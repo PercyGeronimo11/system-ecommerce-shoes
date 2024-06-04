@@ -3,7 +3,8 @@ package com.hb.system.ecommerce.shoes.models;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Product {
+
+public class Product { 
     private String idProduct;
     private String proIdCategory;
     private String pro_name;
