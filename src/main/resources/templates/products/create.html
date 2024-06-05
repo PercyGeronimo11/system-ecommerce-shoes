@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <meta charset="ISO-8859-1">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1 > Nuevo Producto </h1>
+    <form th:action="@{/product/index}" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br>
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion"></textarea><br>
+
+        <label for="precio">Precio Unitario:</label>
+        <input type="number" id="precio" name="precio" step="0.01" required><br>
+
+        <label for="talla">Talla:</label>
+        <input type="text" id="talla" name="talla"><br>
+
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="color"><br>
+
+        <label for="categoria">Categoría:</label>
+        <input type="text" id="categoria" name="categoria"><br>
+
+        <label for="taco">Medida Taco:</label>
+        <input type="text" id="taco" name="taco"><br>
+
+        <label for="material">Material de Capellado:</label>
+        <input type="text" id="material" name="material"><br>
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" required><br>
+
+        <label for="urlImagen">URL Imagen:</label>
+        <input type="text" id="urlImagen" name="urlImagen"><br>
+
+        <button type="submit">Guardar Producto</button>
+    </form>
+</body>
+</html>
