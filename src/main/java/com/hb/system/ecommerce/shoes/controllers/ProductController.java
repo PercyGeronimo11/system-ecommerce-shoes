@@ -5,10 +5,10 @@ import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/product")
@@ -25,22 +25,38 @@ public class ProductController {
     }
 
     @GetMapping("/create")
-    public String create(){
+    public String create(Model model){
+        model.addAttribute("product",new Product());
         return "products/create";
     }
 
-/*
     @PostMapping("/save")
-    public String save(){
-        return "products/save";
+    public String save(@ModelAttribute Product product){
+        productRepository.save(product);
+        return "redirect:/product/index";
     }
 
-    @GetMapping("/edit")
-    public String edit(){
-        return "products/save";
+    @GetMapping("/edit/{id}")
+    public String editProduct(Model model,@PathVariable int id){
+        Optional<Product> productFind=productRepository.findById(id);
+        if(productFind.isEmpty()){
+            return "redirect:/product/index";
+        }else{
+            model.addAttribute("product",productFind.get());
+            return "products/edit";
+        }
     }
-    */
 
+    @PostMapping("/update")
+    public String updateProduct(@ModelAttribute Product product){
+        productRepository.save(product);
+        return "redirect:/product/index";
+    }
+
+    @GetMapping("/cancel")
+    public String cancel(){
+        return "redirect:/product/index";
+    }
 }
 
 

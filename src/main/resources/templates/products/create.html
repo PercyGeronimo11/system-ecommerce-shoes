@@ -10,32 +10,33 @@
 </head>
 <body>
 <div class="container">
-    <h1 > Nuevo Producto </h1>
-    <form th:action="@{/product/save}" method="post">
+    <h1>Nuevo Producto</h1>
+    <form th:action="@{/product/save}" method="post" th:object="${product}">
         <div class="form-group">
             <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <input type="text" id="name" name="pro_name" class="form-control" required>
         </div>
 
         <div class="form-group">
             <label for="description">Descripción:</label>
-            <input id="description" name="description" class="form-control"></input>
+            <input id="description" name="pro_description" class="form-control"></input>
         </div>
 
         <div class="form-group">
-            <label for="price_unit">Precio Unitario:</label>
-            <input type="number" id="price_unit" name="price_unit" class="form-control">
+            <label for="category">Categoria:</label>
+            <select id="category" name="category" class="form-control">
+                <option value="1"  > Categoria 1</option>
+            </select>
         </div>
-
         <div class="form-group">
-            <label for="urlImage">URL Imagen:</label>
-            <input type="text" id="urlImage" name="urlImagen" class="form-control">
+            <label for="priceUnit">Precio Unitario:</label>
+            <input type="number" id="priceUnit" name="pro_unit_price" class="form-control">
         </div>
 
         <button type="submit" class="btn btn-primary">Guardar Producto</button>
-
     </form>
-
+    <a th:href="@{/product/cancel}"><button class="btn btn-warning">Cancelar</button></a>
 </div>
+
 </body>
 </html>

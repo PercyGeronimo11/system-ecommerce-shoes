@@ -10,27 +10,36 @@
           crossorigin="anonymous">
 </head>
 <body>
-    <h1 > Lista de productos </h1>
-    <table>
-        <thead>
-            <tr>
-                <td>N°</td>
-                <td>Producto</td>
-                <td>Categoria</td>
-                <td>Descripción</td>
-                <td>Precio Unitario</td>
-                <td>Opciones</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td> 1</td>
-                <td> Zapato A</td>
-                <td> negro</td>
-                <td> Es el mejor zapato</td>
-                <td> 15.20</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container">
+    <h1>Editar Producto</h1>
+    <form th:action="@{/product/update}" method="post" th:object="${product}">
+        <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="pro_name" class="form-control"
+                   th:value="${product.pro_name}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descripción:</label>
+            <input id="description" name="pro_description" class="form-control"
+                th:value="${product.pro_description}">
+        </div>
+
+        <div class="form-group">
+            <label for="category">Categoria:</label>
+            <select id="category" name="category" class="form-control">
+                <option value="1"  > Categoria 1</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="priceUnit">Precio Unitario:</label>
+            <input type="number" id="priceUnit" name="pro_unit_price" class="form-control"
+                th:value="${product.pro_unit_price}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+    </form>
+    <a th:href="@{/product/cancel}"><button class="btn btn-warning">Cancelar</button></a>
+</div>
 </body>
 </html>
