@@ -1,4 +1,4 @@
-package com.hb.system.ecommerce.shoes.repository;
+package com.hb.system.ecommerce.shoes.repositories;
 
 import com.hb.system.ecommerce.shoes.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
