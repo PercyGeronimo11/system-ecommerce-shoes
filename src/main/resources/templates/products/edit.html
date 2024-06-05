@@ -13,6 +13,7 @@
 <div class="container">
     <h1>Editar Producto</h1>
     <form th:action="@{/product/update}" method="post" th:object="${product}">
+        <input type="hidden"  name="id" th:value="${product.id}" >
         <div class="form-group">
             <label for="name">Nombre:</label>
             <input type="text" id="name" name="pro_name" class="form-control"

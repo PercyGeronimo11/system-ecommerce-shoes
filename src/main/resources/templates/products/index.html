@@ -32,7 +32,7 @@
             <td th:text="${product.pro_unit_price}"></td>
             <td>
                 <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-primary">Editar</a>
-                <a href="#" class="btn btn-danger">Eliminar</a>
+                <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn btn-danger">Eliminar</a>
             </td>
         </tr>
         </tbody>

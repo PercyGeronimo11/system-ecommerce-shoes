@@ -49,12 +49,27 @@ public class ProductController {
 
     @PostMapping("/update")
     public String updateProduct(@ModelAttribute Product product){
-        productRepository.save(product);
+        Optional<Product> productFind=productRepository.findById(product.getId());
+        if (productFind.isPresent()){
+            productFind.get().setCategory(product.getCategory());
+            productFind.get().setPro_name(product.getPro_name());
+            productFind.get().setPro_description(product.getPro_description());
+            productFind.get().setPro_unit_price(product.getPro_unit_price());
+            productRepository.save(productFind.get());
+        }else{
+
+        }
         return "redirect:/product/index";
     }
 
     @GetMapping("/cancel")
     public String cancel(){
+        return "redirect:/product/index";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id){
+        productRepository.deleteById(id);
         return "redirect:/product/index";
     }
 }
