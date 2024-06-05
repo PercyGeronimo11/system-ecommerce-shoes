@@ -1,45 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- <meta charset="UTF-8"> -->
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
 </head>
 <body>
+<div class="container">
     <h1 > Nuevo Producto </h1>
-    <form th:action="@{/product/index}" method="post">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required><br>
+    <form th:action="@{/product/save}" method="post">
+        <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+        </div>
 
-        <label for="descripcion">Descripción:</label>
-        <textarea id="descripcion" name="descripcion"></textarea><br>
+        <div class="form-group">
+            <label for="description">DescripciÃ³n:</label>
+            <input id="description" name="description" class="form-control"></input>
+        </div>
 
-        <label for="precio">Precio Unitario:</label>
-        <input type="number" id="precio" name="precio" step="0.01" required><br>
+        <div class="form-group">
+            <label for="price_unit">Precio Unitario:</label>
+            <input type="number" id="price_unit" name="price_unit" class="form-control">
+        </div>
 
-        <label for="talla">Talla:</label>
-        <input type="text" id="talla" name="talla"><br>
+        <div class="form-group">
+            <label for="urlImage">URL Imagen:</label>
+            <input type="text" id="urlImage" name="urlImagen" class="form-control">
+        </div>
 
-        <label for="color">Color:</label>
-        <input type="text" id="color" name="color"><br>
+        <button type="submit" class="btn btn-primary">Guardar Producto</button>
 
-        <label for="categoria">Categoría:</label>
-        <input type="text" id="categoria" name="categoria"><br>
-
-        <label for="taco">Medida Taco:</label>
-        <input type="text" id="taco" name="taco"><br>
-
-        <label for="material">Material de Capellado:</label>
-        <input type="text" id="material" name="material"><br>
-
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" required><br>
-
-        <label for="urlImagen">URL Imagen:</label>
-        <input type="text" id="urlImagen" name="urlImagen"><br>
-
-        <button type="submit">Guardar Producto</button>
     </form>
+
+</div>
 </body>
 </html>

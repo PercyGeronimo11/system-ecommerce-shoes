@@ -15,6 +15,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "cat_id", referencedColumnName = "cat_id")
     private Category category;
+
     private String pro_name;
     private String pro_description;
     private String pro_unit_price;

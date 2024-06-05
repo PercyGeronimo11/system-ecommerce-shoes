@@ -24,12 +24,12 @@ public class ProductController {
         return "products/index";
     }
 
-/*
     @GetMapping("/create")
     public String create(){
         return "products/create";
     }
 
+/*
     @PostMapping("/save")
     public String save(){
         return "products/save";
