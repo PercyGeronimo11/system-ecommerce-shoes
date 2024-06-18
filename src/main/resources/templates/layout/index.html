@@ -55,7 +55,21 @@
             <div class="sidebar-heading">
                 Interface
             </div>
-
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/user/list}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Usuarios</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/category/list}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Categorías</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/material/list}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Materiales</span></a>
+            </li>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -363,7 +377,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" th:include="${contenido} :: content">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">

@@ -44,7 +44,7 @@
     </style>
 </head>
 <body>
-    <div class="div-container">
+    <div class="div-container" th:fragment="content">
         <center><h1>Editar Categoría</h1></center>
 
         <div class="formularioCreate">
@@ -55,7 +55,7 @@
                     <label for="descripcion">Descripción</label>
                     <input type="text" class="form-control" name="descripcion" id="descripcion" th:field="*{description}" placeholder="Ingresa la descripción">
                 </div>
-                <input type="submit" class="btn btn-primary" value="Enviar">
+                <input type="submit" class="btn btn-primary" value="Actualizar">
             </form>
         </div>
     </div>

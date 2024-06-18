@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.services.UserService;
 
@@ -18,24 +19,26 @@ import lombok.RequiredArgsConstructor;
 @Controller
 // @RestController
 // @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 
 public class UserController {
      @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping({"/list"})
     public String getAllUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "user-list";
+        model.addAttribute("contenido", "users/UserList");
+        return "layout/index";
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("user", new User());
-        return "user-form";
+    @GetMapping({"/create"})
+    public String showCreateForm(User user, Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("contenido", "users/UserCreate");
+        return "layout/index";
     }
 
     @PostMapping

@@ -22,13 +22,15 @@ public class CategoryController {
     @GetMapping({"/list"})
     public String getAllCategories(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
-        return "categories/CategoryList";
+        model.addAttribute("contenido", "categories/CategoryList");
+        return "layout/index";
     }
 
     @GetMapping({"/create"})
     public String getCreateCategory(Category categoria,Model model) {
         model.addAttribute("categoria", categoria);
-        return "categories/CategoryCreate";
+        model.addAttribute("contenido", "categories/CategoryCreate");
+        return "layout/index";
     }
 
     @PostMapping({"/new"})
@@ -48,7 +50,8 @@ public class CategoryController {
     public String getEditCategory(@PathVariable int id, Model model) {
         Category category = categoryRepository.findById(id);
         model.addAttribute("category", category);
-        return "categories/CategoryEdit";
+        model.addAttribute("contenido", "categories/CategoryEdit");
+        return "layout/index";
     }
 
     @PostMapping("update/{id}")
