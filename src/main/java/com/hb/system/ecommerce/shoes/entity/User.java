@@ -2,13 +2,7 @@ package com.hb.system.ecommerce.shoes.entity;
 
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,107 +12,78 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
-public class User implements UserDetails {
+public class User{
     @Id
+    @Column(name = "USE_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer USE_id;
-
-    private String USE_name;
-    private String USE_email;
-    private String USE_password;
-    private Integer USE_status;
-    private LocalDateTime USE_register_date;
-    private Integer ROL_id;
+    private Integer id;
+    @Column(name = "USE_name")
+    private String name;
+    @Column(name = "USE_email")
+    private String email;
+    @Column(name = "USE_password")
+    private String password;
+    @Column(name = "USE_status")
+    private boolean status;
+    @Column(name = "USE_register_date")
+    private LocalDateTime registerDate;
+    @Column(name = "ROL_id")
+    private Integer rolId;
 
     // Getters y Setters
-    public Integer getUSE_id() {
-        return USE_id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUSE_id(Integer USE_id) {
-        this.USE_id = USE_id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getUSE_name() {
-        return USE_name;
+    public String getName() {
+        return name;
     }
 
-    public void setUSE_name(String USE_name) {
-        this.USE_name = USE_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUSE_email() {
-        return USE_email;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUSE_email(String USE_email) {
-        this.USE_email = USE_email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getUSE_password() {
-        return USE_password;
-    }
-
-    public void setUSE_password(String USE_password) {
-        this.USE_password = USE_password;
-    }
-
-    public Integer getUSE_status() {
-        return USE_status;
-    }
-
-    public void setUSE_status(Integer USE_status) {
-        this.USE_status = USE_status;
-    }
-
-    public LocalDateTime getUSE_register_date() {
-        return USE_register_date;
-    }
-
-    public void setUSE_register_date(LocalDateTime USE_register_date) {
-        this.USE_register_date = USE_register_date;
-    }
-
-    public Integer getROL_id() {
-        return ROL_id;
-    }
-
-    public void setROL_id(Integer ROL_id) {
-        this.ROL_id = ROL_id;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER")); // Cambia según tus roles
-    }
-
-    @Override
     public String getPassword() {
-        return USE_password;
+        return password;
     }
 
-    @Override
-    public String getUsername() {
-        return USE_email;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public boolean getStatus() {
+        return status;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public LocalDateTime getRegisterDate() {
+        return registerDate;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return USE_status == 1; // Asume que 1 es "activo"
+    public void setRegisterDate(LocalDateTime registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public Integer getRolId() {
+        return rolId;
+    }
+
+    public void setRolId(Integer rolId) {
+        this.rolId = rolId;
     }
 }

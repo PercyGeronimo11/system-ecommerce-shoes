@@ -1,7 +1,5 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,17 +8,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.services.UserService;
 
-import lombok.RequiredArgsConstructor;
 @Controller
 // @RestController
 // @Controller
 @RequestMapping("/user")
-@RequiredArgsConstructor
 
 public class UserController {
      @Autowired
@@ -28,8 +22,7 @@ public class UserController {
 
     @GetMapping({"/list"})
     public String getAllUsers(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("contenido", "users/UserList");
         return "layout/index";
     }
@@ -41,10 +34,10 @@ public class UserController {
         return "layout/index";
     }
 
-    @PostMapping
+    @PostMapping({"/store"})
     public String saveUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
-        return "redirect:/users";
+        return "redirect:/user/list";
     }
 
     @GetMapping("/edit/{id}")
