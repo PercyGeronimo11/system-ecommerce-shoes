@@ -17,11 +17,11 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping({"/index","/"})
+    @GetMapping({"/index","/","list"})
     public String index(Model model){
         List<Product> productList=productRepository.findAll();
         model.addAttribute("products", productList);
-        return "products/index";
+        return "products/list";
     }
 
     @GetMapping("/create")
