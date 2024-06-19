@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+</head>
+<body>
+<div class="container my-5" th:fragment="content">
+    <h1>Nuevo Producto</h1>
+    <form th:action="@{/product/save}" method="post" th:object="${product}">
+        <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="pro_name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descripción:</label>
+            <input id="description" name="pro_description" class="form-control"></input>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Categoria:</label>
+            <select id="category" name="category" class="form-control">
+                <option value="1"  > Categoria 1</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="priceUnit">Precio Unitario:</label>
+            <input type="number" id="priceUnit" name="pro_unit_price" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Producto</button>
+    </form>
+    <a th:href="@{/product/cancel}"><button class="btn btn-warning">Cancelar</button></a>
+</div>
+
+</body>
+</html>
