@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/lots")
+@RequestMapping("/lot")
 public class LotController {
 
     @Autowired
@@ -20,32 +20,32 @@ public class LotController {
     @GetMapping({"/index","/","list"})
     public String index(Model model){
         List<Lot> lotsList=lotsRepository.findAll();
-        model.addAttribute("lotss", lotsList);
-        model.addAttribute("contenido", "lotss/list");
+        model.addAttribute("lots", lotsList);
+        model.addAttribute("contenido", "lots/list");
         return "layout/index";
     }
 
     @GetMapping("/create")
     public String create(Model model){
         model.addAttribute("lots",new Lot());
-        model.addAttribute("contenido", "lotss/create");
+        model.addAttribute("contenido", "lots/create");
         return "layout/index";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute Lot lots){
         lotsRepository.save(lots);
-        return "redirect:/lots/index";
+        return "redirect:/lot/index";
     }
 
     @GetMapping("/edit/{id}")
     public String editLot(Model model,@PathVariable int id){
         Optional<Lot> lotsFind=lotsRepository.findById(id);
         if(lotsFind.isEmpty()){
-            return "redirect:/lots/index";
+            return "redirect:/lot/index";
         }else{
             model.addAttribute("lots",lotsFind.get());
-            model.addAttribute("contenido", "lotss/edit");
+            model.addAttribute("contenido", "lots/edit");
             return "layout/index";
         }
     }
@@ -62,18 +62,18 @@ public class LotController {
         }else{
 
         }
-        return "redirect:/lots/index";
+        return "redirect:/lot/index";
     }
 
     @GetMapping("/cancel")
     public String cancel(){
-        return "redirect:/lots/index";
+        return "redirect:/lot/index";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id){
         lotsRepository.deleteById(id);
-        return "redirect:/lots/index";
+        return "redirect:/lot/index";
     }
 }
 
