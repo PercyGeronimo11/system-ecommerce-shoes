@@ -33,8 +33,9 @@ public class CategoryController {
         return "layout/index";
     }
 
-    @PostMapping({"/new"})
+    @PostMapping({"/store"})
     public String NewCategory(@ModelAttribute Category category) {
+        category.setState(true);
         categoryRepository.save(category);
         return "redirect:/category/list";
     }
