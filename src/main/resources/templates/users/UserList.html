@@ -82,9 +82,12 @@
                                     <a th:href="@{/user/edit/} + ${user.id}" class="btn btn-warning btn-sm me-1">
                                         Editar
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="${'#deleteModal' + user.id}">
+                                    <!-- <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="${'#deleteModal' + user.id}">
                                         Eliminar
-                                    </button>
+                                    </button> -->
+                                    <a class="btn btn-danger btn-sm" th:href="@{/user/delete/} + ${user.id}">
+                                        Eliminar
+                                    </a>
                                 </div>
                             </td>
                         </tr>

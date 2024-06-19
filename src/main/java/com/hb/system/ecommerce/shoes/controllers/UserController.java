@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.services.UserService;
 
@@ -42,14 +43,15 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        User user = userService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        User user = userService.getUserById(id);
         model.addAttribute("user", user);
-        return "user-form";
+        model.addAttribute("contenido", "users/UserEdit");
+        return "layout/index";
     }
 
     @GetMapping("/delete/{id}")
     public String showDeleteConfirm(@PathVariable("id") Integer id, Model model) {
-        User user = userService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "confirm-delete";
     }

@@ -82,9 +82,12 @@
                                     <a th:href="@{/category/edit/} + ${category.id}" class="btn btn-warning btn-sm me-1">
                                         Editar
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="${'#deleteModal' + category.id}">
+                                    <!-- <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" th:data-bs-target="${'#deleteModal' + category.id}">
                                         Eliminar
-                                    </button>
+                                    </button> -->
+                                    <a class="btn btn-danger btn-sm" th:href="@{/category/delete/} + ${category.id}">
+                                        Eliminar
+                                    </a>
                                 </div>
                             </td>
                         </tr>

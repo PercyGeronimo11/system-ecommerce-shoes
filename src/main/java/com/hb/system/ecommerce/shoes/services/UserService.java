@@ -1,9 +1,7 @@
 package com.hb.system.ecommerce.shoes.services;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Integer id) {
+    public User getUserById(int id) {
         return userRepository.findById(id);
     }
 
