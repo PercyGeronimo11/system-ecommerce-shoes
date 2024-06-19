@@ -63,4 +63,8 @@ public class PromotionController {
         promotionRepository.save(promotionOld);
         return "redirect:/promotion/list";
     }
+    @GetMapping("/cancel")
+    public String cancel(){
+        return "redirect:/promotion/list";
+    }
 }
