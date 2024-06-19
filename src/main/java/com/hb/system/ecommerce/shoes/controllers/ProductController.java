@@ -21,13 +21,15 @@ public class ProductController {
     public String index(Model model){
         List<Product> productList=productRepository.findAll();
         model.addAttribute("products", productList);
-        return "products/list";
+        model.addAttribute("contenido", "products/list");
+        return "layout/index";
     }
 
     @GetMapping("/create")
     public String create(Model model){
         model.addAttribute("product",new Product());
-        return "products/create";
+        model.addAttribute("contenido", "products/create");
+        return "layout/index";
     }
 
     @PostMapping("/save")
@@ -43,7 +45,8 @@ public class ProductController {
             return "redirect:/product/index";
         }else{
             model.addAttribute("product",productFind.get());
-            return "products/edit";
+            model.addAttribute("contenido", "products/edit");
+            return "layout/index";
         }
     }
 

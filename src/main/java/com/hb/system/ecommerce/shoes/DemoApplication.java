@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 @SpringBootApplication
 @Controller
 public class DemoApplication {
+
   @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("contenido", "dashboard");
