@@ -48,28 +48,28 @@
         <center><h1>Editar Promocion</h1></center>
 
         <div class="formularioCreate">
-            <form th:action="@{/promotion/update/{id}(id=${promotion.PROM_id})}" method="post" th:object="${promotion}">
+            <form th:action="@{/promotion/update/{id}(id=${promotion.PROMT_id})}" method="post" th:object="${promotion}">
                 <div class="mb-3">
-                    <label for="PROM_percentage">% Promocion</label>
-                    <input type="number" class="form-control" name="PROM_percentage" id="PROM_percentage" th:field="*{PROM_percentage}" placeholder="Ingresa el porcentaje">
+                    <label for="PROMT_percentage">% Promocion</label>
+                    <input type="number" class="form-control" name="PROMT_percentage" id="PROMT_percentage" th:field="*{PROMT_percentage}" placeholder="Ingresa el porcentaje">
                 </div>
                 <div class="mb-3">
-                    <label for="PROM_start_date">Fecha de Inicio</label>
-                    <input type="date" class="form-control" name="PROM_start_date" id="PROM_start_date" th:field="*{PROM_start_date}" placeholder="Ingresa la fecha de inicio">
+                    <label for="PROMT_start_date">Fecha de Inicio</label>
+                    <input type="date" class="form-control" name="PROMT_start_date" id="PROMT_start_date" th:field="*{PROMT_start_date}" placeholder="Ingresa la fecha de inicio">
                 </div>
                 <div class="mb-3">
-                    <label for="PROM_end_date">Fecha de Fin</label>
-                    <input type="date" class="form-control" name="PROM_end_date" id="PROM_end_date" th:field="*{PROM_end_date}" placeholder="Ingresa la fecha de fin">
+                    <label for="PROMT_end_date">Fecha de Fin</label>
+                    <input type="date" class="form-control" name="PROMT_end_date" id="PROMT_end_date" th:field="*{PROMT_end_date}" placeholder="Ingresa la fecha de fin">
                 </div>
                 <div class="mb-3">
-                    <label for="PROM_description">Descripción</label>
-                    <input type="text" class="form-control" name="PROM_description" id="PROM_description" th:field="*{PROM_description}" placeholder="Ingresa la descripción">
+                    <label for="PROMT_description">Descripción</label>
+                    <input type="text" class="form-control" name="PROMT_description" id="PROMT_description" th:field="*{PROMT_description}" placeholder="Ingresa la descripción">
                 </div>
                 <div class="mb-3">
-                    <label for="PROM_status">Estado</label>
-                    <select class="form-control" name="PROM_status" id="PROM_status" th:field="*{PROM_status}">
-                        <option th:value="true" th:text="${promotion.PROM_status} ? 'Activo' : 'Inactivo'">Activo</option>
-                        <option th:value="false" th:text="${promotion.PROM_status} ? 'Inactivo' : 'Activo'">Inactivo</option>
+                    <label for="PROMT_status">Estado</label>
+                    <select class="form-control" name="PROMT_status" id="PROMT_status" th:field="*{PROMT_status}">
+                        <option th:value="true" th:text="${promotion.PROMT_status} ? 'Activo' : 'Inactivo'">Activo</option>
+                        <option th:value="false" th:text="${promotion.PROMT_status} ? 'Inactivo' : 'Activo'">Inactivo</option>
                     </select>
                 </div>
                 <input type="submit" class="btn btn-primary" value="Actualizar">

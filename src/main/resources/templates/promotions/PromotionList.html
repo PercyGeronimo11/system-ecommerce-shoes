@@ -89,20 +89,20 @@
                     </thead>
                     <tbody>
                         <tr th:each="promotion : ${promotions}">
-                            <td th:text="${promotion.PROM_id}"></td>
-                            <td th:text="${promotion.PROM_percentage}"></td>
-                            <td th:text="${promotion.PROM_start_date}"></td>
-                            <td th:text="${promotion.PROM_end_date}"></td>
-                            <td th:text="${promotion.PROM_description}"></td>
-                            <td th:text="${promotion.PROM_status ? 'Activo' : 'inactivo'}"></td>
+                            <td th:text="${promotion.PROMT_id}"></td>
+                            <td th:text="${promotion.PROMT_percentage}"></td>
+                            <td th:text="${promotion.PROMT_start_date}"></td>
+                            <td th:text="${promotion.PROMT_end_date}"></td>
+                            <td th:text="${promotion.PROMT_description}"></td>
+                            <td th:text="${promotion.PROMT_status ? 'Activo' : 'inactivo'}"></td>
                             <td>
                                 <div class="d-flex">
-                                    <a th:href="@{/promotion/edit/} + ${promotion.PROM_id}"
+                                    <a th:href="@{/promotion/edit/} + ${promotion.PROMT_id}"
                                         class="btn btn-primary btn-sm me-1">
                                         Editar
                                     </a>
                                     <a class="btn btn-danger btn-sm"
-                                         th:href="@{/promotion/delete/} + ${promotion.PROM_id}"
+                                         th:href="@{/promotion/delete/} + ${promotion.PROMT_id}"
                                          >
                                         Eliminar
                                     </a>
@@ -116,22 +116,22 @@
 
         <!-- Modal de Confirmación 
         <div th:each="promotion : ${promotions}">
-            <div th:id="${'deleteModal' + promotion.PROM_id}" class="modal fade" tabindex="-1"
+            <div th:id="${'deleteModal' + promotion.PROMT_id}" class="modal fade" tabindex="-1"
                 aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" th:id="${'deleteModalLabel' + promotion.PROM_id}">Confirmar
+                            <h5 class="modal-title" th:id="${'deleteModalLabel' + promotion.PROMT_id}">Confirmar
                                 Eliminación</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             ¿Está seguro que desea eliminar la promocion: <strong
-                                th:text="${promotion.PROM_description}"></strong>?
+                                th:text="${promotion.PROMT_description}"></strong>?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <a th:href="@{/promotion/delete/} + ${promotion.PROM_id}"
+                            <a th:href="@{/promotion/delete/} + ${promotion.PROMT_id}"
                                 class="btn btn-danger">Eliminar</a>
                         </div>
                     </div>

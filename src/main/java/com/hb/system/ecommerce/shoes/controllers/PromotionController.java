@@ -58,7 +58,7 @@ public class PromotionController {
     public String UpdatePromotion(@PathVariable int id, @ModelAttribute Promotion promotion, Model model) {
         Promotion promotionOld = promotionRepository.findById(id);
         promotionOld = promotion;
-        promotionOld.setPROM_id(id);
+        promotionOld.setPROMT_id(id);
         promotionRepository.save(promotionOld);
         return "redirect:/promotion/list";
     }

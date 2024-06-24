@@ -11,88 +11,88 @@ import jakarta.persistence.Table;
 @Table(name = "promotion")
 public class Promotion {
     @Id
-    @Column(name = "PROM_id")
+    @Column(name = "PROMT_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int PROM_id;
+    private int PROMT_id;
 
-    @Column(name = "PROM_percentage")
-    private int PROM_percentage;
+    @Column(name = "PROMT_percentage")
+    private int PROMT_percentage;
 
-    @Column(name = "PROM_start_date")
-    private Date PROM_start_date;
+    @Column(name = "PROMT_start_date")
+    private Date PROMT_start_date;
 
-    @Column(name = "PROM_end_date")
-    private Date PROM_end_date;
+    @Column(name = "PROMT_end_date")
+    private Date PROMT_end_date;
 
-    @Column(name = "PROM_description")
-    private String PROM_description;
+    @Column(name = "PROMT_description")
+    private String PROMT_description;
 
-    @Column(name = "PROM_status")
-    private boolean PROM_status;
+    @Column(name = "PROMT_status")
+    private boolean PROMT_status;
 
     public Promotion() {
     }
 
-    public Promotion(int PROM_id, int PROM_percentage, Date PROM_start_date, Date PROM_end_date, String PROM_description, boolean PROM_status) {
-        this.PROM_id = PROM_id;
-        this.PROM_percentage = PROM_percentage;
-        this.PROM_start_date = PROM_start_date;
-        this.PROM_end_date = PROM_end_date;
-        this.PROM_description = PROM_description;
-        this.PROM_status = PROM_status;
+    public Promotion(int PROMT_id, int PROMT_percentage, Date PROMT_start_date, Date PROMT_end_date, String PROMT_description, boolean PROMT_status) {
+        this.PROMT_id = PROMT_id;
+        this.PROMT_percentage = PROMT_percentage;
+        this.PROMT_start_date = PROMT_start_date;
+        this.PROMT_end_date = PROMT_end_date;
+        this.PROMT_description = PROMT_description;
+        this.PROMT_status = PROMT_status;
     }
-    public Promotion(int PROM_percentage, Date PROM_start_date, Date PROM_end_date, String PROM_description, boolean PROM_status) {
-        this.PROM_percentage = PROM_percentage;
-        this.PROM_start_date = PROM_start_date;
-        this.PROM_end_date = PROM_end_date;
-        this.PROM_description = PROM_description;
-        this.PROM_status = PROM_status;
+    public Promotion(int PROMT_percentage, Date PROMT_start_date, Date PROMT_end_date, String PROMT_description, boolean PROMT_status) {
+        this.PROMT_percentage = PROMT_percentage;
+        this.PROMT_start_date = PROMT_start_date;
+        this.PROMT_end_date = PROMT_end_date;
+        this.PROMT_description = PROMT_description;
+        this.PROMT_status = PROMT_status;
     }
-    public int getPROM_id() {
-        return PROM_id;
-    }
-
-    public void setPROM_id(int PROM_id) {
-        this.PROM_id = PROM_id;
+    public int getPROMT_id() {
+        return PROMT_id;
     }
 
-    public int getPROM_percentage() {
-        return PROM_percentage;
+    public void setPROMT_id(int PROMT_id) {
+        this.PROMT_id = PROMT_id;
     }
 
-    public void setPROM_percentage(int PROM_percentage) {
-        this.PROM_percentage = PROM_percentage;
+    public int getPROMT_percentage() {
+        return PROMT_percentage;
     }
 
-    public Date getPROM_start_date() {
-        return PROM_start_date;
+    public void setPROMT_percentage(int PROMT_percentage) {
+        this.PROMT_percentage = PROMT_percentage;
     }
 
-    public void setPROM_start_date(Date PROM_start_date) {
-        this.PROM_start_date = PROM_start_date;
+    public Date getPROMT_start_date() {
+        return PROMT_start_date;
     }
 
-    public Date getPROM_end_date() {
-        return PROM_end_date;
+    public void setPROMT_start_date(Date PROMT_start_date) {
+        this.PROMT_start_date = PROMT_start_date;
     }
 
-    public void setPROM_end_date(Date PROM_end_date) {
-        this.PROM_end_date = PROM_end_date;
+    public Date getPROMT_end_date() {
+        return PROMT_end_date;
     }
 
-    public String getPROM_description() {
-        return PROM_description;
+    public void setPROMT_end_date(Date PROMT_end_date) {
+        this.PROMT_end_date = PROMT_end_date;
     }
 
-    public void setPROM_description(String PROM_description) {
-        this.PROM_description = PROM_description;
+    public String getPROMT_description() {
+        return PROMT_description;
     }
 
-    public boolean isPROM_status() {
-        return PROM_status;
+    public void setPROMT_description(String PROMT_description) {
+        this.PROMT_description = PROMT_description;
     }
 
-    public void setPROM_status(boolean PROM_status) {
-        this.PROM_status = PROM_status;
+    public boolean isPROMT_status() {
+        return PROMT_status;
+    }
+
+    public void setPROMT_status(boolean PROMT_status) {
+        this.PROMT_status = PROMT_status;
     }
 }
