@@ -1,29 +1,33 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hb.system.ecommerce.shoes.entity.Promotion;
-import com.hb.system.ecommerce.shoes.repositories.PromotionRepository;
+import com.hb.system.ecommerce.shoes.services.PromotionService;
 
-@Controller
+import lombok.RequiredArgsConstructor;
+
+@RestController
 @RequestMapping("/promotion")
+@RequiredArgsConstructor
 public class PromotionController {
     @Autowired
-    private PromotionRepository promotionRepository;
+    private final PromotionService promotionService;
 
     @GetMapping({ "/list" })
-    public String getAllPromotions(Model model) {
-        model.addAttribute("promotions", promotionRepository.findAll());
-        model.addAttribute("contenido", "promotions/PromotionList");
-        return "layout/index";
+    public java.util.List<Promotion> getPromotions() {
+        return promotionService.getAllPromotions();
     }
 
     @GetMapping({ "/create" })
@@ -34,10 +38,19 @@ public class PromotionController {
     }
 
     @PostMapping({ "/new" })
-    public String StoreCategory(@ModelAttribute Promotion promotion) {
-        promotionRepository.save(promotion);
-        return "redirect:/promotion/list";
+    public ResponseEntity<String> createPromotion(@RequestBody Promotion promotion) {
+        try {
+            promotionService.createPromotion(promotion);
+            String mensaje = "Promotion creado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String mensajeError = "Error al crear el Promotion.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
+        }
     }
+
+
+
 
     @GetMapping("delete/{id}")
     public String eliminarPromotion(@PathVariable int id, RedirectAttributes redirectAttributes) {
