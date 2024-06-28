@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PromotionService {
 
-    private PromotionRepository promotionRepository;
+    private final PromotionRepository promotionRepository;
 
     public void createPromotion(Promotion promotion) {
 

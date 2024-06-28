@@ -17,7 +17,7 @@ import com.hb.system.ecommerce.shoes.services.PromotionService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/promotion")
+@RequestMapping("/api/promotion")
 @RequiredArgsConstructor
 public class PromotionController {
     @Autowired
@@ -26,9 +26,10 @@ public class PromotionController {
     @GetMapping({ "/list" })
     public java.util.List<Promotion> getPromotions() {
         return promotionService.getAllPromotions();
+        
     }
 
-    @PostMapping({ "/new" })
+    @PostMapping({ "/store" })
     public ResponseEntity<String> createPromotion(@RequestBody Promotion promotion) {
         try {
             promotionService.createPromotion(promotion);
