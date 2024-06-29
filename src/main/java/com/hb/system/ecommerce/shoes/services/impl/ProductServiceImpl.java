@@ -1,6 +1,7 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
 import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
+import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Category;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -37,5 +39,21 @@ public class ProductServiceImpl implements ProductService {
         product.setProSizePlatform(productCreateReq.getProSizePlatform());
         product.setProSizeTacon(productCreateReq.getProSizeTacon());
         return productRepository.save(product);
+    }
+
+
+    @Override
+    public Product productEditService(int id,ProductEditReq productEditReq){
+        Optional<Product> productFind=productRepository.findById(id);
+            productFind.get().setProName(productEditReq.getProName());
+            productFind.get().setProDescription(productEditReq.getProDescription());
+            Category category= new Category();
+            category.setId(productEditReq.getCatId());
+            productFind.get().setCategory(category);
+            productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
+            productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
+            productFind.get().setProSizeTacon(productEditReq.getProSizeTacon());
+            return productRepository.save(productFind.get());
+
     }
 }

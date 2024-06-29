@@ -1,6 +1,7 @@
 package com.hb.system.ecommerce.shoes.controllers;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
+import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
@@ -45,6 +46,15 @@ public class ProductController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id, @RequestBody ProductEditReq productEditReq){
+       Product product= productService.productEditService(id,productEditReq);
+       ApiResponse<Product> response=new ApiResponse<>();
+       response.setStatus(HttpStatus.OK.value());
+       response.setMessage("El producto ha sido editado exitosamente");
+       response.setData(product);
+       return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 //    @GetMapping({"/index","/","list"})
 //    public String index(Model model){
@@ -53,6 +63,7 @@ public class ProductController {
 //        model.addAttribute("contenido", "products/list");
 //        return "layout/index";
 //    }
+
 //    @GetMapping("/create")
 //    public String create(Model model){
 //        model.addAttribute("product",new Product());
@@ -60,25 +71,13 @@ public class ProductController {
 //        return "layout/index";
 //    }
 
-//
 //    @PostMapping("/save")
 //    public String save(@ModelAttribute Product product){
 //        productRepository.save(product);
 //        return "redirect:/product/index";
 //    }
-//
-//    @GetMapping("/edit/{id}")
-//    public String editProduct(Model model,@PathVariable int id){
-//        Optional<Product> productFind=productRepository.findById(id);
-//        if(productFind.isEmpty()){
-//            return "redirect:/product/index";
-//        }else{
-//            model.addAttribute("product",productFind.get());
-//            model.addAttribute("contenido", "products/edit");
-//            return "layout/index";
-//        }
-//    }
-//
+
+
 //    @PostMapping("/update")
 //    public String updateProduct(@ModelAttribute Product product){
 //        Optional<Product> productFind=productRepository.findById(product.getId());
