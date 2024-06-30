@@ -1,67 +1,62 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.hb.system.ecommerce.shoes.entity.Category;
-import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
-import org.springframework.ui.Model;
+import com.hb.system.ecommerce.shoes.services.CategoryService;
 
-@Controller
-@RequestMapping("/category")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/category")
 public class CategoryController {
-    @Autowired
-    private CategoryRepository categoryRepository;
 
-    @GetMapping({"/list"})
-    public String getAllCategories(Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("contenido", "categories/CategoryList");
-        return "layout/index";
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
-    @GetMapping({"/create"})
-    public String getCreateCategory(Category categoria,Model model) {
-        model.addAttribute("categoria", categoria);
-        model.addAttribute("contenido", "categories/CategoryCreate");
-        return "layout/index";
+    @GetMapping("/list")
+    public List<Category> getCategories() {
+        return categoryService.getAllCategories();
     }
 
-    @PostMapping({"/store"})
-    public String NewCategory(@ModelAttribute Category category) {
-        category.setState(true);
-        categoryRepository.save(category);
-        return "redirect:/category/list";
-    }
-    
-    @GetMapping("delete/{id}")
-    public String eliminarGenero(@PathVariable int id, RedirectAttributes redirectAttributes) {
-        Category category = categoryRepository.findById(id);
-        categoryRepository.delete(category);
-        return "redirect:/category/list";
+    @PostMapping("/store")
+    public ResponseEntity<String> createCategory(@RequestBody Category category) {
+        try {
+            categoryService.createCategory(category);
+            String mensaje = "Category creado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (IllegalArgumentException e) {
+            String mensajeError = "Error al crear el Category: " + e.getMessage();
+            return ResponseEntity.badRequest().body(mensajeError);
+        }
     }
 
-    @GetMapping("edit/{id}")
-    public String getEditCategory(@PathVariable int id, Model model) {
-        Category category = categoryRepository.findById(id);
-        model.addAttribute("category", category);
-        model.addAttribute("contenido", "categories/CategoryEdit");
-        return "layout/index";
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
+        try {
+            categoryService.updateCategory(id, category);
+            String mensaje = "Category actualizado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (IllegalArgumentException e) {
+            String mensajeError = "Error al actualizar el Category: " + e.getMessage();
+            return ResponseEntity.badRequest().body(mensajeError);
+        }
     }
 
-    @PostMapping("update/{id}")
-    public String UpdateCategory(@PathVariable int id, @ModelAttribute Category category, Model model) {
-        Category categoryOld = categoryRepository.findById(id);
-        categoryOld = category;
-        categoryOld.setId(id);
-        categoryRepository.save(categoryOld);
-        return "redirect:/category/list";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable Integer id) {
+        try {
+            categoryService.deleteCategory(id);
+            String mensaje = "Category eliminado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String mensajeError = "Error al eliminar el Category con ID " + id;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
+        }
     }
-
 }

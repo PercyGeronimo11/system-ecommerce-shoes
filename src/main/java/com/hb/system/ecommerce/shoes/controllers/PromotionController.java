@@ -1,69 +1,78 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.hb.system.ecommerce.shoes.entity.Promotion;
-import com.hb.system.ecommerce.shoes.repositories.PromotionRepository;
+import com.hb.system.ecommerce.shoes.services.PromotionService;
 
-@Controller
-@RequestMapping("/promotion")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/promotion")
 public class PromotionController {
-    @Autowired
-    private PromotionRepository promotionRepository;
 
-    @GetMapping({ "/list" })
-    public String getAllPromotions(Model model) {
-        model.addAttribute("promotions", promotionRepository.findAll());
-        model.addAttribute("contenido", "promotions/PromotionList");
-        return "layout/index";
+    private final PromotionService promotionService;
+
+    public PromotionController(PromotionService promotionService) {
+        this.promotionService = promotionService;
     }
-
-    @GetMapping({ "/create" })
-    public String getCreatePromotion(Promotion promocion, Model model) {
-        model.addAttribute("promotion", promocion);
-        model.addAttribute("contenido", "promotions/PromotionCreate");
-        return "layout/index";
+    
+    @GetMapping("/list")
+    public List<Promotion> getPromotions() {
+        return promotionService.getAllPromotions();
     }
 
-    @PostMapping({ "/new" })
-    public String StoreCategory(@ModelAttribute Promotion promotion) {
-        promotionRepository.save(promotion);
-        return "redirect:/promotion/list";
+    @PostMapping("/store")
+    public ResponseEntity<String> createPromotion(@RequestBody Promotion promotion) {
+        try {
+            // Validar los datos manualmente
+            if (promotion.getPROMT_start_date() == null || promotion.getPROMT_end_date() == null) {
+                throw new IllegalArgumentException("Las fechas de inicio y fin son obligatorias.");
+            }
+
+            promotionService.createPromotion(promotion);
+            String mensaje = "Promotion creado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (IllegalArgumentException e) {
+            String mensajeError = "Error al crear el Promotion: " + e.getMessage();
+            return ResponseEntity.badRequest().body(mensajeError);
+        } catch (Exception e) {
+            String mensajeError = "Error interno al crear el Promotion.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
+        }
     }
 
-    @GetMapping("delete/{id}")
-    public String eliminarPromotion(@PathVariable int id, RedirectAttributes redirectAttributes) {
-        Promotion promotion = promotionRepository.findById(id);
-        promotionRepository.delete(promotion);
-        return "redirect:/promotion/list";
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updatePromotion(@PathVariable Integer id, @RequestBody Promotion promotion) {
+        try {
+            // Validar los datos manualmente
+            if (promotion.getPROMT_start_date() == null || promotion.getPROMT_end_date() == null) {
+                throw new IllegalArgumentException("Las fechas de inicio y fin son obligatorias.");
+            }
+
+            promotionService.updatePromotion(id, promotion);
+            String mensaje = "Promotion actualizado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (IllegalArgumentException e) {
+            String mensajeError = "Error al actualizar el Promotion: " + e.getMessage();
+            return ResponseEntity.badRequest().body(mensajeError);
+        } catch (Exception e) {
+            String mensajeError = "Error interno al actualizar el Promotion con ID " + id;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
+        }
     }
 
-    @GetMapping("edit/{id}")
-    public String getEditPromotion(@PathVariable int id, Model model) {
-        Promotion promotion = promotionRepository.findById(id);
-        model.addAttribute("promotion", promotion);
-        model.addAttribute("contenido", "promotions/PromotionEdit");
-        return "layout/index";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePromotion(@PathVariable Integer id) {
+        try {
+            promotionService.deletePromotion(id);
+            String mensaje = "Promotion eliminado exitosamente.";
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String mensajeError = "Error al eliminar el Promotion con ID " + id;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
+        }
     }
-
-    @PostMapping("update/{id}")
-    public String UpdatePromotion(@PathVariable int id, @ModelAttribute Promotion promotion, Model model) {
-        Promotion promotionOld = promotionRepository.findById(id);
-        promotionOld = promotion;
-        promotionOld.setPROMT_id(id);
-        promotionRepository.save(promotionOld);
-        return "redirect:/promotion/list";
-    }
-    @GetMapping("/cancel")
-    public String cancel(){
-        return "redirect:/promotion/list";
-    }
-}
+} 

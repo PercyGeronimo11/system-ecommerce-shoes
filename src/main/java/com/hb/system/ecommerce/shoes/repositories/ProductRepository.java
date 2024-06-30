@@ -1,5 +1,6 @@
 package com.hb.system.ecommerce.shoes.repositories;
 
+<<<<<<< HEAD
 import com.hb.system.ecommerce.shoes.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findByProNameContaining(String proName);
     //Optional<Product> findById(int id);
+=======
+public interface ProductRepository {
+
+>>>>>>> criss
 }
