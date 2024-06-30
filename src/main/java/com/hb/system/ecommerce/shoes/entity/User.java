@@ -24,15 +24,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User implements UserDetails{
     @Id
     @GeneratedValue
     Integer id;
     @Column(nullable = false, name = "USE_name")
-    String username;
+    String name;
     @Column(nullable = false, name = "USE_email")
-    String email;
+    String username;
     @Column(nullable = false, name = "USE_password")
     String password;
     @Column(name = "USE_status")
