@@ -19,12 +19,12 @@ import com.hb.system.ecommerce.shoes.services.MaterialService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/material")
 public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
-    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping
     public ResponseEntity<ApiResponse<List<Material>>> list() {
         List<Material> materials = materialService.listAll();
