@@ -26,7 +26,7 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails user=userRepository.findByEmail(request.getEmail()).orElseThrow();
+        UserDetails user=userRepository.findByUsername(request.getEmail()).orElseThrow();
         return AuthResponse.builder()
             .token(jwtService.getToken(user))
             .build();

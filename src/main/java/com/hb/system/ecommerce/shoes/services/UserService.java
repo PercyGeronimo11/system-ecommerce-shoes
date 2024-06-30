@@ -1,6 +1,4 @@
 package com.hb.system.ecommerce.shoes.services;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +28,6 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        // Encriptar la contraseña antes de guardar el usuario
-        /* user.setRegisterDate(LocalDateTime.now());
-        user.setStatus(true); */
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
