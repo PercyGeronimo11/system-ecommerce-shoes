@@ -14,7 +14,7 @@ public class MaterialService implements ApiService<Material>{
     private MaterialRepository resourceRepository;
     
     public List<Material> listAll() {
-        return resourceRepository.findAll();
+        return resourceRepository.findAllActiveMaterials();
     }
 
     public Material getById(int id) {
@@ -35,6 +35,8 @@ public class MaterialService implements ApiService<Material>{
     }
 
     public void delete(int id) {
-        resourceRepository.deleteById(id);
+        Material material = resourceRepository.findById(id);
+        material.setStatus(false);
+        resourceRepository.save(material);
     }
 }
