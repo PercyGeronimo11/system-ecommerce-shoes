@@ -3,6 +3,7 @@ package com.hb.system.ecommerce.shoes.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,13 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping
     public ResponseEntity<ApiResponse<List<Material>>> list() {
         List<Material> materials = materialService.listAll();
         ApiResponse<List<Material>> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Se registró el material exitosamente");
+        response.setMessage("Lista de productos exitosamente");
         response.setData(materials);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
