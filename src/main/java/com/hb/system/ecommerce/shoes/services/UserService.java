@@ -31,8 +31,8 @@ public class UserService {
 
     public User saveUser(User user) {
         // Encriptar la contraseña antes de guardar el usuario
-        user.setRegisterDate(LocalDateTime.now());
-        user.setStatus(true);
+        /* user.setRegisterDate(LocalDateTime.now());
+        user.setStatus(true); */
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
