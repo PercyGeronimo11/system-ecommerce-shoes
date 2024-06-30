@@ -2,8 +2,6 @@ package com.hb.system.ecommerce.shoes.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @Entity
