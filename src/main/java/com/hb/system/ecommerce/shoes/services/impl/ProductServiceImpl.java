@@ -70,9 +70,12 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> productFind=productRepository.findById(id);
             productFind.get().setProName(productEditReq.getProName());
             productFind.get().setProDescription(productEditReq.getProDescription());
-            Category category= new Category();
-            category.setId(productEditReq.getCatId());
-            productFind.get().setCategory(category);
+            Optional<Category> categoryOptional = categoryRepository.findById(productEditReq.getCatId());
+            if (categoryOptional.isPresent()) {
+                productFind.get().setCategory(categoryOptional.get());
+            } else {
+                throw new RuntimeException("Categoría no encontrada");
+            }
             productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
             productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
             productFind.get().setProSizeTacon(productEditReq.getProSizeTacon());
