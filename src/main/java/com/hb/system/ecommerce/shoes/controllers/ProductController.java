@@ -8,6 +8,7 @@ import com.hb.system.ecommerce.shoes.entity.Product;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -64,27 +71,26 @@ public class ProductController {
        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-//    @GetMapping({"/index","/","list"})
-//    public String index(Model model){
-//        List<Product> productList=productRepository.findAll();
-//        model.addAttribute("products", productList);
-//        model.addAttribute("contenido", "products/list");
-//        return "layout/index";
-//    }
+    @Value("${image.upload.directory}")
+    private String uploadDir;
 
-//    @GetMapping("/create")
-//    public String create(Model model){
-//        model.addAttribute("product",new Product());
-//        model.addAttribute("contenido", "products/create");
-//        return "layout/index";
-//    }
-
-//    @PostMapping("/save")
-//    public String save(@ModelAttribute Product product){
-//        productRepository.save(product);
-//        return "redirect:/product/index";
-//    }
-
+    @GetMapping("/images/{imageName:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        Path imagePath = Paths.get(uploadDir).resolve(imageName);
+        Resource imageResource;
+        try {
+            imageResource = new UrlResource(imagePath.toUri());
+            if (imageResource.exists() || imageResource.isReadable()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG) // O el tipo de imagen correcto
+                        .body(imageResource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 //    @PostMapping("/update")
 //    public String updateProduct(@ModelAttribute Product product){
 //        Optional<Product> productFind=productRepository.findById(product.getId());
