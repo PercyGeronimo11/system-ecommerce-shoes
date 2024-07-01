@@ -27,6 +27,7 @@ public class PromotionController {
         response.setMessage("Lista de promociones exitosamente");
         response.setData(promotions);
         return new ResponseEntity<>(response,HttpStatus.OK);
+        
     }
     
     @PostMapping
