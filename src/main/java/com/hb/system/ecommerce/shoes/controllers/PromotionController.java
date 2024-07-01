@@ -28,10 +28,7 @@ public class PromotionController {
         response.setData(promotions);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
-
-
-
+    
     @PostMapping
     public ResponseEntity<ApiResponse<Promotion>> create(@RequestBody Promotion promotionRequest){
         Promotion promocion= promotionService.save(promotionRequest);
