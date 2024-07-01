@@ -1,35 +1,42 @@
 package com.hb.system.ecommerce.shoes.services;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hb.system.ecommerce.shoes.entity.Material;
 import com.hb.system.ecommerce.shoes.repositories.MaterialRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MaterialService {
+public class MaterialService implements ApiService<Material>{
     @Autowired
-    private MaterialRepository materialRepository;
+    private MaterialRepository resourceRepository;
     
-    public List<Material> getAllMaterials() {
-        return materialRepository.findAll();
+    public List<Material> listAll() {
+        return resourceRepository.findAllActiveMaterials();
     }
 
-    public Material getMaterialById(int id) {
-        return materialRepository.findById(id);
+    public Material getById(int id) {
+        return resourceRepository.findById(id);
     }
 
-    public Material saveMaterial(Material material) {
-        material.setStatus(true);
-        return materialRepository.save(material);
+    public Material save(Material resource) {
+        resource.setStatus(true);
+        return resourceRepository.save(resource);
     }
 
-    public void deleteMAterial(Integer id) {
-        materialRepository.deleteById(id);
+    public Material update(int id, Material resource){
+        if (resourceRepository.existsById(id)) {
+            resource.setId(id);
+            return resourceRepository.save(resource);
+        } else
+            return null;
+    }
+
+    public void delete(int id) {
+        Material material = resourceRepository.findById(id);
+        material.setStatus(false);
+        resourceRepository.save(material);
     }
 }
