@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.hb.system.ecommerce.shoes.auth.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -26,8 +25,7 @@ public class SecurityConfig {
     {
         return http
             .csrf(csrf -> 
-                csrf
-                .disable())
+                csrf.disable())
             .authorizeHttpRequests(authRequest ->
               authRequest
                 .requestMatchers("/auth/**").permitAll()

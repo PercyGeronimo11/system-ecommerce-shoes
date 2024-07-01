@@ -13,8 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
+@CrossOrigin(origins = "*")
 @RestController
 @Controller
 @RequestMapping("/product")
@@ -36,9 +39,11 @@ public class ProductController {
 
     @PostMapping(
             value = "/store",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<Product>> create(@RequestBody ProductCreateReq productCreateReq){
-        Product product= productService.productStoreService(productCreateReq);
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Product>> create( ProductCreateReq productCreateReq,
+                                                        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
+        Product product= productService.productStoreService(productCreateReq, file);
         ApiResponse<Product> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Se a guardado el producto exitosamente");
@@ -46,9 +51,12 @@ public class ProductController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id, @RequestBody ProductEditReq productEditReq){
-       Product product= productService.productEditService(id,productEditReq);
+    public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id,
+                                                            @RequestBody ProductEditReq productEditReq,
+                                                            @RequestParam("file") MultipartFile file){
+       Product product= productService.productEditService(id,productEditReq,file);
        ApiResponse<Product> response=new ApiResponse<>();
        response.setStatus(HttpStatus.OK.value());
        response.setMessage("El producto ha sido editado exitosamente");
@@ -76,7 +84,6 @@ public class ProductController {
 //        productRepository.save(product);
 //        return "redirect:/product/index";
 //    }
-
 
 //    @PostMapping("/update")
 //    public String updateProduct(@ModelAttribute Product product){
