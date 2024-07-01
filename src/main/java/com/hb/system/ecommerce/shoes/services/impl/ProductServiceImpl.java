@@ -1,5 +1,17 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
@@ -9,21 +21,6 @@ import com.hb.system.ecommerce.shoes.entity.Product;
 import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
 import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
 import com.hb.system.ecommerce.shoes.services.ProductService;
-import jakarta.servlet.ServletContext;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,8 +28,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private ServletContext servletContext;
+
+
 
     @Override
     public ProductListResp productListService(ProductListReq productListReq){
