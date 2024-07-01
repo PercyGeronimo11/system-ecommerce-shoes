@@ -30,8 +30,8 @@ public class SecurityConfig {
               authRequest
                 .requestMatchers("/auth/**").permitAll()
                 /* .requestMatchers("/api/**").permitAll() */
-                .anyRequest().permitAll()
-                /* .anyRequest().authenticated() */
+                /* .anyRequest().permitAll() */
+                .anyRequest().authenticated()
                 )
             .sessionManagement(sessionManager->
                 sessionManager 
