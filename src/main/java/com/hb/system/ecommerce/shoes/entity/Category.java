@@ -20,14 +20,14 @@ public class Category {
     @Id
     @Column(name = "CAT_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int CAT_id;
 
     @Column(name = "CAT_name")
-    private String name;
+    private String CAT_name;
 
     @Column(name = "CAT_description")
-    private String description;
+    private String CAT_description;
 
     @Column(name = "CAT_status")
-    private boolean status;
+    private boolean CAT_status;
 }
