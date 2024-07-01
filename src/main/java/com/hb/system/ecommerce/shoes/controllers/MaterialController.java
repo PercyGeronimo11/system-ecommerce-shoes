@@ -48,6 +48,7 @@ public class MaterialController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Material>> edit(@PathVariable int id, @RequestBody Material materialRequest){
         Material material= materialService.update(id,materialRequest);
+        material.setStatus(true);
         ApiResponse<Material> response=new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("El material se actualizó exitosamente");
