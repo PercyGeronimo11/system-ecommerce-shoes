@@ -1,47 +1,48 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.services.UserService;
 
-@Controller
-// @RestController
-// @Controller
-@RequestMapping("/user")
-
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/api/user")
 public class UserController {
      @Autowired
     private UserService userService;
 
-    @GetMapping({"/list"})
-    public String getAllUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("contenido", "users/UserList");
-        return "layout/index";
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<User>>> list() {
+        List<User> users = userService.listAll();
+        ApiResponse<List<User>> response= new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Lista de usuarios exitosamente");
+        response.setData(users);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping({"/create"})
-    public String showCreateForm(User user, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("contenido", "users/UserCreate");
-        return "layout/index";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<User>> delete(@PathVariable int id){
+        userService.delete(id);
+        ApiResponse<User> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Producto eliminado exitosamente");
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PostMapping({"/store"})
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
-        return "redirect:/user/list";
-    }
-
-    @GetMapping("/edit/{id}")
+    /* @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
@@ -60,7 +61,7 @@ public class UserController {
     public String deleteUser(@PathVariable("id") Integer id) {
         userService.deleteUser(id);
         return "redirect:/user/list";
-    }
+    } */
 
     
 }
