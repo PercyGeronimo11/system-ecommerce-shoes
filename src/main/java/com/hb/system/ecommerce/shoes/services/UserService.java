@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.repositories.UserRepository;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,22 +15,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> listAll() {
+        return userRepository.findAllActiveUsers();
     }
 
-    public User getUserById(int id) {
+    public User getById(int id) {
         return userRepository.findById(id);
     }
 
-    public User saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    public void deleteUser(Integer id) {
+    public void delete(Integer id) {
         userRepository.deleteById(id);
     }
 }
