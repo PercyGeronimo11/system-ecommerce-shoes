@@ -1,62 +1,72 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.services.CategoryService;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*") // Permitir solicitudes desde cualquier origen
 @RequestMapping("/api/category")
 public class CategoryController {
-
-    private final CategoryService categoryService;
-
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    @Autowired
+    private  CategoryService categoryService;
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<Category>>> list() {
+        List<Category> categories = categoryService.listAll();
+        ApiResponse<List<Category>> response= new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Lista de categorias exitosamente");
+        response.setData(categories);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/list")
-    public List<Category> getCategories() {
-        return categoryService.getAllCategories();
+    @PostMapping
+    public ResponseEntity<ApiResponse<Category>> create(@RequestBody Category categoriaRequest){
+        Category categoria= categoryService.save(categoriaRequest);
+        ApiResponse<Category> response= new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Se registró una categoria exitosamente");
+        response.setData(categoria);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PostMapping("/store")
-    public ResponseEntity<String> createCategory(@RequestBody Category category) {
-        try {
-            categoryService.createCategory(category);
-            String mensaje = "Category creado exitosamente.";
-            return ResponseEntity.ok(mensaje);
-        } catch (IllegalArgumentException e) {
-            String mensajeError = "Error al crear el Category: " + e.getMessage();
-            return ResponseEntity.badRequest().body(mensajeError);
-        }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Category>> edit(@PathVariable int id, @RequestBody Category categoriaRequest){
+        Category categoria= categoryService.update(id,categoriaRequest);
+        ApiResponse<Category> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("La categoria se actualizó exitosamente");
+        response.setData(categoria);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
-        try {
-            categoryService.updateCategory(id, category);
-            String mensaje = "Category actualizado exitosamente.";
-            return ResponseEntity.ok(mensaje);
-        } catch (IllegalArgumentException e) {
-            String mensajeError = "Error al actualizar el Category: " + e.getMessage();
-            return ResponseEntity.badRequest().body(mensajeError);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Category>> getById(@PathVariable int id){
+        Category categoria= categoryService.getById(id);
+        ApiResponse<Category> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Detalle de la categoria recuperado exitossamente");
+        response.setData(categoria);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Integer id) {
-        try {
-            categoryService.deleteCategory(id);
-            String mensaje = "Category eliminado exitosamente.";
-            return ResponseEntity.ok(mensaje);
-        } catch (Exception e) {
-            String mensajeError = "Error al eliminar el Category con ID " + id;
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensajeError);
-        }
+    public ResponseEntity<ApiResponse<Category>> delete(@PathVariable int id){
+        categoryService.delete(id);
+        ApiResponse<Category> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Categoria eliminada exitosamente");
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
