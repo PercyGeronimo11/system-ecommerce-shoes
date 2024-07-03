@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product productEditService(int id,ProductEditReq productEditReq, MultipartFile file){
-        Optional<Product> productFind=productRepository.findById(id);
+            Optional<Product> productFind=productRepository.findById(id);
             productFind.get().setProName(productEditReq.getProName());
             productFind.get().setProDescription(productEditReq.getProDescription());
             Optional<Category> categoryOptional = categoryRepository.findById(productEditReq.getCatId());

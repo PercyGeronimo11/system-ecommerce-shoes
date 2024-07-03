@@ -1,6 +1,8 @@
 package com.hb.system.ecommerce.shoes.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Category;
@@ -21,8 +23,10 @@ public class CategoryService {
     }
     // Método para obtener una categ por su ID
     public Category getById(int id) {
-        // Llama al método del repositorio que busca una catg por su ID
-        return categoryRepository.findById(id);
+        Optional<Category> categoryFind=categoryRepository.findById(id);
+        //if(categoryFind.isPresent())  aquí valida con excepciones
+        return categoryFind.get();
+
     }
   // Método para guardar una nueva categ
   public Category save(Category resource) {
@@ -39,10 +43,10 @@ public class CategoryService {
 }
 // Método para eliminar (desactivar) una catg
 public void delete(int id) {
-    Category categoria = categoryRepository.findById(id);
+    Optional<Category> categoria = categoryRepository.findById(id);
     // Establece el estado de la catg a 'false' (inactiva)
-    categoria.setCAT_status(false);
+    categoria.get().setCAT_status(false);
     // Guarda 
-    categoryRepository.save(categoria);
+    categoryRepository.save(categoria.get());
 }
 }

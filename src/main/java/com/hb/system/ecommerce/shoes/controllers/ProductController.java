@@ -94,6 +94,7 @@ public class ProductController {
             return ResponseEntity.badRequest().build();
         }
     }
+
 //    @PostMapping("/update")
 //    public String updateProduct(@ModelAttribute Product product){
 //        Optional<Product> productFind=productRepository.findById(product.getId());
