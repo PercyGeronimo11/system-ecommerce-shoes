@@ -26,7 +26,7 @@ public class UserInitializer {
         return args -> {
             if (!userRepository.findByUsername("admin@service.com").isPresent()) {
                 User user = new User();
-                Role role = rolRepository.findById(1).orElseThrow(() -> new RuntimeException("Role not found"));
+                Role role = rolRepository.findById(2).orElseThrow(() -> new RuntimeException("Role not found"));
                 user.setName("Administrador");
                 user.setUsername("admin@service.com");
                 user.setPassword(passwordEncoder.encode("12345678"));
