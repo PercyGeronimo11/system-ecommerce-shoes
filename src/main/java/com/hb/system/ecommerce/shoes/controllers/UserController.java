@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
+import com.hb.system.ecommerce.shoes.dto.request.UserEditReq;
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.services.UserService;
 
@@ -42,14 +45,17 @@ public class UserController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    /* @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("contenido", "users/UserEdit");
-        return "layout/index";
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<User>> edit(@PathVariable int id, @RequestBody UserEditReq userRequest){
+        User user= userService.update(id,userRequest);
+        user.setStatus(true);
+        ApiResponse<User> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("El usuario se actualizó exitosamente");
+        response.setData(user);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
+    /*
     @GetMapping("/delete/{id}")
     public String showDeleteConfirm(@PathVariable("id") Integer id, Model model) {
         User user = userService.getUserById(id);

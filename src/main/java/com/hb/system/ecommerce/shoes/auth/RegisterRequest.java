@@ -1,7 +1,5 @@
 package com.hb.system.ecommerce.shoes.auth;
 
-import com.hb.system.ecommerce.shoes.entity.Role;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
