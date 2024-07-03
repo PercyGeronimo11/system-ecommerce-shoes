@@ -1,10 +1,14 @@
 package com.hb.system.ecommerce.shoes.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,7 +26,8 @@ public class CategoryService {
     // Método para obtener una categ por su ID
     public Category getById(int id) {
         // Llama al método del repositorio que busca una catg por su ID
-        return categoryRepository.findById(id);
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        return optionalCategory.orElse(null);
     }
   // Método para guardar una nueva categ
   public Category save(Category resource) {
@@ -39,10 +44,15 @@ public class CategoryService {
 }
 // Método para eliminar (desactivar) una catg
 public void delete(int id) {
-    Category categoria = categoryRepository.findById(id);
-    // Establece el estado de la catg a 'false' (inactiva)
-    categoria.setCAT_status(false);
-    // Guarda 
-    categoryRepository.save(categoria);
+    Optional<Category> optionalCategory = categoryRepository.findById(id);
+    if (optionalCategory.isPresent()) {
+        Category categoria = optionalCategory.get();
+        // Establece el estado de la categoría a 'false' (inactiva)
+        categoria.setCAT_status(false);
+        // Guarda la categoría actualizada
+        categoryRepository.save(categoria);
+    } else {
+        throw new EntityNotFoundException("Category not found with id: " + id);
+    }
 }
 }
