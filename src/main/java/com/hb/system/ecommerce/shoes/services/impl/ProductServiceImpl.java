@@ -92,7 +92,6 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Error al eliminar el archivo: " + ex.getMessage());
         }
     }
-
     private String saveFile(MultipartFile archivo) {
         try {
             String uploadDir = "uploads";
@@ -103,10 +102,32 @@ public class ProductServiceImpl implements ProductService {
             String fileName = archivo.getOriginalFilename();
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+
+            // Guardar la URL relativa de la imagen
+            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName; // URL relativa
+
+            return fileUrl; // Retornar la URL relativa de la imagen
         } catch (IOException ex) {
             throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
         }
     }
+
+//
+//    private String saveFile(MultipartFile archivo) {
+//        try {
+//            String uploadDir = "uploads";
+//            Path uploadPath = Paths.get(uploadDir);
+//            if (!uploadPath.toFile().exists()) {
+//                uploadPath.toFile().mkdirs();
+//            }
+//            String fileName = archivo.getOriginalFilename();
+//            Path filePath = uploadPath.resolve(fileName);
+//            Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//            String fileAbsolutePath = filePath.toAbsolutePath().toString();
+//            return fileAbsolutePath;
+//        } catch (IOException ex) {
+//            throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
+//        }
+//    }
 
 }
