@@ -33,14 +33,13 @@ public class SecurityConfig {
                 /* .anyRequest().permitAll() */
                 .anyRequest().authenticated()
                 )
+
             .sessionManagement(sessionManager->
                 sessionManager 
                   .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
-            
-            
     }
 
 }

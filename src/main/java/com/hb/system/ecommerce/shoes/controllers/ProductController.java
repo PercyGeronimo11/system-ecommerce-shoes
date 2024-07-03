@@ -7,6 +7,7 @@ import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 @Controller
@@ -50,6 +52,7 @@ public class ProductController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<Product>> create( ProductCreateReq productCreateReq,
                                                         @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
+        log.info("valores", productCreateReq);
         Product product= productService.productStoreService(productCreateReq, file);
         ApiResponse<Product> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());

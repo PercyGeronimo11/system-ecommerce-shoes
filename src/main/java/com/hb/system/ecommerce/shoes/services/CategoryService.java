@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -44,9 +46,8 @@ public class CategoryService {
 // Método para eliminar (desactivar) una catg
 public void delete(int id) {
     Optional<Category> categoria = categoryRepository.findById(id);
-    // Establece el estado de la catg a 'false' (inactiva)
     categoria.get().setCAT_status(false);
-    // Guarda 
     categoryRepository.save(categoria.get());
+
 }
 }

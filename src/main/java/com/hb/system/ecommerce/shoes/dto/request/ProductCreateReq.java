@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ProductCreateReq {
-    private int id;
     private int catId;
     private String proName;
     private String proDescription;
