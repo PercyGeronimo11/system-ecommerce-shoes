@@ -14,7 +14,7 @@ public class MaterialService implements ApiService<Material>{
     private MaterialRepository resourceRepository;
     
     public List<Material> listAll() {
-        return resourceRepository.findAllActiveMaterials();
+        return resourceRepository.findMaterialsByStatus(true);
     }
 
     public Material getById(int id) {

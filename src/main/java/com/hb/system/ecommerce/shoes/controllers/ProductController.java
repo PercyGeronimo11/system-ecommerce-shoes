@@ -35,7 +35,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping(
-            value = {"/index", "/", "/list"},
+            value = {"/list"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<ProductListResp>> index( ProductListReq productListReq){
         ProductListResp productListResp = productService.productListService(productListReq);
@@ -51,8 +51,7 @@ public class ProductController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<Product>> create( ProductCreateReq productCreateReq,
-                                                        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
-        log.info("valores", productCreateReq);
+                       @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
         Product product= productService.productStoreService(productCreateReq, file);
         ApiResponse<Product> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());

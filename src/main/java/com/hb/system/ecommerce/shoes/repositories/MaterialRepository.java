@@ -9,8 +9,5 @@ import com.hb.system.ecommerce.shoes.entity.Material;
 
 public interface MaterialRepository extends JpaRepository<Material, Integer>{
     Material findById(int id);
-
-    @Query("SELECT m FROM Material m WHERE m.status = true")
-    List<Material> findAllActiveMaterials();
-
+    List<Material> findMaterialsByStatus(boolean status);
 }
