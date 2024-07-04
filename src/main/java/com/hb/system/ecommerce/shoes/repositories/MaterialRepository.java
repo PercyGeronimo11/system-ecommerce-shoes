@@ -12,4 +12,5 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>{
 
     @Query("SELECT m FROM Material m WHERE m.status = true")
     List<Material> findAllActiveMaterials();
+
 }
