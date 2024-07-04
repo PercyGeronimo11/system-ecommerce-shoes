@@ -33,7 +33,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping(
-            value = {"/index", "/", "/list"},
+            value = {"/list"},
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<ProductListResp>> index( ProductListReq productListReq){
         ProductListResp productListResp = productService.productListService(productListReq);
