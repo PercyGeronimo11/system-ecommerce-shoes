@@ -37,8 +37,6 @@ public class CategoryController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-
-
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Category>> edit(@PathVariable int id, @RequestBody Category categoriaRequest){
         Category categoria= categoryService.update(id,categoriaRequest);
