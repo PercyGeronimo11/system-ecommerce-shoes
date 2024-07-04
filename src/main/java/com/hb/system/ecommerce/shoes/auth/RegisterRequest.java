@@ -14,4 +14,5 @@ public class RegisterRequest {
     String email;
     String password;
     boolean status;
+    int role;
 }

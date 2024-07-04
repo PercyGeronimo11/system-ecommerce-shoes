@@ -60,25 +60,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product productEditService(int id, ProductEditReq productEditReq, MultipartFile file) {
-        Optional<Product> productFind = productRepository.findById(id);
-        if (!productFind.isPresent()) {
-            throw new RuntimeException("Producto no encontrado");
-        }
-        Product product = productFind.get();
-        product.setProName(productEditReq.getProName());
-        product.setProDescription(productEditReq.getProDescription());
-        Optional<Category> categoryOptional = categoryRepository.findById(productEditReq.getCatId());
-        if (categoryOptional.isPresent()) {
-            product.setCategory(categoryOptional.get());
-        } else {
-            throw new RuntimeException("Categoría no encontrada");
-        }
-        product.setProUnitPrice(productEditReq.getProUnitPrice());
-        product.setProSizePlatform(productEditReq.getProSizePlatform());
-        product.setProSizeTacon(productEditReq.getProSizeTacon());
-        product.setProUrlImage(saveFile(file));
-        return productRepository.save(product);
+    public Product productEditService(int id,ProductEditReq productEditReq, MultipartFile file){
+            Optional<Product> productFind=productRepository.findById(id);
+            productFind.get().setProName(productEditReq.getProName());
+            productFind.get().setProDescription(productEditReq.getProDescription());
+            Optional<Category> categoryOptional = categoryRepository.findById(productEditReq.getCatId());
+            if (categoryOptional.isPresent()) {
+                productFind.get().setCategory(categoryOptional.get());
+            } else {
+                throw new RuntimeException("Categoría no encontrada");
+            }
+            productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
+            productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
+            productFind.get().setProSizeTacon(productEditReq.getProSizeTacon());
+            productFind.get().setProUrlImage(saveFile(file));
+            return productRepository.save(productFind.get());
     }
 
     private void deleteFile(String fileName) {
