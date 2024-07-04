@@ -18,22 +18,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Promotion {
     @Id
-    @Column(name = "PROMT_id")
+    @Column(name = "prom_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int PROMT_id;
+    private int id;
 
-    @Column(name = "PROMT_percentage")
-    private int PROMT_percentage;
+    @Column(name = "prom_percentage")
+    private int promPercentage;
 
-    @Column(name = "PROMT_start_date")
-    private Date PROMT_start_date;
+    @Column(name = "prom_start_date")
+    private Date promStartdate;
 
-    @Column(name = "PROMT_end_date")
-    private Date PROMT_end_date;
+    @Column(name = "prom_end_date")
+    private Date promEnddate;
 
-    @Column(name = "PROMT_description")
-    private String PROMT_description;
+    @Column(name = "prom_description")
+    private String promDescription;
 
-    @Column(name = "PROMT_status")
-    private boolean PROMT_status;
+    @Column(name = "prom_url_image")
+    private String promUrlImage;
+
+    @Column(name = "prom_status")
+    private boolean promStatus;
 }
