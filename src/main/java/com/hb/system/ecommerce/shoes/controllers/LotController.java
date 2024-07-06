@@ -1,12 +1,9 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
-import com.hb.system.ecommerce.shoes.dto.request.LotCreateReq;
-import com.hb.system.ecommerce.shoes.dto.request.LotEditReq;
+import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
 import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
 import com.hb.system.ecommerce.shoes.entity.Lot;
-import com.hb.system.ecommerce.shoes.entity.Lot;
-import com.hb.system.ecommerce.shoes.repositories.LotRepository;
 import com.hb.system.ecommerce.shoes.services.LotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,16 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @Controller
@@ -49,8 +42,8 @@ public class LotController {
     @PostMapping(
             value = "/store",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<Lot>> storeController(@RequestBody LotCreateReq lotCreateReq) throws IOException {
-        Lot lot= lotService.lotStoreService(lotCreateReq);
+    public ResponseEntity<ApiResponse<Lot>> storeController(@RequestBody LotRequest lotRequest) throws IOException {
+        Lot lot= lotService.lotStoreService(lotRequest);
         ApiResponse<Lot> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Se a guardado el loto exitosamente");
@@ -60,7 +53,7 @@ public class LotController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<Lot>> editLot(@PathVariable int id,
-                                                            @RequestBody LotEditReq lotEditReq){
+                                                            @RequestBody LotRequest lotEditReq){
         Lot lot= lotService.lotEditService(id,lotEditReq);
         ApiResponse<Lot> response=new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());

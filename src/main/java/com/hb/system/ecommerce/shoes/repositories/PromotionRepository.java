@@ -10,6 +10,6 @@ import com.hb.system.ecommerce.shoes.entity.Promotion;
 public interface PromotionRepository extends JpaRepository<Promotion, Integer>{
     Promotion findById(int id);
 
-    @Query("SELECT p FROM Promotion p WHERE p.PROMT_status = true")
+    @Query("SELECT p FROM Promotion p WHERE p.promStatus = true")
     List<Promotion> findAllActivePromotions();
 }

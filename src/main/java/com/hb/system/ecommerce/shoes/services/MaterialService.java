@@ -1,6 +1,8 @@
 package com.hb.system.ecommerce.shoes.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Material;
@@ -18,7 +20,12 @@ public class MaterialService implements ApiService<Material>{
     }
 
     public Material getById(int id) {
-        return resourceRepository.findById(id);
+        Optional<Material> material=resourceRepository.findById(id);
+        if(material.isPresent()){
+            return material.get();
+        }else{
+            throw new RuntimeException("No se encontro material");
+        }
     }
 
     public Material save(Material resource) {
@@ -35,8 +42,12 @@ public class MaterialService implements ApiService<Material>{
     }
 
     public void delete(int id) {
-        Material material = resourceRepository.findById(id);
-        material.setStatus(false);
-        resourceRepository.save(material);
+        Optional<Material> material=resourceRepository.findById(id);
+        if(material.isPresent()){
+            material.get().setStatus(false);
+            resourceRepository.save(material.get());
+        }else{
+            throw new RuntimeException("No se encontro material");
+        }
     }
 }

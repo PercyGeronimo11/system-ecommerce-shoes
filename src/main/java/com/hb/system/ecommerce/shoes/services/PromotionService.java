@@ -31,7 +31,7 @@ public class PromotionService {
     // Método para guardar una nueva promoción
     public Promotion save(Promotion resource) {
         // Establece el estado de la promoción a 'true' (activa)
-        resource.setPROMT_status(true);
+        resource.setPromStatus(true);
         // Guarda la promoción en el repositorio y devuelve el objeto guardado
         return promotionRepository.save(resource);
     }
@@ -41,7 +41,7 @@ public class PromotionService {
         // Comprueba si una promoción con el ID dado existe
         if (promotionRepository.existsById(id)) {
             // Establece el ID de la promoción al ID dado
-            resource.setPROMT_id(id);
+            resource.setId(id);
             // Guarda la promoción actualizada en el repositorio y devuelve el objeto guardado
             return promotionRepository.save(resource);
         } else
@@ -54,7 +54,7 @@ public class PromotionService {
         // Busca la promoción por su ID
         Promotion promocion = promotionRepository.findById(id);
         // Establece el estado de la promoción a 'false' (inactiva)
-        promocion.setPROMT_status(false);
+        promocion.setPromStatus(false);
         // Guarda la promoción con el estado actualizado en el repositorio
         promotionRepository.save(promocion);
     }

@@ -1,30 +1,32 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
-import com.hb.system.ecommerce.shoes.dto.request.LotCreateReq;
-import com.hb.system.ecommerce.shoes.dto.request.LotEditReq;
+import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
+import com.hb.system.ecommerce.shoes.dto.request.LotDetailRequest;
 import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
-import com.hb.system.ecommerce.shoes.entity.Category;
-import com.hb.system.ecommerce.shoes.entity.Lot;
-import com.hb.system.ecommerce.shoes.entity.Product;
-import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
-import com.hb.system.ecommerce.shoes.repositories.LotRepository;
-import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
+import com.hb.system.ecommerce.shoes.entity.*;
+import com.hb.system.ecommerce.shoes.repositories.*;
 import com.hb.system.ecommerce.shoes.services.LotService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LotServiceImpl implements LotService {
     @Autowired
     private LotRepository lotRepository;
     @Autowired
+    private LotDetailRepository lotDetailRepository;
+    @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private MaterialRepository materialRepository;
 
     @Override
     public LotListResp lotListService(String search) {
@@ -35,62 +37,64 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
-    public Lot lotStoreService(LotCreateReq lotCreateReq) throws IOException {
+    public Lot lotStoreService(LotRequest lotRequest) throws IOException {
         try {
             Lot lot = new Lot();
-            lot.setProName(lotCreateReq.getProName());
-            lot.setProDescription(lotCreateReq.getProDescription());
-            Optional<Category> categoryFind = categoryRepository.findById(lotCreateReq.getCategoryId());
-            if (categoryFind.isPresent()) {
-                lot.setCategory(categoryFind.get());
-            } else {
-                throw new RuntimeException("Categoría no encontrada");
-            }
-            Optional<Product> productFind = productRepository.findById(lotCreateReq.getProductId());
-            if (productFind.isPresent()) {
+            Optional<Product> productFind=productRepository.findById(lotRequest.getProductId());
+            if(productFind.isPresent()){
                 lot.setProduct(productFind.get());
-            } else {
-                throw new RuntimeException("Product no encontrada");
+            }else{
+                throw new RuntimeException("No se encontro el producto");
             }
-            lot.setLotProductsAmount(lotCreateReq.getLotProductsAmount());
-            lot.setProSizePlatform(lotCreateReq.getProSizePlatform());
-            lot.setProSizeTacon(lotCreateReq.getProSizeTacon());
-            lot.setLotTotalCost(lotCreateReq.getLotTotalCost());
+
+            lot.setLotTotalCost(lotRequest.getLotTotalCost());
+            lot.setLotQuantityProducts(lotRequest.getLotQuantityProducts());
             lot.setLotStatus(true);
-            return lotRepository.save(lot);
+
+            Lot savedLot = lotRepository.save(lot);
+
+            for (LotDetailRequest detailRequest : lotRequest.getLotDetail()) {
+                LotDetail detail = new LotDetail();
+                detail.setLot(savedLot);
+                Optional<Material> materialFind=materialRepository.findById(lotRequest.getProductId());
+                if(materialFind.isPresent()){
+                    detail.setMaterial(materialFind.get());
+                }else{
+                    throw new RuntimeException("No se encontro el material");
+                }
+                detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
+                detail.setDetSubTotal(detailRequest.getDetSubTotal());
+                lotDetailRepository.save(detail);
+            }
+            return savedLot;
         } catch (Exception e) {
             throw new RuntimeException("Error: Don't save the lot", e);
         }
     }
 
     @Override
-    public Lot lotEditService(int id,LotEditReq lotEditReq){
-            Optional<Lot> lotFind=lotRepository.findById(id);
-            if(lotFind.isPresent()){
-                lotFind.get().setProName(lotEditReq.getProName());
-            }else{
-                throw new RuntimeException("Categoría no encontrada");
-            }
+    public Lot lotEditService(int id,LotRequest lotRequest){
+        Lot existingLot = lotRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Lot not found with id: " + id));
 
-            lotFind.get().setProDescription(lotEditReq.getProDescription());
-            Optional<Category> categoryFind = categoryRepository.findById(lotEditReq.getCategoryId());
-            if (categoryFind.isPresent()) {
-                lotFind.get().setCategory(categoryFind.get());
-            } else {
-                throw new RuntimeException("Categoría no encontrada");
+        // Eliminar todos los detalles existentes del lote
+        lotDetailRepository.deleteByLot_Id(existingLot.getId());
+
+        for (LotDetailRequest detailRequest : lotRequest.getLotDetail()) {
+            LotDetail detail = new LotDetail();
+            detail.setLot(existingLot);
+            Optional<Material> materialFind=materialRepository.findById(lotRequest.getProductId());
+            if(materialFind.isPresent()){
+                detail.setMaterial(materialFind.get());
+            }else{
+                throw new RuntimeException("No se encontro el material");
             }
-        Optional<Product> productFind = productRepository.findById(lotEditReq.getProductId());
-        if (productFind.isPresent()) {
-            lotFind.get().setProduct(productFind.get());
-        } else {
-            throw new RuntimeException("Product no encontrada");
+            detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
+            detail.setDetSubTotal(detailRequest.getDetSubTotal());
+            lotDetailRepository.save(detail);
         }
-        lotFind.get().setLotProductsAmount(lotEditReq.getLotProductsAmount());
-        lotFind.get().setProSizePlatform(lotEditReq.getProSizePlatform());
-        lotFind.get().setProSizeTacon(lotEditReq.getProSizeTacon());
-        lotFind.get().setLotTotalCost(lotEditReq.getLotTotalCost());
-        lotFind.get().setLotStatus(true);
-        return lotRepository.save(lotFind.get());
+
+        return lotRepository.save(existingLot);
     }
 
 }
