@@ -13,25 +13,25 @@ import lombok.Data;
 @Table(name = "material")
 public class Material {
     @Id
-    @Column(name = "MAT_id")
+    @Column(name = "mat_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "MAT_name")
+    @Column(name = "mat_name")
     private String name;
 
-    @Column(name = "MAT_unit_price")
+    @Column(name = "mat_unit_price")
     private String unitPrice;
 
-    @Column(name = "MAT_stock")
+    @Column(name = "mat_stock")
     private String stock;
 
-    @Column(name = "MAT_unit")
+    @Column(name = "mat_unit")
     private String unit;
 
-    @Column(name = "MAT_description")
+    @Column(name = "mat_description")
     private String description;
 
-    @Column(name = "MAT_status")
+    @Column(name = "mat_status")
     private boolean status;
 }

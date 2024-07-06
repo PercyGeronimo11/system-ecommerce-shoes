@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
             }
             product.setProUnitPrice(productCreateReq.getProUnitPrice());
             product.setProSizePlatform(productCreateReq.getProSizePlatform());
-            product.setProSizeTacon(productCreateReq.getProSizeTacon());
+            product.setProSizeTaco(productCreateReq.getProSizeTaco());
             product.setProUrlImage(saveFile(file));
             return productRepository.save(product);
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
             }
             productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
             productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
-            productFind.get().setProSizeTacon(productEditReq.getProSizeTacon());
+            productFind.get().setProSizeTaco(productEditReq.getProSizeTaco());
             productFind.get().setProUrlImage(saveFile(file));
             return productRepository.save(productFind.get());
     }

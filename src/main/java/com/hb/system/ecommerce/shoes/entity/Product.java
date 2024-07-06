@@ -27,8 +27,8 @@ public class Product {
     private String proSize;
     @Column(name = "pro_size_platform")
     private String proSizePlatform;
-    @Column(name = "pro_size_tacon")
-    private String proSizeTacon;
+    @Column(name = "pro_size_taco")
+    private String proSizeTaco;
     @Column(name = "pro_url_image")
     private String proUrlImage;
     @Column(name = "pro_color")

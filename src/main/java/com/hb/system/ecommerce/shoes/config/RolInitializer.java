@@ -14,9 +14,9 @@ public class RolInitializer {
     @Transactional
     public CommandLineRunner initRoles(RolRepository roleRepository) {
         return args -> {
-            if (!roleRepository.findByName("USUARIO").isPresent()) {
+            if (!roleRepository.findByName("USER").isPresent()) {
                 Role userRole = new Role();
-                userRole.setName("USUARIO");
+                userRole.setName("USER");
                 userRole.setStatus(true);
                 roleRepository.save(userRole);
             }

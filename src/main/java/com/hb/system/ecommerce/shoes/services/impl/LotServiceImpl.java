@@ -7,14 +7,16 @@ import com.hb.system.ecommerce.shoes.entity.*;
 import com.hb.system.ecommerce.shoes.repositories.*;
 import com.hb.system.ecommerce.shoes.services.LotService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class LotServiceImpl implements LotService {
     @Autowired
@@ -27,6 +29,8 @@ public class LotServiceImpl implements LotService {
     private ProductRepository productRepository;
     @Autowired
     private MaterialRepository materialRepository;
+    @Autowired
+    private LotDetailServiceImpl lotDetailServiceImpl;
 
     @Override
     public LotListResp lotListService(String search) {
@@ -37,14 +41,15 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
+    @Transactional
     public Lot lotStoreService(LotRequest lotRequest) throws IOException {
         try {
             Lot lot = new Lot();
-            Optional<Product> productFind=productRepository.findById(lotRequest.getProductId());
-            if(productFind.isPresent()){
+            Optional<Product> productFind = productRepository.findById(lotRequest.getProductId());
+            if (productFind.isPresent()) {
                 lot.setProduct(productFind.get());
-            }else{
-                throw new RuntimeException("No se encontro el producto");
+            } else {
+                throw new RuntimeException("No se encontró el producto");
             }
 
             lot.setLotTotalCost(lotRequest.getLotTotalCost());
@@ -53,22 +58,30 @@ public class LotServiceImpl implements LotService {
 
             Lot savedLot = lotRepository.save(lot);
 
-            for (LotDetailRequest detailRequest : lotRequest.getLotDetail()) {
+            lotRequest.getLotDetail().forEach(detailRequest->{
                 LotDetail detail = new LotDetail();
-                detail.setLot(savedLot);
-                Optional<Material> materialFind=materialRepository.findById(lotRequest.getProductId());
-                if(materialFind.isPresent()){
+                Optional<Material> materialFind = materialRepository.findById(detailRequest.getMaterialId());
+                if (materialFind.isPresent()) {
                     detail.setMaterial(materialFind.get());
-                }else{
-                    throw new RuntimeException("No se encontro el material");
+                    log.info("material:"+ materialFind.get());
+                } else {
+                    throw new RuntimeException("No se encontró el material");
                 }
                 detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
+                detail.setDetPriceUnit(detailRequest.getDetSubTotal());
                 detail.setDetSubTotal(detailRequest.getDetSubTotal());
+                log.info("finalll");
+                LotDetail existingDetail = lotDetailRepository.findById(detail.getId()).orElse(null);
+                if (existingDetail != null) {
+                    lotDetailRepository.delete(existingDetail);
+                }
+                detail.setLot(savedLot);
                 lotDetailRepository.save(detail);
-            }
+                log.info("saliiii");
+            });
             return savedLot;
         } catch (Exception e) {
-            throw new RuntimeException("Error: Don't save the lot", e);
+            throw new RuntimeException("Error: No se pudo guardar el lote", e);
         }
     }
 

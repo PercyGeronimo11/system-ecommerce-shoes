@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class LotDetailRequest {
     private int materialId;
-    private String detQuantity;
-    private String detSubTotal;
+    private Double detPriceUnit;
+    private Integer detQuantity;
+    private Double detSubTotal;
 }

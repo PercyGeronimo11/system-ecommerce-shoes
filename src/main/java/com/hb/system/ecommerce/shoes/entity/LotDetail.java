@@ -7,7 +7,8 @@ import lombok.Data;
 @Entity
 public class LotDetail {
     @Id
-    @Column(name = "lotDetail_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lot_det_id")
     private int id;
 
     @ManyToOne
@@ -18,9 +19,12 @@ public class LotDetail {
     @JoinColumn(name = "mat_id", referencedColumnName = "mat_id")
     private Material material;
 
+    @Column(name = "det_price_unit")
+    private Double detPriceUnit;
+
     @Column(name = "det_quantity_material")
-    private String detQuantityMaterials;
+    private Integer detQuantityMaterials;
 
     @Column(name = "det_sub_total")
-    private String detSubTotal;
+    private Double detSubTotal;
 }

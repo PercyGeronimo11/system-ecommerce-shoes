@@ -7,6 +7,7 @@ import lombok.Data;
 @Entity
 public class Lot {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lot_id")
     private int id;
 
@@ -15,10 +16,10 @@ public class Lot {
     private Product product;
 
     @Column(name = "lot_total_cost")
-    private String lotTotalCost;
+    private Double lotTotalCost;
 
-    @Column(name = "lot_products_quantity")
-    private String lotQuantityProducts;
+    @Column(name = "lot_quantity_products")
+    private Integer lotQuantityProducts;
 
     @Column(name = "lot_status")
     private Boolean lotStatus;

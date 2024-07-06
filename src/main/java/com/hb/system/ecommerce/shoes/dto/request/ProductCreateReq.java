@@ -9,5 +9,5 @@ public class ProductCreateReq {
     private String proDescription;
     private String proUnitPrice;
     private String proSizePlatform;
-    private String proSizeTacon;
+    private String proSizeTaco;
 }

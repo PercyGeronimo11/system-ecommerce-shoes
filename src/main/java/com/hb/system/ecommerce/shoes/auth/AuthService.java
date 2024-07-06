@@ -37,7 +37,8 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        Role role = roleRepository.findById(request.getRole()).orElseThrow(() -> new IllegalArgumentException("Default role not found"));
+        Role role = roleRepository.findById(request.getRole()).orElseThrow(()
+                -> new IllegalArgumentException("Default role not found"));
         User user = User.builder()
             .name(request.getUsername())
             .username(request.getEmail())
