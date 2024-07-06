@@ -1,80 +1,95 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
+import com.hb.system.ecommerce.shoes.dto.ApiResponse;
+import com.hb.system.ecommerce.shoes.dto.request.LotCreateReq;
+import com.hb.system.ecommerce.shoes.dto.request.LotEditReq;
+import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
+import com.hb.system.ecommerce.shoes.entity.Lot;
 import com.hb.system.ecommerce.shoes.entity.Lot;
 import com.hb.system.ecommerce.shoes.repositories.LotRepository;
+import com.hb.system.ecommerce.shoes.services.LotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @Controller
 @RequestMapping("/lot")
 public class LotController {
-
     @Autowired
-    private LotRepository lotsRepository;
+    private LotService lotService;
 
-    @GetMapping({"/index","/","list"})
-    public String index(Model model){
-        List<Lot> lotsList=lotsRepository.findAll();
-        model.addAttribute("lots", lotsList);
-        model.addAttribute("contenido", "lots/list");
-        return "layout/index";
+    @GetMapping(
+            value = {"/list"},
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<LotListResp>> index(@RequestParam(name = "search") String search){
+        LotListResp lotListResp = lotService.lotListService(search);
+        ApiResponse<LotListResp> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Lista de lotes exitosamente");
+        response.setData(lotListResp);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/create")
-    public String create(Model model){
-        model.addAttribute("lots",new Lot());
-        model.addAttribute("contenido", "lots/create");
-        return "layout/index";
+    @PostMapping(
+            value = "/store",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<Lot>> storeController(@RequestBody LotCreateReq lotCreateReq) throws IOException {
+        Lot lot= lotService.lotStoreService(lotCreateReq);
+        ApiResponse<Lot> response= new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Se a guardado el loto exitosamente");
+        response.setData(lot);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PostMapping("/save")
-    public String save(@ModelAttribute Lot lots){
-        lotsRepository.save(lots);
-        return "redirect:/lot/index";
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ApiResponse<Lot>> editLot(@PathVariable int id,
+                                                            @RequestBody LotEditReq lotEditReq){
+        Lot lot= lotService.lotEditService(id,lotEditReq);
+        ApiResponse<Lot> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("El loto ha sido editado exitosamente");
+        response.setData(lot);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/edit/{id}")
-    public String editLot(Model model,@PathVariable int id){
-        Optional<Lot> lotsFind=lotsRepository.findById(id);
-        if(lotsFind.isEmpty()){
-            return "redirect:/lot/index";
-        }else{
-            model.addAttribute("lots",lotsFind.get());
-            model.addAttribute("contenido", "lots/edit");
-            return "layout/index";
+    @Value("${image.upload.directory}")
+    private String uploadDir;
+
+    @GetMapping("/images/{imageName:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        Path imagePath = Paths.get(uploadDir).resolve(imageName);
+        Resource imageResource;
+        try {
+            imageResource = new UrlResource(imagePath.toUri());
+            if (imageResource.exists() || imageResource.isReadable()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG) // O el tipo de imagen correcto
+                        .body(imageResource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException ex) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PostMapping("/update")
-    public String updateLot(@ModelAttribute Lot lots){
-        Optional<Lot> lotsFind=lotsRepository.findById(lots.getId());
-        if (lotsFind.isPresent()){
-            //lotsFind.get().setCategory(lots.getCategory());
-            lotsFind.get().setPro_name(lots.getPro_name());
-            lotsFind.get().setPro_description(lots.getPro_description());
-            lotsFind.get().setPro_unit_price(lots.getPro_unit_price());
-            lotsRepository.save(lotsFind.get());
-        }else{
-
-        }
-        return "redirect:/lot/index";
-    }
-
-    @GetMapping("/cancel")
-    public String cancel(){
-        return "redirect:/lot/index";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable int id){
-        lotsRepository.deleteById(id);
-        return "redirect:/lot/index";
-    }
 }
 
 

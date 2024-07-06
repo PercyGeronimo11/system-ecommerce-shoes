@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.Product;
@@ -30,8 +29,8 @@ public class ProductServiceImpl implements ProductService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public ProductListResp productListService(ProductListReq productListReq) {
-        List<Product> productList = productRepository.findByProNameContaining(productListReq.getSearch());
+    public ProductListResp productListService(String search) {
+        List<Product> productList = productRepository.findByProNameContaining(search);
         return ProductListResp.builder()
                 .content(productList)
                 .build();

@@ -2,7 +2,6 @@ package com.hb.system.ecommerce.shoes.controllers;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
 
@@ -37,8 +36,8 @@ public class ProductController {
     @GetMapping(
             value = {"/list"},
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<ProductListResp>> index( ProductListReq productListReq){
-        ProductListResp productListResp = productService.productListService(productListReq);
+    public ResponseEntity<ApiResponse<ProductListResp>> index( String search){
+        ProductListResp productListResp = productService.productListService(search);
         ApiResponse<ProductListResp> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Lista de productos exitosamente");
@@ -59,10 +58,6 @@ public class ProductController {
         response.setData(product);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
-
-    
-
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id,
