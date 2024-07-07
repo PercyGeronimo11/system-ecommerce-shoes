@@ -60,10 +60,6 @@ public class ProductController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-
-    
-
-
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id,
                                                             @RequestBody ProductEditReq productEditReq,

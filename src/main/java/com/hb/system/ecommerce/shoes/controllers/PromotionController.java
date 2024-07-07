@@ -1,17 +1,23 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
 import com.hb.system.ecommerce.shoes.services.PromotionService;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
-import org.springframework.http.HttpHeaders;
+
 @RestController
 @CrossOrigin(origins = "*") // Permitir solicitudes desde cualquier origen
 @RequestMapping("/api/promotion")
@@ -30,43 +36,23 @@ public class PromotionController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Promotion>> create(@RequestPart("promotion") Promotion promotionRequest,
-            @RequestPart("file") MultipartFile file) {
-        Promotion promocion;
-        try {
-            promocion = promotionService.save(promotionRequest, file);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (IllegalArgumentException e) {
-            ApiResponse<Promotion> response = new ApiResponse<>();
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.setMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+                @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
+        Promotion promotion = promotionService.save(promotionRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Se registró una promoción exitosamente");
-        response.setData(promocion);
+        response.setMessage("Promoción registrada exitosamente");
+        response.setData(promotion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int id,
-            @RequestPart("promotion") Promotion promotionRequest, @RequestPart("file") MultipartFile file) {
-        Promotion promocion;
-        try {
-            promocion = promotionService.update(id, promotionRequest, file);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (IllegalArgumentException e) {
-            ApiResponse<Promotion> response = new ApiResponse<>();
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.setMessage(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+            @RequestPart("promotion") Promotion promotionRequest,
+            @RequestPart(name = "file", required = false) MultipartFile file) throws IOException {
+        Promotion promotion = promotionService.update(id, promotionRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setMessage("La promoción se actualizó exitosamente");
-        response.setData(promocion);
+        response.setMessage("Promoción actualizada exitosamente");
+        response.setData(promotion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -89,16 +75,23 @@ public class PromotionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/images/{fileName:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String fileName) {
-        Resource resource;
+    @Value("${image.upload.directory}")
+    private String uploadDir;
+    @GetMapping("/images/{imageName:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+        Path imagePath = Paths.get(uploadDir).resolve(imageName);
+        Resource imageResource;
         try {
-            resource = promotionService.loadFileAsResource(fileName);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            imageResource = new UrlResource(imagePath.toUri());
+            if (imageResource.exists() || imageResource.isReadable()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG) // O el tipo de imagen correcto
+                        .body(imageResource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException ex) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
     }
 }
