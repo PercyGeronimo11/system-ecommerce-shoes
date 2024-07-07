@@ -78,6 +78,7 @@ public class LotServiceImpl implements LotService {
                 detail.setLot(savedLot);
                 lotDetailRepository.save(detail);
             });
+            productFind.get().setProStock(lot.getLotQuantityProducts());
             return savedLot;
         } catch (Exception e) {
             throw new RuntimeException("Error: No se pudo guardar el lote", e);

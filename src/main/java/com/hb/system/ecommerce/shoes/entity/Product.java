@@ -21,7 +21,9 @@ public class Product {
     @Column(name = "pro_description")
     private String proDescription;
     @Column(name = "pro_unit_price")
-    private String proUnitPrice;
+    private Double proUnitPrice;
+    @Column(name = "pro_unit_cost")
+    private Double proUnitCost;
     @Column(name = "pro_size")
     private String proSize;
     @Column(name = "pro_size_platform")
@@ -33,7 +35,7 @@ public class Product {
     @Column(name = "pro_color")
     private String proColor;
     @Column(name = "pro_stock")
-    private String proStock;
+    private int proStock;
     @Column(name = "pro_status")
-    private String proStatus;
+    private Boolean proStatus;
 }
