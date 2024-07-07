@@ -29,6 +29,7 @@ public class MaterialService implements ApiService<Material>{
     public Material update(int id, Material resource){
         if (resourceRepository.existsById(id)) {
             resource.setId(id);
+            resource.setStatus(true);
             return resourceRepository.save(resource);
         } else
             return null;
