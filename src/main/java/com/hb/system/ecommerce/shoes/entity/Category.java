@@ -12,22 +12,21 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "category")
-@Data  // Para generar automáticamente getters, setters, toString, equals, y hashCode
-@NoArgsConstructor  // Constructor sin argumentos
-@AllArgsConstructor  // Constructor con todos los argumentos
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
-    
     @Id
-    @Column(name = "CAT_id")
+    @Column(name = "cat_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int CAT_id;
+    private int id;
 
-    @Column(name = "CAT_name")
-    private String CAT_name;
+    @Column(name = "cat_name")
+    private String catName;
 
-    @Column(name = "CAT_description")
-    private String CAT_description;
+    @Column(name = "cat_description")
+    private String catDescription;
 
-    @Column(name = "CAT_status")
-    private boolean CAT_status;
+    @Column(name = "cat_status")
+    private boolean catStatus;
 }

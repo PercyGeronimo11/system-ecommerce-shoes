@@ -2,11 +2,11 @@ package com.hb.system.ecommerce.shoes.controllers;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 @Controller
@@ -35,8 +36,8 @@ public class ProductController {
     @GetMapping(
             value = {"/list"},
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<ProductListResp>> index( ProductListReq productListReq){
-        ProductListResp productListResp = productService.productListService(productListReq);
+    public ResponseEntity<ApiResponse<ProductListResp>> index( String search){
+        ProductListResp productListResp = productService.productListService(search);
         ApiResponse<ProductListResp> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Lista de productos exitosamente");
@@ -49,7 +50,7 @@ public class ProductController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<Product>> create( ProductCreateReq productCreateReq,
-                                                        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
+                       @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
         Product product= productService.productStoreService(productCreateReq, file);
         ApiResponse<Product> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
@@ -57,10 +58,6 @@ public class ProductController {
         response.setData(product);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
-
-    
-
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id,
@@ -94,6 +91,7 @@ public class ProductController {
             return ResponseEntity.badRequest().build();
         }
     }
+
 //    @PostMapping("/update")
 //    public String updateProduct(@ModelAttribute Product product){
 //        Optional<Product> productFind=productRepository.findById(product.getId());

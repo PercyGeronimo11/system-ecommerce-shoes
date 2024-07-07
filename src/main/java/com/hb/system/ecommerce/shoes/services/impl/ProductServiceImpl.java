@@ -1,21 +1,5 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
-import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductListReq;
-import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
-import com.hb.system.ecommerce.shoes.entity.Category;
-import com.hb.system.ecommerce.shoes.entity.Product;
-import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
-import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
-import com.hb.system.ecommerce.shoes.services.ProductService;
-import jakarta.servlet.ServletContext;
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,7 +7,19 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
+import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
+import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
+import com.hb.system.ecommerce.shoes.entity.Category;
+import com.hb.system.ecommerce.shoes.entity.Product;
+import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
+import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
+import com.hb.system.ecommerce.shoes.services.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,12 +27,10 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private ServletContext servletContext;
 
     @Override
-    public ProductListResp productListService(ProductListReq productListReq){
-        List<Product> productList=productRepository.findByProNameContaining(productListReq.getSearch());
+    public ProductListResp productListService(String search) {
+        List<Product> productList = productRepository.findByProNameContaining(search);
         return ProductListResp.builder()
                 .content(productList)
                 .build();
@@ -45,9 +39,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product productStoreService(ProductCreateReq productCreateReq, MultipartFile file) throws IOException {
         try {
-            Product product=new Product();
+            Product product = new Product();
             product.setProName(productCreateReq.getProName());
-            product.setProDescription(product.getProDescription());
+            product.setProDescription(productCreateReq.getProDescription());
             Optional<Category> categoryOptional = categoryRepository.findById(productCreateReq.getCatId());
             if (categoryOptional.isPresent()) {
                 product.setCategory(categoryOptional.get());
@@ -56,10 +50,9 @@ public class ProductServiceImpl implements ProductService {
             }
             product.setProUnitPrice(productCreateReq.getProUnitPrice());
             product.setProSizePlatform(productCreateReq.getProSizePlatform());
-            product.setProSizeTacon(productCreateReq.getProSizeTacon());
+            product.setProSizeTaco(productCreateReq.getProSizeTaco());
             product.setProUrlImage(saveFile(file));
             return productRepository.save(product);
-
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while creating the product", e);
         }
@@ -67,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product productEditService(int id,ProductEditReq productEditReq, MultipartFile file){
-        Optional<Product> productFind=productRepository.findById(id);
+            Optional<Product> productFind=productRepository.findById(id);
             productFind.get().setProName(productEditReq.getProName());
             productFind.get().setProDescription(productEditReq.getProDescription());
             Optional<Category> categoryOptional = categoryRepository.findById(productEditReq.getCatId());
@@ -78,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
             }
             productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
             productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
-            productFind.get().setProSizeTacon(productEditReq.getProSizeTacon());
+            productFind.get().setProSizeTaco(productEditReq.getProSizeTaco());
             productFind.get().setProUrlImage(saveFile(file));
             return productRepository.save(productFind.get());
     }
@@ -92,6 +85,7 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Error al eliminar el archivo: " + ex.getMessage());
         }
     }
+
     private String saveFile(MultipartFile archivo) {
         try {
             String uploadDir = "uploads";
@@ -103,31 +97,11 @@ public class ProductServiceImpl implements ProductService {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Guardar la URL relativa de la imagen
-            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName; // URL relativa
+            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName;
 
-            return fileUrl; // Retornar la URL relativa de la imagen
+            return fileUrl;
         } catch (IOException ex) {
             throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
         }
     }
-
-//
-//    private String saveFile(MultipartFile archivo) {
-//        try {
-//            String uploadDir = "uploads";
-//            Path uploadPath = Paths.get(uploadDir);
-//            if (!uploadPath.toFile().exists()) {
-//                uploadPath.toFile().mkdirs();
-//            }
-//            String fileName = archivo.getOriginalFilename();
-//            Path filePath = uploadPath.resolve(fileName);
-//            Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//            String fileAbsolutePath = filePath.toAbsolutePath().toString();
-//            return fileAbsolutePath;
-//        } catch (IOException ex) {
-//            throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
-//        }
-//    }
-
 }
