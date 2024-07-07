@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rol")
 @Entity
 public class Role {
     @Id

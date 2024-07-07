@@ -97,10 +97,9 @@ public class ProductServiceImpl implements ProductService {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Guardar la URL relativa de la imagen
-            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName; // URL relativa
+            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName;
 
-            return fileUrl; // Retornar la URL relativa de la imagen
+            return fileUrl;
         } catch (IOException ex) {
             throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
         }

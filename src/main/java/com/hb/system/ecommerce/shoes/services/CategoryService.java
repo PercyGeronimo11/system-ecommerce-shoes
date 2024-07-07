@@ -30,13 +30,13 @@ public class CategoryService {
     }
   // Método para guardar una nueva categ
   public Category save(Category resource) {
-    resource.setCAT_status(true);
+    resource.setCatStatus(true);
     return categoryRepository.save(resource);
 }
    // Método para actualizar una  catg existente
    public Category update(int id, Category resource){
     if (categoryRepository.existsById(id)) {
-        resource.setCAT_id(id);
+        resource.setId(id);
         return categoryRepository.save(resource);
     } else
         return null;
@@ -44,7 +44,7 @@ public class CategoryService {
 // Método para eliminar (desactivar) una catg
 public void delete(int id) {
     Optional<Category> categoria = categoryRepository.findById(id);
-    categoria.get().setCAT_status(false);
+    categoria.get().setCatStatus(false);
     categoryRepository.save(categoria.get());
 
 }
