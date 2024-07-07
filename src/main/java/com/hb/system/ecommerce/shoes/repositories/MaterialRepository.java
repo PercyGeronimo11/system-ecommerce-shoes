@@ -10,5 +10,6 @@ import com.hb.system.ecommerce.shoes.entity.Material;
 
 public interface MaterialRepository extends JpaRepository<Material, Integer>{
     Optional<Material> findById(int id);
+    Optional<Material> findByName(String name);
     List<Material> findMaterialsByStatus(boolean status);
 }

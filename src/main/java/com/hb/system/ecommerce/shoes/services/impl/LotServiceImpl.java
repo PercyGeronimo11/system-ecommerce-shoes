@@ -60,7 +60,7 @@ public class LotServiceImpl implements LotService {
 
             lotRequest.getLotDetail().forEach(detailRequest->{
                 LotDetail detail = new LotDetail();
-                Optional<Material> materialFind = materialRepository.findById(detailRequest.getMaterialId());
+                Optional<Material> materialFind = materialRepository.findByName(detailRequest.getName());
                 if (materialFind.isPresent()) {
                     detail.setMaterial(materialFind.get());
                     log.info("material:"+ materialFind.get());
@@ -70,14 +70,13 @@ public class LotServiceImpl implements LotService {
                 detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
                 detail.setDetPriceUnit(detailRequest.getDetSubTotal());
                 detail.setDetSubTotal(detailRequest.getDetSubTotal());
-                log.info("finalll");
-                LotDetail existingDetail = lotDetailRepository.findById(detail.getId()).orElse(null);
-                if (existingDetail != null) {
-                    lotDetailRepository.delete(existingDetail);
-                }
+//                log.info("finalll");
+//                LotDetail existingDetail = lotDetailRepository.findById(detail.getId()).orElse(null);
+//                if (existingDetail != null) {
+//                    lotDetailRepository.delete(existingDetail);
+//                }
                 detail.setLot(savedLot);
                 lotDetailRepository.save(detail);
-                log.info("saliiii");
             });
             return savedLot;
         } catch (Exception e) {
@@ -90,19 +89,19 @@ public class LotServiceImpl implements LotService {
         Lot existingLot = lotRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Lot not found with id: " + id));
 
-        // Eliminar todos los detalles existentes del lote
         lotDetailRepository.deleteByLot_Id(existingLot.getId());
 
         for (LotDetailRequest detailRequest : lotRequest.getLotDetail()) {
             LotDetail detail = new LotDetail();
             detail.setLot(existingLot);
-            Optional<Material> materialFind=materialRepository.findById(lotRequest.getProductId());
+            Optional<Material> materialFind=materialRepository.findByName(detailRequest.getName());
             if(materialFind.isPresent()){
                 detail.setMaterial(materialFind.get());
             }else{
                 throw new RuntimeException("No se encontro el material");
             }
             detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
+            detail.setDetPriceUnit(detailRequest.getDetSubTotal());
             detail.setDetSubTotal(detailRequest.getDetSubTotal());
             lotDetailRepository.save(detail);
         }
