@@ -20,11 +20,11 @@ public class Material {
     @Column(name = "mat_name")
     private String name;
 
-    @Column(name = "mat_unit_price")
-    private String unitPrice;
+    @Column(name = "mat_price")
+    private String price;
 
-    @Column(name = "mat_stock")
-    private String stock;
+    @Column(name = "mat_quantity")
+    private String quantity;
 
     @Column(name = "mat_unit")
     private String unit;
