@@ -1,61 +1,87 @@
 package com.hb.system.ecommerce.shoes.services;
-import java.util.List;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.Path;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
 import com.hb.system.ecommerce.shoes.repositories.PromotionRepository;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.beans.factory.annotation.Value;
 @Service
 @RequiredArgsConstructor
 public class PromotionService {
 
-    // Inyección de dependencias de PromotionRepository
     @Autowired
     private PromotionRepository promotionRepository;
-    
-    // Método para listar todas las promociones activas
+    @Value("${image.upload.directory}")
+    private String uploadDir;
     public List<Promotion> listAll() {
-        // Llama al método del repositorio que devuelve todas las promociones activas
         return promotionRepository.findAllActivePromotions();
     }
 
-    // Método para obtener una promoción por su ID
     public Promotion getById(int id) {
-        // Llama al método del repositorio que busca una promoción por su ID
         return promotionRepository.findById(id);
     }
 
-    // Método para guardar una nueva promoción
-    public Promotion save(Promotion resource) {
-        // Establece el estado de la promoción a 'true' (activa)
-        resource.setPromStatus(true);
-        // Guarda la promoción en el repositorio y devuelve el objeto guardado
-        return promotionRepository.save(resource);
+    public Promotion save(Promotion promotionRequest, MultipartFile file) throws IOException {
+        try {
+             Promotion promotion=new Promotion();
+             promotion.setPromPercentage(promotionRequest.getPromPercentage());
+             promotion.setPromStartdate(promotionRequest.getPromStartdate());
+             promotion.setPromEnddate(promotionRequest.getPromEnddate());
+             promotion.setPromDescription(promotionRequest.getPromDescription());
+             promotion.setPromStatus(true);
+             promotion.setPromUrlImage(saveFile(file));
+             return promotionRepository.save(promotion);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while creating the promotion", e);
+        }
     }
 
-    // Método para actualizar una promoción existente
-    public Promotion update(int id, Promotion resource){
-        // Comprueba si una promoción con el ID dado existe
+    public Promotion update(int id, Promotion promotionRequest, MultipartFile file) throws IOException {
         if (promotionRepository.existsById(id)) {
-            // Establece el ID de la promoción al ID dado
-            resource.setId(id);
-            // Guarda la promoción actualizada en el repositorio y devuelve el objeto guardado
-            return promotionRepository.save(resource);
-        } else
-            // Si la promoción no existe, devuelve null
-            return null;
+            promotionRequest.setId(id);
+            if (file != null && !file.isEmpty()) {
+                promotionRequest.setPromUrlImage(saveFile(file));
+            }
+            return promotionRepository.save(promotionRequest);
+        } else {
+            throw new IllegalArgumentException("Promotion not found with id: " + id);
+        }
     }
 
-    // Método para eliminar (desactivar) una promoción
     public void delete(int id) {
-        // Busca la promoción por su ID
-        Promotion promocion = promotionRepository.findById(id);
-        // Establece el estado de la promoción a 'false' (inactiva)
-        promocion.setPromStatus(false);
-        // Guarda la promoción con el estado actualizado en el repositorio
-        promotionRepository.save(promocion);
+        Promotion promotion = promotionRepository.findById(id);
+        if (promotion != null) {
+            promotion.setPromStatus(false);
+            promotionRepository.save(promotion);
+        } else {
+            throw new IllegalArgumentException("Promotion not found with id: " + id);
+        }
+    }
+
+    private String saveFile(MultipartFile archivo) {
+        try {
+            String uploadDir = "uploads";
+            Path uploadPath = Paths.get(uploadDir);
+            if (!uploadPath.toFile().exists()) {
+                uploadPath.toFile().mkdirs();
+            }
+            String fileName = archivo.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            String fileUrl = "http://127.0.0.1:8080/promotion/images/" + fileName;
+
+            return fileUrl;
+        } catch (IOException ex) {
+            throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
+        }
     }
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +23,7 @@ public class Role {
 
     @Column(nullable = false, name = "rol_status")
     private boolean status;
+
+    @Column(name = "rol_description")
+    private boolean description;
 }
