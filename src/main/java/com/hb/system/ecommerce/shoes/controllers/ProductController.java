@@ -4,6 +4,7 @@ import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
 import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
+import com.hb.system.ecommerce.shoes.entity.Product;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -92,31 +93,15 @@ public class ProductController {
         }
     }
 
-//    @PostMapping("/update")
-//    public String updateProduct(@ModelAttribute Product product){
-//        Optional<Product> productFind=productRepository.findById(product.getId());
-//        if (productFind.isPresent()){
-//            productFind.get().setCategory(product.getCategory());
-//            productFind.get().setPro_name(product.getPro_name());
-//            productFind.get().setPro_description(product.getPro_description());
-//            productFind.get().setPro_unit_price(product.getPro_unit_price());
-//            productRepository.save(productFind.get());
-//        }else{
-//
-//        }
-//        return "redirect:/product/index";
-//    }
-//
-//    @GetMapping("/cancel")
-//    public String cancel(){
-//        return "redirect:/product/index";
-//    }
-//
-//    @GetMapping("/delete/{id}")
-//    public String delete(@PathVariable int id){
-//        productRepository.deleteById(id);
-//        return "redirect:/product/index";
-//    }
+    @GetMapping("/get/{id}")
+    public ResponseEntity<ApiResponse<Product>> getById(@PathVariable int id){
+        Product product= productService.productGetService(id);
+        ApiResponse<Product> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Detalle del producto recuperado exitossamente");
+        response.setData(product);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
 
 

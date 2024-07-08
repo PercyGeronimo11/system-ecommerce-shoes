@@ -80,6 +80,16 @@ public class ProductServiceImpl implements ProductService {
             return productRepository.save(productFind.get());
     }
 
+    @Override
+    public Product productGetService(int id) {
+        Optional<Product> productFind=productRepository.findById(id);
+        if(productFind.isPresent()){
+            return productFind.get();
+        }else{
+            return null;
+        }
+    }
+
     private void deleteFile(String fileName) {
         try {
             String uploadDir = "uploads";
