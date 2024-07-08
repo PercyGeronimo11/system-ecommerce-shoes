@@ -51,6 +51,10 @@ public class ProductServiceImpl implements ProductService {
             product.setProUnitPrice(productCreateReq.getProUnitPrice());
             product.setProSizePlatform(productCreateReq.getProSizePlatform());
             product.setProSizeTaco(productCreateReq.getProSizeTaco());
+            product.setProSize(productCreateReq.getProSize());
+            product.setProColor(productCreateReq.getProColor());
+            product.setProStock(0);
+            product.setProStatus(true);
             product.setProUrlImage(saveFile(file));
             return productRepository.save(product);
         } catch (Exception e) {
@@ -74,6 +78,16 @@ public class ProductServiceImpl implements ProductService {
             productFind.get().setProSizeTaco(productEditReq.getProSizeTaco());
             productFind.get().setProUrlImage(saveFile(file));
             return productRepository.save(productFind.get());
+    }
+
+    @Override
+    public Product productGetService(int id) {
+        Optional<Product> productFind=productRepository.findById(id);
+        if(productFind.isPresent()){
+            return productFind.get();
+        }else{
+            return null;
+        }
     }
 
     private void deleteFile(String fileName) {

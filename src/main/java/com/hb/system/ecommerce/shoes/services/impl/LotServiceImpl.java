@@ -70,14 +70,11 @@ public class LotServiceImpl implements LotService {
                 detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
                 detail.setDetPriceUnit(detailRequest.getDetSubTotal());
                 detail.setDetSubTotal(detailRequest.getDetSubTotal());
-//                log.info("finalll");
-//                LotDetail existingDetail = lotDetailRepository.findById(detail.getId()).orElse(null);
-//                if (existingDetail != null) {
-//                    lotDetailRepository.delete(existingDetail);
-//                }
                 detail.setLot(savedLot);
                 lotDetailRepository.save(detail);
             });
+            //Actualizar stock
+            productFind.get().setProStock(lot.getLotQuantityProducts()+productFind.get().getProStock());
             return savedLot;
         } catch (Exception e) {
             throw new RuntimeException("Error: No se pudo guardar el lote", e);

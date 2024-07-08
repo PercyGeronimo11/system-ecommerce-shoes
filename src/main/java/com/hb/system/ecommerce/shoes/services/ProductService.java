@@ -13,5 +13,7 @@ public interface ProductService {
 
     Product productStoreService(ProductCreateReq productCreateReq, MultipartFile urlImage)throws IOException;
 
+    Product productGetService(int id);
+
     Product productEditService(int id,ProductEditReq productEditReq, MultipartFile urlImage);
 }
