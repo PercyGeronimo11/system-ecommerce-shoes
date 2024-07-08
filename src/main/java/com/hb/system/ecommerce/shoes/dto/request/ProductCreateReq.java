@@ -1,10 +1,5 @@
 package com.hb.system.ecommerce.shoes.dto.request;
 
-import com.hb.system.ecommerce.shoes.entity.Category;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data
