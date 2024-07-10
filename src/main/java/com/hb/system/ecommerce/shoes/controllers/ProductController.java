@@ -83,7 +83,7 @@ public class ProductController {
             imageResource = new UrlResource(imagePath.toUri());
             if (imageResource.exists() || imageResource.isReadable()) {
                 return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG) // O el tipo de imagen correcto
+                        .contentType(MediaType.IMAGE_JPEG)
                         .body(imageResource);
             } else {
                 return ResponseEntity.notFound().build();
