@@ -1,6 +1,11 @@
 package com.hb.system.ecommerce.shoes.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +27,8 @@ public class Role {
     private String name;
 
     @Column(nullable = false, name = "rol_status")
-    private boolean status;
+    private Boolean status;
 
     @Column(name = "rol_description")
-    private boolean description;
+    private Boolean description;
 }
