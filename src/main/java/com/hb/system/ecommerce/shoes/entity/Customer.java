@@ -1,6 +1,6 @@
 package com.hb.system.ecommerce.shoes.entity;
-import java.sql.Date;
 
+import java.util.Date; 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,21 +18,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer{
+public class Customer {
     @Id
-    @Column(name = "cust_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cust_id")
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "use_id", referencedColumnName = "use_id")
+    @JoinColumn(name = "use_id")
     private User usuario;
 
-    @Column(name = "cust_firstName")
+    @Column(name = "cust_firstname")
     private String custFirstName;
 
-    @Column(name = "cust_lastName")
-    private boolean custLastName;
+    @Column(name = "cust_lastname")
+    private String custLastName;
 
     @Column(name = "cust_dni")
     private String custDni;
@@ -40,8 +40,8 @@ public class Customer{
     @Column(name = "cust_department")
     private String custDepartment;
 
-    @Column(name = "cust_birthDate")
-    private Date custBirthDate;
+    @Column(name = "cust_birthdate")
+    private Date custBirthDate; 
 
     @Column(name = "cust_city")
     private String custCity;
@@ -49,20 +49,15 @@ public class Customer{
     @Column(name = "cust_province")
     private String custProvince;
 
-
-//camposextra
     @Column(name = "cust_email")
     private String custEmail;
 
     @Column(name = "cust_password")
     private String custPassword;
-//camposextra    
-
 
     @Column(name = "cust_cellphone")
     private String custCellphone;
 
     @Column(name = "cust_status")
     private boolean custStatus;
-
 }
