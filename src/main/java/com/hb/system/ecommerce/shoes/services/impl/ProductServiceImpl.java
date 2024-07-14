@@ -18,7 +18,6 @@ import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.Product;
-import com.hb.system.ecommerce.shoes.entity.Promotion;
 import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
 import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
 import com.hb.system.ecommerce.shoes.services.ProductService;
@@ -37,10 +36,10 @@ public class ProductServiceImpl implements ProductService {
                 .content(productList)
                 .build();
     }
-   
+
     @Override 
-    public ProductListResp productsxCategory(int idcate) {
-        Optional<Category> categoryOptional = categoryRepository.findById(idcate);
+    public ProductListResp productsByCategory(int idcategory) {
+        Optional<Category> categoryOptional = categoryRepository.findById(idcategory);
         if (!categoryOptional.isPresent()) {
             throw new RuntimeException("Categoría no encontrada");
         }

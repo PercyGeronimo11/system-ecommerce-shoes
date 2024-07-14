@@ -12,7 +12,7 @@ public interface ProductService {
     ProductListResp productListService(String search);
 
     Product productStoreService(ProductCreateReq productCreateReq, MultipartFile urlImage)throws IOException;
-    ProductListResp productsxCategory(int id);
+    ProductListResp productsByCategory(int id);
     Product productGetService(int id);
 
     Product productEditService(int id,ProductEditReq productEditReq, MultipartFile urlImage);

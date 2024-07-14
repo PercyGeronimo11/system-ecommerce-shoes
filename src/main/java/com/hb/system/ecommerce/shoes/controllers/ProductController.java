@@ -45,8 +45,8 @@ public class ProductController {
     }
 
     @GetMapping(value = { "/listaxcate/{idcate}" }, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<ProductListResp>> listaxcategory(@PathVariable("idcate") int idcate) {
-        ProductListResp productListResp = productService.productsxCategory(idcate);
+    public ResponseEntity<ApiResponse<ProductListResp>> productsByCategory(@PathVariable("idcate") int idcate) {
+        ProductListResp productListResp = productService.productsByCategory(idcate);
         ApiResponse<ProductListResp> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Lista de productos de una categoría exitosamente");

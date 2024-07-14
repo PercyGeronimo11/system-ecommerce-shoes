@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Customer;
 import com.hb.system.ecommerce.shoes.entity.User;
@@ -23,37 +24,38 @@ public class CustomerService {
     @Autowired
     private UserRepository userRepository;
 
-    // Método para listar todas los clientes
     public List<Customer> listAll() {
-        // Llama al método del repositorio que devuelva todos los clientes
+
         return customerRepository.findAll();
     }
 
-    // Método para obtener un cliente por su ID
     public Customer getById(int id) {
         Optional<Customer> customerFind = customerRepository.findById(id);
         return customerFind.get();
 
     }
 
-    // Método para guardar un nuevo cliente
     public Customer save(Customer customer) {
-        // Guardar y retornar el cliente
         try {
             Optional<Customer> customerOpt = customerRepository.findByCustDni(customer.getCustDni());
             if (customerOpt.isPresent()) {
-                throw new RuntimeException("El DNI del cliente ya existe");    
-            } 
-            // Crear el usuario 
-             User usuar = new User();
+                throw new RuntimeException("El DNI del cliente ya existe");
+            }
+            // Encriptar la contraseña
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encryptedPassword = passwordEncoder.encode(customer.getCustPassword());
+
+            // Crear el usuario
+            User usuar = new User();
             usuar.setName(customer.getCustFirstName());
             usuar.setUsername(customer.getCustEmail());
-            usuar.setPassword(customer.getCustPassword());
+
+            usuar.setPassword(encryptedPassword); 
             usuar.setRegisterDate(LocalDateTime.now());
             usuar.setRole(rolRepository.findById(3).get());
             usuar.setStatus(true);
             usuar = userRepository.save(usuar);
-            
+
             // Establecer todos los campos del cliente
             customer.setCustFirstName(customer.getCustFirstName());
             customer.setCustLastName(customer.getCustLastName());
@@ -62,7 +64,7 @@ public class CustomerService {
             customer.setCustBirthDate(customer.getCustBirthDate());
             customer.setCustCity(customer.getCustCity());
             customer.setCustProvince(customer.getCustProvince());
-            customer.setCustPassword(customer.getCustPassword());
+            customer.setCustPassword(encryptedPassword); 
             customer.setCustCellphone(customer.getCustCellphone());
             customer.setCustStatus(true);
             customer.setUsuario(usuar);
