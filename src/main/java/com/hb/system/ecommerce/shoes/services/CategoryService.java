@@ -33,6 +33,7 @@ public class CategoryService {
     resource.setCatStatus(true);
     return categoryRepository.save(resource);
 }
+
    // Método para actualizar una  catg existente
    public Category update(int id, Category resource){
     if (categoryRepository.existsById(id)) {

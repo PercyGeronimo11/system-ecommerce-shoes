@@ -36,6 +36,18 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    @Override 
+    public ProductListResp productsByCategory(int idcategory) {
+        Optional<Category> categoryOptional = categoryRepository.findById(idcategory);
+        if (!categoryOptional.isPresent()) {
+            throw new RuntimeException("Categoría no encontrada");
+        }
+        List<Product> productList = productRepository.findByCategory(categoryOptional.get());
+        return ProductListResp.builder()
+            .content(productList)
+            .build();
+    }
+
     @Override
     public Product productStoreService(ProductReq productReq, MultipartFile file) throws IOException {
         try {

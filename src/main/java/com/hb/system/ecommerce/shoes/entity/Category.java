@@ -29,4 +29,7 @@ public class Category {
 
     @Column(name = "cat_status")
     private boolean catStatus;
+
+    @Column(name = "cat_hast_taco")
+    private boolean catHastTaco;
 }

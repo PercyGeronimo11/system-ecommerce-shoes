@@ -3,7 +3,6 @@ import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.ProductReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
-
 import com.hb.system.ecommerce.shoes.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +31,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping(
-            value = {"/list"},
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<ProductListResp>> index( String search){
+    @GetMapping(value = { "/list" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<ProductListResp>> index(String search) {
         ProductListResp productListResp = productService.productListService(search);
         ApiResponse<ProductListResp> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
@@ -56,8 +53,20 @@ public class ProductController {
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Se a guardado el producto exitosamente");
         response.setData(product);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping(
+            value = { "/listaxcate/{idcate}" },
+            produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<ApiResponse<ProductListResp>> productsByCategory(@PathVariable("idcate") int idcate) {
+            ProductListResp productListResp = productService.productsByCategory(idcate);
+            ApiResponse<ProductListResp> response = new ApiResponse<>();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Lista de productos de una categoría exitosamente");
+            response.setData(productListResp);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
 
     @PutMapping(
             value = "/update/{id}",
@@ -66,14 +75,13 @@ public class ProductController {
     public ResponseEntity<ApiResponse<Product>> editProduct(
             @PathVariable int id,
             ProductReq productEditReq,
-            @RequestParam(name="file", required = false) MultipartFile file)
-    {
-       Product product= productService.productEditService(id,productEditReq,file);
-       ApiResponse<Product> response=new ApiResponse<>();
-       response.setStatus(HttpStatus.OK.value());
-       response.setMessage("El producto ha sido editado exitosamente");
-       response.setData(product);
-       return new ResponseEntity<>(response,HttpStatus.OK);
+            @RequestParam(name="file", required = false) MultipartFile file) {
+        Product product = productService.productEditService(id, productEditReq, file);
+        ApiResponse<Product> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("El producto ha sido editado exitosamente");
+        response.setData(product);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Value("${image.upload.directory}")
@@ -98,14 +106,12 @@ public class ProductController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<ApiResponse<Product>> getById(@PathVariable int id){
-        Product product= productService.productGetService(id);
-        ApiResponse<Product> response=new ApiResponse<>();
+    public ResponseEntity<ApiResponse<Product>> getById(@PathVariable int id) {
+        Product product = productService.productGetService(id);
+        ApiResponse<Product> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Detalle del producto recuperado exitossamente");
         response.setData(product);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
-
-

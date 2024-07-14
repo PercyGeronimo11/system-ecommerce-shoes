@@ -10,8 +10,8 @@ import java.io.IOException;
 public interface ProductService {
     ProductListResp productListService(String search);
 
-    Product productStoreService(ProductReq productReq, MultipartFile urlImage)throws IOException;
-
+    Product productStoreService(ProductReq productCreateReq, MultipartFile urlImage)throws IOException;
+    ProductListResp productsByCategory(int id);
     Product productGetService(int id);
 
     Product productEditService(int id,ProductReq productEditReq, MultipartFile urlImage);

@@ -19,9 +19,6 @@ public class PromotionService {
 
     @Autowired
     private PromotionRepository promotionRepository;
-    @Value("${image.upload.directory}")
-    private String uploadDir;
-
     public List<Promotion> listAll() {
         return promotionRepository.findAllActivePromotions();
     }
@@ -67,6 +64,8 @@ public class PromotionService {
         }
     }
 
+    @Value("${image.upload.directory}")
+    private String uploadDir;
     private String saveFile(MultipartFile archivo) {
         try {
             String uploadDir = "uploads";
