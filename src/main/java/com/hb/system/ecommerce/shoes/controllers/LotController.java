@@ -2,9 +2,12 @@ package com.hb.system.ecommerce.shoes.controllers;
 
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
+import com.hb.system.ecommerce.shoes.dto.response.LotCompleteResp;
 import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
 import com.hb.system.ecommerce.shoes.entity.Lot;
+import com.hb.system.ecommerce.shoes.entity.LotDetail;
 import com.hb.system.ecommerce.shoes.services.LotService;
+import com.hb.system.ecommerce.shoes.services.impl.LotDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @Controller
@@ -26,6 +30,9 @@ import java.nio.file.Paths;
 public class LotController {
     @Autowired
     private LotService lotService;
+
+    @Autowired
+    private LotDetailServiceImpl lotDetailService;
 
     @GetMapping(
             value = {"/list"},
@@ -46,14 +53,33 @@ public class LotController {
         Lot lot= lotService.lotStoreService(lotRequest);
         ApiResponse<Lot> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Se a guardado el loto exitosamente");
+        response.setMessage("Se a guardado el lote exitosamente");
         response.setData(lot);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<ApiResponse<Lot>> editLot(@PathVariable int id,
-                                                            @RequestBody LotRequest lotEditReq){
+    @GetMapping("/get/{id}")
+    public ResponseEntity<ApiResponse<LotCompleteResp>> getById(@PathVariable int id){
+        LotCompleteResp lot= lotService.lotGetService(id);
+        ApiResponse<LotCompleteResp> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Detalle del lote recuperado exitossamente");
+        response.setData(lot);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+//    @GetMapping("/get-details/{id}")
+//    public ResponseEntity<ApiResponse<List<LotDetail>>> getDetailByLotId(@PathVariable int id){
+//        List<LotDetail> lotDetails= lotDetailService.lotDetailsGetService(id);
+//        ApiResponse<List<LotDetail>> response=new ApiResponse<>();
+//        response.setStatus(HttpStatus.OK.value());
+//        response.setMessage("Detalle del lote recuperado exitossamente");
+//        response.setData(lotDetails);
+//        return new ResponseEntity<>(response,HttpStatus.OK);
+//    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse<Lot>> editLot(@PathVariable int id, @RequestBody LotRequest lotEditReq){
         Lot lot= lotService.lotEditService(id,lotEditReq);
         ApiResponse<Lot> response=new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
