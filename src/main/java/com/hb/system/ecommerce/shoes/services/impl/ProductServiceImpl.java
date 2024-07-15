@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,22 +33,28 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductListResp productListService(String search) {
         List<Product> productList = productRepository.findByProNameContaining(search);
+        List<Product> filteredProductList = productList.stream()
+        .filter(product -> product.getProStock() > 0)
+        .collect(Collectors.toList());
         return ProductListResp.builder()
-                .content(productList)
+                .content(filteredProductList)
                 .build();
     }
 
-    @Override 
-    public ProductListResp productsByCategory(int idcategory) {
-        Optional<Category> categoryOptional = categoryRepository.findById(idcategory);
-        if (!categoryOptional.isPresent()) {
-            throw new RuntimeException("Categoría no encontrada");
-        }
-        List<Product> productList = productRepository.findByCategory(categoryOptional.get());
-        return ProductListResp.builder()
-            .content(productList)
-            .build();
+@Override
+public ProductListResp productsByCategory(int idcategory) {
+    Optional<Category> categoryOptional = categoryRepository.findById(idcategory);
+    if (!categoryOptional.isPresent()) {
+        throw new RuntimeException("Categoría no encontrada");
     }
+    List<Product> productList = productRepository.findByCategory(categoryOptional.get());
+    List<Product> filteredProductList = productList.stream()
+        .filter(product -> product.getProStock() > 0)
+        .collect(Collectors.toList());
+    return ProductListResp.builder()
+        .content(filteredProductList)
+        .build();
+}
 
     @Override
     public Product productStoreService(ProductCreateReq productCreateReq, MultipartFile file) throws IOException {
