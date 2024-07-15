@@ -10,7 +10,6 @@ import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryService {
     // Inyección de dependencias de PromotionRepository
     @Autowired
@@ -28,13 +27,16 @@ public class CategoryService {
         return categoryFind.get();
 
     }
-  // Método para guardar una nueva categ
+
   public Category save(Category resource) {
-    resource.setCatStatus(true);
-    return categoryRepository.save(resource);
+      resource.setCatStatus(true);
+      if (resource.getCatHasTaco() == null) {
+          resource.setCatHasTaco(false);
+      }
+      resource.setCatHasTaco(true);
+      return categoryRepository.save(resource);
 }
 
-   // Método para actualizar una  catg existente
    public Category update(int id, Category resource){
     if (categoryRepository.existsById(id)) {
         resource.setId(id);

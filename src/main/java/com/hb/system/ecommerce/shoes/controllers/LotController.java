@@ -68,16 +68,6 @@ public class LotController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-//    @GetMapping("/get-details/{id}")
-//    public ResponseEntity<ApiResponse<List<LotDetail>>> getDetailByLotId(@PathVariable int id){
-//        List<LotDetail> lotDetails= lotDetailService.lotDetailsGetService(id);
-//        ApiResponse<List<LotDetail>> response=new ApiResponse<>();
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setMessage("Detalle del lote recuperado exitossamente");
-//        response.setData(lotDetails);
-//        return new ResponseEntity<>(response,HttpStatus.OK);
-//    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse<Lot>> editLot(@PathVariable int id, @RequestBody LotRequest lotEditReq){
         Lot lot= lotService.lotEditService(id,lotEditReq);
