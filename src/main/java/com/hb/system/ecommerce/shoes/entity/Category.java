@@ -31,5 +31,5 @@ public class Category {
     private Boolean catStatus;
 
     @Column(name = "cat_has_taco")
-    private Boolean catHasTaco;
+    private boolean catHasTaco;
 }

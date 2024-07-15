@@ -30,10 +30,6 @@ public class CategoryService {
 
   public Category save(Category resource) {
       resource.setCatStatus(true);
-      if (resource.getCatHasTaco() == null) {
-          resource.setCatHasTaco(false);
-      }
-      resource.setCatHasTaco(true);
       return categoryRepository.save(resource);
 }
 
@@ -44,7 +40,6 @@ public class CategoryService {
     } else
         return null;
 }
-// Método para eliminar (desactivar) una catg
 public void delete(int id) {
     Optional<Category> categoria = categoryRepository.findById(id);
     categoria.get().setCatStatus(false);
