@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.hb.system.ecommerce.shoes.dto.request.LoginReq;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Customer;
 import com.hb.system.ecommerce.shoes.services.CustomerService;
@@ -36,6 +37,24 @@ public class CustomerController {
         response.setData(customer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<Customer>> logIn(@RequestBody LoginReq loginRequest) {
+        try {
+            Customer client = customerService.logIn(loginRequest.getEmail(), loginRequest.getPassword());
+            ApiResponse<Customer> response = new ApiResponse<>();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Login exitoso");
+            response.setData(client);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            ApiResponse<Customer> response = new ApiResponse<>();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setMessage("Email o contraseña incorrectos");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Customer>> edit(@PathVariable int id, @RequestBody Customer customerRequest){

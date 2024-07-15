@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Customer;
@@ -23,7 +24,8 @@ public class CustomerService {
     private RolRepository rolRepository;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private final BCryptPasswordEncoder passwordEncoder;
     public List<Customer> listAll() {
 
         return customerRepository.findAll();
@@ -33,6 +35,17 @@ public class CustomerService {
         Optional<Customer> customerFind = customerRepository.findById(id);
         return customerFind.get();
 
+    }
+
+    public Customer logIn(String email, String password) {
+      
+        Customer customer = customerRepository.findByCustEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        if (!passwordEncoder.matches(password, customer.getCustPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        return customer;
     }
 
     public Customer save(Customer customer) {
@@ -50,7 +63,7 @@ public class CustomerService {
             usuar.setName(customer.getCustFirstName());
             usuar.setUsername(customer.getCustEmail());
 
-            usuar.setPassword(encryptedPassword); 
+            usuar.setPassword(encryptedPassword);
             usuar.setRegisterDate(LocalDateTime.now());
             usuar.setRole(rolRepository.findById(3).get());
             usuar.setStatus(true);
@@ -64,7 +77,7 @@ public class CustomerService {
             customer.setCustBirthDate(customer.getCustBirthDate());
             customer.setCustCity(customer.getCustCity());
             customer.setCustProvince(customer.getCustProvince());
-            customer.setCustPassword(encryptedPassword); 
+            customer.setCustPassword(encryptedPassword);
             customer.setCustCellphone(customer.getCustCellphone());
             customer.setCustStatus(true);
             customer.setUsuario(usuar);
