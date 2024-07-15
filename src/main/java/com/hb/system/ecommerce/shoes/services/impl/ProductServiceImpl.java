@@ -14,8 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
+import com.hb.system.ecommerce.shoes.dto.request.ProductReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.Product;
@@ -57,22 +56,22 @@ public ProductListResp productsByCategory(int idcategory) {
 }
 
     @Override
-    public Product productStoreService(ProductCreateReq productCreateReq, MultipartFile file) throws IOException {
+    public Product productStoreService(ProductReq productReq, MultipartFile file) throws IOException {
         try {
             Product product = new Product();
-            product.setProName(productCreateReq.getProName());
-            product.setProDescription(productCreateReq.getProDescription());
-            Optional<Category> categoryOptional = categoryRepository.findById(productCreateReq.getCatId());
+            product.setProName(productReq.getProName());
+            product.setProDescription(productReq.getProDescription());
+            Optional<Category> categoryOptional = categoryRepository.findById(productReq.getCatId());
             if (categoryOptional.isPresent()) {
                 product.setCategory(categoryOptional.get());
             } else {
                 throw new RuntimeException("Categoría no encontrada");
             }
-            product.setProUnitPrice(productCreateReq.getProUnitPrice());
-            product.setProSizePlatform(productCreateReq.getProSizePlatform());
-            product.setProSizeTaco(productCreateReq.getProSizeTaco());
-            product.setProSize(productCreateReq.getProSize());
-            product.setProColor(productCreateReq.getProColor());
+            product.setProUnitPrice(productReq.getProUnitPrice());
+            product.setProSizePlatform(productReq.getProSizePlatform());
+            product.setProSizeTaco(productReq.getProSizeTaco());
+            product.setProSize(productReq.getProSize());
+            product.setProColor(productReq.getProColor());
             product.setProStock(0);
             product.setProStatus(true);
             product.setProUrlImage(saveFile(file));
@@ -83,7 +82,7 @@ public ProductListResp productsByCategory(int idcategory) {
     }
 
     @Override
-    public Product productEditService(int id,ProductEditReq productEditReq, MultipartFile file){
+    public Product productEditService(int id,ProductReq productEditReq, MultipartFile file){
             Optional<Product> productFind=productRepository.findById(id);
             productFind.get().setProName(productEditReq.getProName());
             productFind.get().setProDescription(productEditReq.getProDescription());
@@ -96,7 +95,9 @@ public ProductListResp productsByCategory(int idcategory) {
             productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
             productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
             productFind.get().setProSizeTaco(productEditReq.getProSizeTaco());
-            productFind.get().setProUrlImage(saveFile(file));
+            if (file != null && !file.isEmpty()) {
+                productFind.get().setProUrlImage(saveFile(file));
+            }
             return productRepository.save(productFind.get());
     }
 

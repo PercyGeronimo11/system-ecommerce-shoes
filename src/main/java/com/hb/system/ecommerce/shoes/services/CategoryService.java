@@ -10,7 +10,6 @@ import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryService {
    
     @Autowired
@@ -27,10 +26,11 @@ public class CategoryService {
         return categoryFind.get();
 
     }
+
  
   public Category save(Category resource) {
-    resource.setCatStatus(true);
-    return categoryRepository.save(resource);
+      resource.setCatStatus(true);
+      return categoryRepository.save(resource);
 }
 
    public Category update(int id, Category resource){
@@ -40,7 +40,7 @@ public class CategoryService {
     } else
         return null;
 }
-
+// Método para eliminar (desactivar) una catg
 public void delete(int id) {
     Optional<Category> categoria = categoryRepository.findById(id);
     categoria.get().setCatStatus(false);

@@ -1,11 +1,8 @@
 package com.hb.system.ecommerce.shoes.controllers;
-
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
-import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
+import com.hb.system.ecommerce.shoes.dto.request.ProductReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
-
 import com.hb.system.ecommerce.shoes.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,31 +41,41 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(value = { "/listaxcate/{idcate}" }, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<ProductListResp>> productsByCategory(@PathVariable("idcate") int idcate) {
-        ProductListResp productListResp = productService.productsByCategory(idcate);
-        ApiResponse<ProductListResp> response = new ApiResponse<>();
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Lista de productos de una categoría exitosamente");
-        response.setData(productListResp);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/store", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<Product>> create(ProductCreateReq productCreateReq,
+    @PostMapping(
+            value = "/store",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Product>> create(
+            ProductReq productReq,
             @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
-        Product product = productService.productStoreService(productCreateReq, file);
-        ApiResponse<Product> response = new ApiResponse<>();
+        Product product= productService.productStoreService(productReq, file);
+        ApiResponse<Product> response= new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Se a guardado el producto exitosamente");
         response.setData(product);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<ApiResponse<Product>> editProduct(@PathVariable int id,
-            @RequestBody ProductEditReq productEditReq,
-            @RequestParam("file") MultipartFile file) {
+    @GetMapping(
+            value = { "/listaxcate/{idcate}" },
+            produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<ApiResponse<ProductListResp>> productsByCategory(@PathVariable("idcate") int idcate) {
+            ProductListResp productListResp = productService.productsByCategory(idcate);
+            ApiResponse<ProductListResp> response = new ApiResponse<>();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Lista de productos de una categoría exitosamente");
+            response.setData(productListResp);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+    @PutMapping(
+            value = "/update/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Product>> editProduct(
+            @PathVariable int id,
+            ProductReq productEditReq,
+            @RequestParam(name="file", required = false) MultipartFile file) {
         Product product = productService.productEditService(id, productEditReq, file);
         ApiResponse<Product> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
