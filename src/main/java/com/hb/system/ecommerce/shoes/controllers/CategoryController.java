@@ -12,7 +12,7 @@ import com.hb.system.ecommerce.shoes.services.CategoryService;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*") // Permitir solicitudes desde cualquier origen
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/category")
 public class CategoryController {
     @Autowired

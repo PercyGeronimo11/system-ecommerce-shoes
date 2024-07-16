@@ -30,5 +30,5 @@ public class Role {
     private Boolean status;
 
     @Column(name = "rol_description")
-    private Boolean description;
+    private String description;
 }

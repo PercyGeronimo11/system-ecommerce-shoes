@@ -19,8 +19,6 @@ public class PromotionService {
 
     @Autowired
     private PromotionRepository promotionRepository;
-    @Value("${image.upload.directory}")
-    private String uploadDir;
     public List<Promotion> listAll() {
         return promotionRepository.findAllActivePromotions();
     }
@@ -66,6 +64,8 @@ public class PromotionService {
         }
     }
 
+    @Value("${image.upload.directory}")
+    private String uploadDir;
     private String saveFile(MultipartFile archivo) {
         try {
             String uploadDir = "uploads";
@@ -77,7 +77,7 @@ public class PromotionService {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            String fileUrl = "http://127.0.0.1:8080/promotion/images/" + fileName;
+            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName;
 
             return fileUrl;
         } catch (IOException ex) {
