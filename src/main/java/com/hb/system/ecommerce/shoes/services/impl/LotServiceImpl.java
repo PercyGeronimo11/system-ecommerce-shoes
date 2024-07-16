@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +34,6 @@ public class LotServiceImpl implements LotService {
     private ProductRepository productRepository;
     @Autowired
     private MaterialRepository materialRepository;
-    @Autowired
-    private LotDetailServiceImpl lotDetailServiceImpl;
 
     @Override
     public LotListResp lotListService(String search) {
@@ -77,6 +77,10 @@ public class LotServiceImpl implements LotService {
                 lotDetailRepository.save(detail);
             });
             productFind.get().setProStock(lot.getLotQuantityProducts()+productFind.get().getProStock());
+            BigDecimal lotTotalCost = new BigDecimal(lot.getLotTotalCost());
+            BigDecimal lotQuantityProducts = new BigDecimal(lot.getLotQuantityProducts());
+            BigDecimal result = lotTotalCost.divide(lotQuantityProducts, 2, RoundingMode.HALF_UP);
+            productFind.get().setProUnitCost(result);
             return savedLot;
         } catch (Exception e) {
             throw new RuntimeException("Error: No se pudo guarder el lote", e);
@@ -111,7 +115,10 @@ public class LotServiceImpl implements LotService {
             lotDetailRepository.save(detail);
         });
         existingLot.getProduct().setProStock(existingLot.getProduct().getProStock()+lotRequest.getLotQuantityProducts());
-
+        BigDecimal lotTotalCost = new BigDecimal(existingLot.getLotTotalCost());
+        BigDecimal lotQuantityProducts = new BigDecimal(existingLot.getLotQuantityProducts());
+        BigDecimal result = lotTotalCost.divide(lotQuantityProducts, 2, RoundingMode.HALF_UP);
+        existingLot.getProduct().setProUnitCost(result);
         return lotRepository.save(existingLot);
     }
 
