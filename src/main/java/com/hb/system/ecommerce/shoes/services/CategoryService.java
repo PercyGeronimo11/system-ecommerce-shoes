@@ -10,30 +10,29 @@ import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryService {
-    // Inyección de dependencias de PromotionRepository
+   
     @Autowired
     private  CategoryRepository categoryRepository;
 
-    // Método para listar todas las catg activas
     public List<Category> listAll() {
-        // Llama al método del repositorio que devuelve todas las promociones activas
+     
         return categoryRepository.findAllActiveCategories();
     }
-    // Método para obtener una categ por su ID
+
     public Category getById(int id) {
         Optional<Category> categoryFind=categoryRepository.findById(id);
-        //if(categoryFind.isPresent())  aquí valida con excepciones
+      
         return categoryFind.get();
 
     }
-  // Método para guardar una nueva categ
+
+ 
   public Category save(Category resource) {
-    resource.setCatStatus(true);
-    return categoryRepository.save(resource);
+      resource.setCatStatus(true);
+      return categoryRepository.save(resource);
 }
-   // Método para actualizar una  catg existente
+
    public Category update(int id, Category resource){
     if (categoryRepository.existsById(id)) {
         resource.setId(id);

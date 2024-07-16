@@ -7,18 +7,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hb.system.ecommerce.shoes.dto.request.ProductCreateReq;
-import com.hb.system.ecommerce.shoes.dto.request.ProductEditReq;
+import com.hb.system.ecommerce.shoes.dto.request.ProductReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.Product;
-import com.hb.system.ecommerce.shoes.entity.Promotion;
 import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
 import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
 import com.hb.system.ecommerce.shoes.services.ProductService;
@@ -33,40 +32,46 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductListResp productListService(String search) {
         List<Product> productList = productRepository.findByProNameContaining(search);
+        List<Product> filteredProductList = productList.stream()
+        .filter(product -> product.getProStock() > 0)
+        .collect(Collectors.toList());
         return ProductListResp.builder()
-                .content(productList)
+                .content(filteredProductList)
                 .build();
     }
-   
-    @Override 
-    public ProductListResp productsxCategory(int idcate) {
-        Optional<Category> categoryOptional = categoryRepository.findById(idcate);
-        if (!categoryOptional.isPresent()) {
-            throw new RuntimeException("Categoría no encontrada");
-        }
-        List<Product> productList = productRepository.findByCategory(categoryOptional.get());
-        return ProductListResp.builder()
-            .content(productList)
-            .build();
+
+@Override
+public ProductListResp productsByCategory(int idcategory) {
+    Optional<Category> categoryOptional = categoryRepository.findById(idcategory);
+    if (!categoryOptional.isPresent()) {
+        throw new RuntimeException("Categoría no encontrada");
     }
+    List<Product> productList = productRepository.findByCategory(categoryOptional.get());
+    List<Product> filteredProductList = productList.stream()
+        .filter(product -> product.getProStock() > 0)
+        .collect(Collectors.toList());
+    return ProductListResp.builder()
+        .content(filteredProductList)
+        .build();
+}
 
     @Override
-    public Product productStoreService(ProductCreateReq productCreateReq, MultipartFile file) throws IOException {
+    public Product productStoreService(ProductReq productReq, MultipartFile file) throws IOException {
         try {
             Product product = new Product();
-            product.setProName(productCreateReq.getProName());
-            product.setProDescription(productCreateReq.getProDescription());
-            Optional<Category> categoryOptional = categoryRepository.findById(productCreateReq.getCatId());
+            product.setProName(productReq.getProName());
+            product.setProDescription(productReq.getProDescription());
+            Optional<Category> categoryOptional = categoryRepository.findById(productReq.getCatId());
             if (categoryOptional.isPresent()) {
                 product.setCategory(categoryOptional.get());
             } else {
                 throw new RuntimeException("Categoría no encontrada");
             }
-            product.setProUnitPrice(productCreateReq.getProUnitPrice());
-            product.setProSizePlatform(productCreateReq.getProSizePlatform());
-            product.setProSizeTaco(productCreateReq.getProSizeTaco());
-            product.setProSize(productCreateReq.getProSize());
-            product.setProColor(productCreateReq.getProColor());
+            product.setProUnitPrice(productReq.getProUnitPrice());
+            product.setProSizePlatform(productReq.getProSizePlatform());
+            product.setProSizeTaco(productReq.getProSizeTaco());
+            product.setProSize(productReq.getProSize());
+            product.setProColor(productReq.getProColor());
             product.setProStock(0);
             product.setProStatus(true);
             product.setProUrlImage(saveFile(file));
@@ -77,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product productEditService(int id,ProductEditReq productEditReq, MultipartFile file){
+    public Product productEditService(int id,ProductReq productEditReq, MultipartFile file){
             Optional<Product> productFind=productRepository.findById(id);
             productFind.get().setProName(productEditReq.getProName());
             productFind.get().setProDescription(productEditReq.getProDescription());
@@ -90,7 +95,9 @@ public class ProductServiceImpl implements ProductService {
             productFind.get().setProUnitPrice(productEditReq.getProUnitPrice());
             productFind.get().setProSizePlatform(productEditReq.getProSizePlatform());
             productFind.get().setProSizeTaco(productEditReq.getProSizeTaco());
-            productFind.get().setProUrlImage(saveFile(file));
+            if (file != null && !file.isEmpty()) {
+                productFind.get().setProUrlImage(saveFile(file));
+            }
             return productRepository.save(productFind.get());
     }
 

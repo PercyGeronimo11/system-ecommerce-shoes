@@ -28,8 +28,8 @@ public class Category {
     private String catDescription;
 
     @Column(name = "cat_status")
-    private boolean catStatus;
+    private Boolean catStatus;
 
-    @Column(name = "cat_hast_taco")
-    private boolean catHasttaco;
+    @Column(name = "cat_has_taco")
+    private boolean catHasTaco;
 }
