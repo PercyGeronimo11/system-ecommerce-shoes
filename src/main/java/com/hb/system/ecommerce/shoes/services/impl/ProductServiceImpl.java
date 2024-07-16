@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
         .filter(product -> product.getProStock() > 0)
         .collect(Collectors.toList());
         return ProductListResp.builder()
-                .content(filteredProductList)
+                .content(productList)
                 .build();
     }
 
