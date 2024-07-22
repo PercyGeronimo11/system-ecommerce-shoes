@@ -8,11 +8,10 @@ import lombok.Data;
 public class Lot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lot_id")
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "pro_id", referencedColumnName = "pro_id")
+    @JoinColumn(name = "pro_id", referencedColumnName = "id")
     private Product product;
 
     private Double lotTotalCost;

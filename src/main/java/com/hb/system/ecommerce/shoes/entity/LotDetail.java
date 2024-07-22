@@ -9,16 +9,15 @@ import lombok.Data;
 public class LotDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lot_det_id")
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lot_id", referencedColumnName = "lot_id")
+    @JoinColumn(name = "lot_id", referencedColumnName = "id")
     @JsonIgnore
     private Lot lot;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mat_id", referencedColumnName = "mat_id")
+    @JoinColumn(name = "mat_id", referencedColumnName = "id")
     @JsonIgnore
     private Material material;
 

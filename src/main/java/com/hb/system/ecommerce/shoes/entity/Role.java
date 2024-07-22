@@ -20,15 +20,11 @@ import lombok.NoArgsConstructor;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rol_id")
     private Integer id;
-    
-    @Column(nullable = false, unique = true, name = "rol_name")
+
     private String name;
 
-    @Column(nullable = false, name = "rol_status")
     private Boolean status;
 
-    @Column(name = "rol_description")
     private String description;
 }
