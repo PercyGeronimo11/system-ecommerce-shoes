@@ -1,7 +1,6 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
 import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
-import com.hb.system.ecommerce.shoes.dto.request.LotDetailRequest;
 import com.hb.system.ecommerce.shoes.dto.response.LotCompleteResp;
 import com.hb.system.ecommerce.shoes.dto.response.LotDetailResp;
 import com.hb.system.ecommerce.shoes.dto.response.LotListResp;

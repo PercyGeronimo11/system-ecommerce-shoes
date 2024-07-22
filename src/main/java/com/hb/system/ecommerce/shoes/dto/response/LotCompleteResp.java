@@ -1,11 +1,7 @@
 package com.hb.system.ecommerce.shoes.dto.response;
 
-import com.hb.system.ecommerce.shoes.entity.Lot;
-import com.hb.system.ecommerce.shoes.entity.LotDetail;
 import com.hb.system.ecommerce.shoes.entity.Product;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
 import lombok.Builder;
 import lombok.Data;
 

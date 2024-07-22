@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.hb.system.ecommerce.shoes.entity.Customer;
@@ -26,6 +25,7 @@ public class CustomerService {
     private UserRepository userRepository;
     @Autowired
     private final BCryptPasswordEncoder passwordEncoder;
+
     public List<Customer> listAll() {
 
         return customerRepository.findAll();
@@ -38,7 +38,7 @@ public class CustomerService {
     }
 
     public Customer logIn(String email, String password) {
-      
+
         Customer customer = customerRepository.findByCustEmail(email)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         if (!passwordEncoder.matches(password, customer.getCustPassword())) {
@@ -54,22 +54,21 @@ public class CustomerService {
             if (customerOpt.isPresent()) {
                 throw new RuntimeException("El DNI del cliente ya existe");
             }
-            // Encriptar la contraseña
+            Optional<User> usuarioOpt = userRepository.findByUsername(customer.getCustEmail());
+            if (usuarioOpt.isPresent()) {
+                throw new RuntimeException("El Correo del cliente ya existe");
+            }
+
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encryptedPassword = passwordEncoder.encode(customer.getCustPassword());
-
-            // Crear el usuario
             User usuar = new User();
             usuar.setName(customer.getCustFirstName());
             usuar.setUsername(customer.getCustEmail());
-
             usuar.setPassword(encryptedPassword);
             usuar.setRegisterDate(LocalDateTime.now());
             usuar.setRole(rolRepository.findById(3).get());
             usuar.setStatus(true);
             usuar = userRepository.save(usuar);
-
-            // Establecer todos los campos del cliente
             customer.setCustFirstName(customer.getCustFirstName());
             customer.setCustLastName(customer.getCustLastName());
             customer.setCustDni(customer.getCustDni());

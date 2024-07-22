@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.hb.system.ecommerce.shoes.dto.request.UserEditReq;
@@ -14,7 +13,6 @@ import com.hb.system.ecommerce.shoes.repositories.RolRepository;
 import com.hb.system.ecommerce.shoes.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

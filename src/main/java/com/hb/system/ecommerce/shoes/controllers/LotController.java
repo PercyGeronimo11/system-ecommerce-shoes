@@ -5,9 +5,7 @@ import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
 import com.hb.system.ecommerce.shoes.dto.response.LotCompleteResp;
 import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
 import com.hb.system.ecommerce.shoes.entity.Lot;
-import com.hb.system.ecommerce.shoes.entity.LotDetail;
 import com.hb.system.ecommerce.shoes.services.LotService;
-import com.hb.system.ecommerce.shoes.services.impl.LotDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -22,7 +20,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+
 
 @CrossOrigin(origins = "*")
 @Controller
@@ -30,10 +28,6 @@ import java.util.List;
 public class LotController {
     @Autowired
     private LotService lotService;
-
-    @Autowired
-    private LotDetailServiceImpl lotDetailService;
-
     @GetMapping(
             value = {"/list"},
             produces = MediaType.APPLICATION_JSON_VALUE)
