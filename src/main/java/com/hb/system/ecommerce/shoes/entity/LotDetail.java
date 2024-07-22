@@ -22,12 +22,9 @@ public class LotDetail {
     @JsonIgnore
     private Material material;
 
-    @Column(name = "det_price_unit")
     private Double detPriceUnit;
 
-    @Column(name = "det_quantity_material")
     private Integer detQuantity;
 
-    @Column(name = "det_sub_total")
     private Double detSubTotal;
 }

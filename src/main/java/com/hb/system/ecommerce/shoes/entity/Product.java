@@ -1,6 +1,5 @@
 package com.hb.system.ecommerce.shoes.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 @Entity
 public class Product {
     @Id
-    @Column(name = "pro_id")
     private int id;
     @ManyToOne
     @JoinColumn(name = "cat_id", referencedColumnName = "cat_id")
