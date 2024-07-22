@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.hb.system.ecommerce.shoes.dto.request.LoginReq;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Customer;
+import com.hb.system.ecommerce.shoes.exceptions.CustomException;
 import com.hb.system.ecommerce.shoes.services.CustomerService;
 
 import java.util.List;
@@ -29,13 +30,19 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Customer>> create(@RequestBody Customer Request){
-        Customer customer= customerService.save(Request);
-        ApiResponse<Customer> response= new ApiResponse<>();
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Se registró un cliente exitosamente");
-        response.setData(customer);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+    public ResponseEntity<ApiResponse<Customer>> create(@RequestBody Customer request) {
+        ApiResponse<Customer> response = new ApiResponse<>();
+        try {
+            Customer customer = customerService.save(request);
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Se registró un cliente exitosamente");
+            response.setData(customer);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (CustomException e) {
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setMessage(e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")
