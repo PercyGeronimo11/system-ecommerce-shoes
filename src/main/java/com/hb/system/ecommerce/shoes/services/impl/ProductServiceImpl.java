@@ -29,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Value("${url.dev}")
+    private String urlDev;
+
     @Override
     public ProductListResp productListService(String search) {
         List<Product> productList = productRepository.findByProNameContaining(search);
@@ -113,7 +116,7 @@ public ProductListResp productsByCategory(int idcategory) {
 
     private void deleteFile(String fileName) {
         try {
-            String uploadDir = "uploads";
+            String uploadDir = urlDev+ "uploads";
             Path filePath = Paths.get(uploadDir).resolve(fileName);
             Files.deleteIfExists(filePath);
         } catch (IOException ex) {
@@ -134,7 +137,7 @@ public ProductListResp productsByCategory(int idcategory) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            String fileUrl = "http://127.0.0.1:8080/product/images/" + fileName;
+            String fileUrl = urlDev +"/product/images/" + fileName;
             return fileUrl;
         } catch (IOException ex) {
             throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());

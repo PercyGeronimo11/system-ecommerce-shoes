@@ -17,19 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Category {
     @Id
-    @Column(name = "cat_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "cat_name")
     private String catName;
 
-    @Column(name = "cat_description")
     private String catDescription;
 
-    @Column(name = "cat_status")
     private Boolean catStatus;
 
-    @Column(name = "cat_has_taco")
     private Boolean catHasTaco;
 }

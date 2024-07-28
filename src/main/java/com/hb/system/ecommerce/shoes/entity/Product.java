@@ -1,10 +1,6 @@
 package com.hb.system.ecommerce.shoes.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,10 +9,11 @@ import java.math.BigDecimal;
 @Entity
 public class Product {
     @Id
-    @Column(name = "pro_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne
-    @JoinColumn(name = "cat_id", referencedColumnName = "cat_id")
+    @JoinColumn(name = "cat_id", referencedColumnName = "id")
     private Category category;
 
     private String proName;
