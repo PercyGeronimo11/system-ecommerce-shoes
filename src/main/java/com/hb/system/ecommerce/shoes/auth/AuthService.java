@@ -33,15 +33,18 @@ public class AuthService {
     private final CustomerRepository customerRepository;
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails userDetails = userRepository.findByUsername(request.getEmail()).orElseThrow();
-        User user = userRepository.findByUsername(request.getEmail()).orElseThrow();
-        return AuthResponse.builder()
-                .token(jwtService.getToken(userDetails))
-                .username(user.getName())
-                .rol(user.getRole().getName())
-                .build();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        UserDetails userDetails=userRepository.findByUsername(request.getEmail()).orElseThrow();
+        User user=userRepository.findByUsername(request.getEmail()).orElseThrow();
+        if(user.getRole().getName().equals("Administrador") || user.getRole().getName().equals("Usuario")){
+            return AuthResponse.builder()
+            .token(jwtService.getToken(userDetails))
+            .username(user.getName())
+            .rol(user.getRole().getName())
+            .build();
+        }else{
+            throw new IllegalArgumentException("No tiene permiso para iniciar sesión.");
+        }
     }
 
     public AuthResponse loginCustomer(LoginRequest request) {
