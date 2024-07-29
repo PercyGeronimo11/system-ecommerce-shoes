@@ -29,11 +29,16 @@ public class AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         UserDetails userDetails=userRepository.findByUsername(request.getEmail()).orElseThrow();
         User user=userRepository.findByUsername(request.getEmail()).orElseThrow();
-        return AuthResponse.builder()
+        if(user.getRole().getName().equals("Administrador") || user.getRole().getName().equals("Usuario")){
+            return AuthResponse.builder()
             .token(jwtService.getToken(userDetails))
             .username(user.getName())
             .rol(user.getRole().getName())
             .build();
+        }else{
+            throw new IllegalArgumentException("No tiene permiso para iniciar sesión.");
+        }
+        
     }
 
     public AuthResponse register(RegisterRequest request) {
