@@ -4,7 +4,6 @@ import com.hb.system.ecommerce.shoes.dto.request.ProductReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
 import com.hb.system.ecommerce.shoes.services.ProductService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 @Controller

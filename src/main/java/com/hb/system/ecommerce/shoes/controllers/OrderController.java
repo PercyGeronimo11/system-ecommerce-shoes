@@ -1,6 +1,4 @@
 package com.hb.system.ecommerce.shoes.controllers;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Order;
 import com.hb.system.ecommerce.shoes.entity.OrderDetail;
-import com.hb.system.ecommerce.shoes.services.MaterialService;
 import com.hb.system.ecommerce.shoes.services.OrderService;
 
 @RestController

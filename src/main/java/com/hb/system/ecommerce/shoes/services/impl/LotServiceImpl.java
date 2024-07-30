@@ -28,8 +28,6 @@ public class LotServiceImpl implements LotService {
     @Autowired
     private LotDetailRepository lotDetailRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private MaterialRepository materialRepository;
