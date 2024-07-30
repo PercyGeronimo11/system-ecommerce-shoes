@@ -11,12 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hb.system.ecommerce.shoes.entity.Customer;
 import com.hb.system.ecommerce.shoes.entity.Role;
 import com.hb.system.ecommerce.shoes.entity.User;
 import com.hb.system.ecommerce.shoes.repositories.UserRepository;
-import com.hb.system.ecommerce.shoes.services.CustomerService;
-import com.hb.system.ecommerce.shoes.repositories.CustomerRepository;
 import com.hb.system.ecommerce.shoes.repositories.RolRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +27,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final RolRepository roleRepository;
-    private final CustomerRepository customerRepository;
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
@@ -46,21 +42,20 @@ public class AuthService {
             throw new IllegalArgumentException("No tiene permiso para iniciar sesión.");
         }
     }
-
     public AuthResponse loginCustomer(LoginRequest request) {
-        Optional<User> usuer = userRepository.findByUsername(request.getEmail());
-        if (usuer.isPresent() && usuer.get().getRole().getId()==3) {
-            authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            UserDetails userDetails = userRepository.findByUsername(request.getEmail()).orElseThrow();
-            User user = userRepository.findByUsername(request.getEmail()).orElseThrow();
+        User user = userRepository.findByUsername(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    
+        if (user.getRole().getName().equals("Cliente")) {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    
             return AuthResponse.builder()
-                    .token(jwtService.getToken(userDetails))
+                    .token(jwtService.getToken(user))
                     .username(user.getName())
                     .rol(user.getRole().getName())
                     .build();
         } else {
-            throw new RuntimeException("Customer not found");
+            throw new RuntimeException("No tiene permiso para iniciar sesión");
         }
     }
 

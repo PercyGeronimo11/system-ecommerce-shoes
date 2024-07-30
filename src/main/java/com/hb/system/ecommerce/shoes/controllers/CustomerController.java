@@ -44,24 +44,7 @@ public class CustomerController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<Customer>> logIncustomer(@RequestBody LoginReq loginRequest) {
-        try {
-            Customer client = customerService.logIn(loginRequest.getEmail(), loginRequest.getPassword());
-            ApiResponse<Customer> response = new ApiResponse<>();
-            response.setStatus(HttpStatus.OK.value());
-            response.setMessage("Login exitoso");
-            response.setData(client);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            ApiResponse<Customer> response = new ApiResponse<>();
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setMessage("Email o contraseña incorrectos");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-        }
-    }
-
+    
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Customer>> edit(@PathVariable int id, @RequestBody Customer customerRequest){
         Customer customer= customerService.update(id,customerRequest);
