@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.hb.system.ecommerce.shoes.entity.*;
+
+
 import com.hb.system.ecommerce.shoes.repositories.*;
 
 import com.hb.system.ecommerce.shoes.dto.request.PromoRequest;
@@ -20,7 +22,7 @@ import java.util.Date;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class PromotionDetailService {
+public class PromotionDetailService{
 
     @Autowired
     private PromotionDetailRepository promdetailRepository;
@@ -28,7 +30,8 @@ public class PromotionDetailService {
     private PromotionRepository promotionRepository;
     @Autowired
     private ProductRepository productRepository;
-
+    @Value("${url.local}")
+    private String urlLocal;
     // Lista de detalles Activos
     public List<PromotionDetail> listAll() {
         return promdetailRepository.findByDetStatus(true);
@@ -38,7 +41,6 @@ public class PromotionDetailService {
     public List<PromotionDetail> listAllDetPromotion(int promoid) {
         return promdetailRepository.findByPromotionIdAndDetStatus(promoid, true);
     }
-
     public Promotion save(PromoRequest promocion, MultipartFile file) throws IOException {
         try {
             Promotion promo = new Promotion();
@@ -53,7 +55,7 @@ public class PromotionDetailService {
             promocion.getPromDetail().forEach(PromoDetailRequest -> {
                 PromotionDetail detail = new PromotionDetail();
                 Product producto = new Product();
-                Optional<Product> producFind = productRepository.findById(PromoDetailRequest.getProId());
+                Optional<Product> producFind = productRepository.findById(PromoDetailRequest.getId());
                 if (producFind.isPresent()) {
                     producto = producFind.get();
                 } else {
@@ -68,17 +70,17 @@ public class PromotionDetailService {
             });
             return savedpromo;
         } catch (Exception e) {
-            throw new RuntimeException("Error in store product ", e);
+            throw new RuntimeException("Error al guardar la promocion", e);
         }
     }
 
+
     @Value("${image.upload.directory}")
-    private String uploadDir;
+    private String uploadDirectory;
 
     private String saveFile(MultipartFile archivo) {
         try {
-            String uploadDir = "uploads";
-            Path uploadPath = Paths.get(uploadDir);
+            Path uploadPath = Paths.get(uploadDirectory);
             if (!uploadPath.toFile().exists()) {
                 uploadPath.toFile().mkdirs();
             }
@@ -86,8 +88,7 @@ public class PromotionDetailService {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(archivo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            String fileUrl = "/product/images/" + fileName;
-
+            String fileUrl = urlLocal +"/product/images/" + fileName;
             return fileUrl;
         } catch (IOException ex) {
             throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());

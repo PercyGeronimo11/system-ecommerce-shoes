@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class PromoDetailRequest {
     // datos del producto
-    private int proId;
+    private int id;
     private String proName;
 }

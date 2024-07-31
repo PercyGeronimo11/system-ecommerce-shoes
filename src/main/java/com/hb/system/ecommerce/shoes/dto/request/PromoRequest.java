@@ -12,8 +12,7 @@ public class PromoRequest {
     private Date promStartdate;
 
     private Date promEnddate;
-
-
+    
     private String promDescription;
 
     private String promUrlImage;

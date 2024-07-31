@@ -49,9 +49,7 @@ public class PromotionController {
      * @PostMapping
      * public ResponseEntity<ApiResponse<Promotion>> create(
      * 
-     * @RequestPart("promotion") Promotion promotionRequest,
-     * 
-     * @RequestParam(name = "file", required = false) MultipartFile file)
+     * @RequestPart("promotion") Promotion promotionRequest,@RequestParam(name = "file", required = false) MultipartFile file)
      * 
      * 
      * throws IOException {
@@ -75,16 +73,17 @@ public class PromotionController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Promotion>> create(
-            @RequestPart("promotion") PromoRequest promoRequest,
-            @RequestParam(name = "file", required = false) MultipartFile file)
-            throws IOException {
+        @RequestPart(value = "promotion", required = false) PromoRequest promoRequest, 
+        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException { 
         Promotion promotion = promoDetailService.save(promoRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Se guardo la promocion exitosamente");
+        response.setMessage("Se guardó la promoción exitosamente");
         response.setData(promotion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int id,
