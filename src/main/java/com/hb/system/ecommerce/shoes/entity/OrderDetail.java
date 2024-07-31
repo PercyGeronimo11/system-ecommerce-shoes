@@ -31,7 +31,7 @@ public class OrderDetail {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "pro_id")
+    @JoinColumn(nullable = false, name = "id")
     private Product product;
 
     @Column(nullable = false, name = "odt_amount")
@@ -47,4 +47,4 @@ public class OrderDetail {
     private String odt_description;
 
 
-}
+}  

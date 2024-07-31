@@ -46,7 +46,7 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<Customer>> logIn(@RequestBody LoginReq loginRequest) {
+    public ResponseEntity<ApiResponse<Customer>> logIncustomer(@RequestBody LoginReq loginRequest) {
         try {
             Customer client = customerService.logIn(loginRequest.getEmail(), loginRequest.getPassword());
             ApiResponse<Customer> response = new ApiResponse<>();
@@ -61,7 +61,6 @@ public class CustomerController {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Customer>> edit(@PathVariable int id, @RequestBody Customer customerRequest){
@@ -79,6 +78,16 @@ public class CustomerController {
         ApiResponse<Customer> response=new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Detalle del customer recuperado exitossamente");
+        response.setData(customer);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<ApiResponse<Customer>> getByDni(@PathVariable String dni){
+        Customer customer= customerService.getByDni(dni);
+        ApiResponse<Customer> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Cliente Obtenido por Dni");
         response.setData(customer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

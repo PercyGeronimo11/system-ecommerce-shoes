@@ -5,8 +5,8 @@ import java.util.Objects;
 
 
 public class OrderDetailId implements Serializable  {
-    private int order;
-    private int  product;
+    private Integer order;
+    private Integer  product;
 
     public OrderDetailId() {}
 

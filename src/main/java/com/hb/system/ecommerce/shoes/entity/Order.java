@@ -30,7 +30,7 @@ public class Order {
     private Integer ord_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "cust_id")
+    @JoinColumn(nullable = false, name = "id")
     private Customer customer;
 
     @Column(nullable = false, name = "ord_date")

@@ -1,5 +1,7 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,19 +32,26 @@ public class OrderDetailController {
     private final OrderDetilService orderDetailService;
 
     @PostMapping
-    public void createOrderDetail(@RequestBody OrderDetail orderDetail){
-        orderDetailService.createOrderDetail(orderDetail);
+    public ResponseEntity<String> createOrderDetails(@RequestBody List<OrderDetail> orderDetails){
+        try {
+            orderDetailService.createOrderDetails(orderDetails);
+            return new ResponseEntity<>("Detalles creados exitosamente", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al crear las reservas: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping
-    public java.util.List<OrderDetail> getAllOrdersDetails(){
+    public List<OrderDetail> getAllOrdersDetails(){
         return orderDetailService.getAllOrderDetails();
     }
 
     @GetMapping("/{ord_id}/{pro_id}")
-    public java.util.Optional<OrderDetail> getByOrderDetailId(@PathVariable Integer ord_id, @PathVariable Integer pro_id){
+    public ResponseEntity<OrderDetail> getByOrderDetailId(@PathVariable Integer ord_id, @PathVariable Integer pro_id){
         OrderDetailId orderDetailId = new OrderDetailId(ord_id, pro_id);
-        return orderDetailService.getOrderDetailById(orderDetailId);
+        return orderDetailService.getOrderDetailById(orderDetailId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{ord_id}/{pro_id}")
@@ -57,9 +66,18 @@ public class OrderDetailController {
     }
 
     @DeleteMapping("/{ord_id}/{pro_id}")
-    public void deleteOrderDetail(@PathVariable Integer ord_id, @PathVariable Integer pro_id) {
-        OrderDetailId orderDetailId = new OrderDetailId(ord_id,pro_id);
-        orderDetailService.deleteOrderDetail(orderDetailId);
+    public ResponseEntity<String> deleteOrderDetail(@PathVariable Integer ord_id, @PathVariable Integer pro_id) {
+        OrderDetailId orderDetailId = new OrderDetailId(ord_id, pro_id);
+        try {
+            orderDetailService.deleteOrderDetail(orderDetailId);
+            return new ResponseEntity<>("Reserva eliminada exitosamente", HttpStatus.OK);
+        } catch (OrderDetilService.OrderDetailNotFoundException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (OrderDetilService.OrderDetailServiceException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception ex) {
+            return new ResponseEntity<>("Error inesperado: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @ExceptionHandler(OrderDetilService.OrderDetailNotFoundException.class)

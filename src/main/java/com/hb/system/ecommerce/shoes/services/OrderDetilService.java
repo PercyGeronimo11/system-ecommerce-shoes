@@ -1,5 +1,8 @@
 package com.hb.system.ecommerce.shoes.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.hb.system.ecommerce.shoes.entity.OrderDetail;
@@ -10,48 +13,44 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-
 public class OrderDetilService {
+
     private final OrderDetailRepository orderDetailRepository;
 
-    public String createOrderDetail(OrderDetail orderDetail) {
+    public void createOrderDetails(List<OrderDetail> orderDetails) {
         try {
-            orderDetailRepository.save(orderDetail);
-            return "Detalle  creado exitosamente";
+            orderDetailRepository.saveAll(orderDetails);
         } catch (Exception e) {
-            throw new OrderDetailServiceException("Error al crear la reserva: " + e.getMessage());
+            throw new OrderDetailServiceException("Error al crear las reservas: " + e.getMessage());
         }
     }
 
-    public java.util.List<OrderDetail> getAllOrderDetails() {
+    public List<OrderDetail> getAllOrderDetails() {
         return orderDetailRepository.findAll();
     }
 
-    public java.util.Optional<OrderDetail> getOrderDetailById(OrderDetailId id) {
+    public Optional<OrderDetail> getOrderDetailById(OrderDetailId id) {
         return orderDetailRepository.findById(id);
     }
 
     public void updateOrderDetail(OrderDetailId orderDetailId, OrderDetail orderDetail) {
-        java.util.Optional<OrderDetail> existingOrderDetailOpt = orderDetailRepository.findById(orderDetailId);
+        Optional<OrderDetail> existingOrderDetailOpt = orderDetailRepository.findById(orderDetailId);
         if (existingOrderDetailOpt.isPresent()) {
             OrderDetail existingOrderDetail = existingOrderDetailOpt.get();
-            // Mapear los valores del objeto recibido a la entidad existente
             existingOrderDetail.setOdt_amount(orderDetail.getOdt_amount());
             existingOrderDetail.setOdt_price(orderDetail.getOdt_price());
             existingOrderDetail.setOdt_status(orderDetail.getOdt_status());
 
             orderDetailRepository.save(existingOrderDetail);
-            
         } else {
             throw new OrderDetailNotFoundException("BookingDetail not found");
         }
     }
 
-    public String deleteOrderDetail(OrderDetailId id) {
+    public void deleteOrderDetail(OrderDetailId id) {
         if (orderDetailRepository.existsById(id)) {
             try {
                 orderDetailRepository.deleteById(id);
-                return "Reserva eliminada exitosamente";
             } catch (Exception e) {
                 throw new OrderDetailServiceException("Error al eliminar la reserva: " + e.getMessage());
             }
@@ -60,15 +59,13 @@ public class OrderDetilService {
         }
     }
 
-
-    
-    public class OrderDetailNotFoundException extends RuntimeException {
+    public static class OrderDetailNotFoundException extends RuntimeException {
         public OrderDetailNotFoundException(String message) {
             super(message);
         }
     }
 
-    public class OrderDetailServiceException extends RuntimeException {
+    public static class OrderDetailServiceException extends RuntimeException {
         public OrderDetailServiceException(String message) {
             super(message);
         }

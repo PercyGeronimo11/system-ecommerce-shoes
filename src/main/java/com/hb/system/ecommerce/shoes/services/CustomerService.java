@@ -38,16 +38,28 @@ public class CustomerService {
 
     }
 
+    public Customer getByDni(String dni) {
+        Optional<Customer> customerFind = customerRepository.findByCustDni(dni);
+        return customerFind.get();
+
+    }
+
+
+//borrar
+
     public Customer logIn(String email, String password) {
 
-        Customer customer = customerRepository.findByCustEmail(email)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        Customer customer = customerRepository.findByCustEmail(email).orElseThrow(() -> new RuntimeException("Customer not found"));
         if (!passwordEncoder.matches(password, customer.getCustPassword())) {
             throw new RuntimeException("Invalid email or password");
         }
 
         return customer;
     }
+
+//fin
+
+
 
     public Customer save(Customer customer) {
         Optional<Customer> customerOpt = customerRepository.findByCustDni(customer.getCustDni());
