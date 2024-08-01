@@ -12,6 +12,7 @@ import org.springframework.core.io.UrlResource;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.PromoRequest;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
+import com.hb.system.ecommerce.shoes.dto.response.PromoCompleteResp;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
@@ -45,22 +46,6 @@ public class PromotionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*
-     * @PostMapping
-     * public ResponseEntity<ApiResponse<Promotion>> create(
-     * 
-     * @RequestPart("promotion") Promotion promotionRequest,@RequestParam(name = "file", required = false) MultipartFile file)
-     * 
-     * 
-     * throws IOException {
-     * Promotion promotion = promotionService.save(promotionRequest, file);
-     * ApiResponse<Promotion> response = new ApiResponse<>();
-     * response.setStatus(HttpStatus.OK.value());
-     * response.setMessage("Promoción registrada exitosamente");
-     * response.setData(promotion);
-     * return new ResponseEntity<>(response, HttpStatus.OK);
-     * }
-     */
     @GetMapping(value = { "/list" }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<ProductListResp>> index(String search) {
         ProductListResp productListResp = productService.productListService(search);
@@ -83,11 +68,32 @@ public class PromotionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PromoCompleteResp>> getById(@PathVariable int id) {
+        PromoCompleteResp promotion = promoDetailService.getById(id);
+        ApiResponse<PromoCompleteResp> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Promoción obtenida exitosamente");
+        response.setData(promotion);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+ 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int id,
-            @RequestPart("promotion") Promotion promotionRequest,
+    public ResponseEntity<ApiResponse<Promotion>> edit(
+        @PathVariable int id,
+        @RequestPart(value = "promotion", required = false) PromoRequest promoRequest, 
+        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException { 
+        Promotion promotion = promoDetailService.edit(id, promoRequest, file);
+        ApiResponse<Promotion> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Se editó la promoción exitosamente");
+        response.setData(promotion);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+/*
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int id,@RequestPart("promotion") Promotion promotionRequest,
             @RequestPart(name = "file", required = false) MultipartFile file) throws IOException {
         Promotion promotion = promotionService.update(id, promotionRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
@@ -96,7 +102,9 @@ public class PromotionController {
         response.setData(promotion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+ */
 
+/* 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Promotion>> getById(@PathVariable int id) {
         Promotion promocion = promotionService.getById(id);
@@ -106,7 +114,9 @@ public class PromotionController {
         response.setData(promocion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+*/
 
+/*
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Promotion>> delete(@PathVariable int id) {
         promotionService.delete(id);
@@ -115,6 +125,22 @@ public class PromotionController {
         response.setMessage("Promocion eliminada exitosamente");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Value("${image.upload.directory}")
     private String uploadDir;
