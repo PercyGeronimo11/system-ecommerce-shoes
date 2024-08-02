@@ -58,8 +58,8 @@ public class PromotionController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Promotion>> create(
-        @RequestPart(value = "promotion", required = false) PromoRequest promoRequest, 
-        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException { 
+            @RequestPart(value = "promotion", required = false) PromoRequest promoRequest,
+            @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
         Promotion promotion = promoDetailService.save(promoRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
@@ -77,12 +77,12 @@ public class PromotionController {
         response.setData(promotion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
- 
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Promotion>> edit(
-        @PathVariable int id,
-        @RequestPart(value = "promotion", required = false) PromoRequest promoRequest, 
-        @RequestParam(name = "file", required = false) MultipartFile file) throws IOException { 
+            @PathVariable int id,
+            @RequestPart(value = "promotion", required = false) PromoRequest promoRequest,
+            @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
         Promotion promotion = promoDetailService.edit(id, promoRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
@@ -91,56 +91,45 @@ public class PromotionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-/*
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int id,@RequestPart("promotion") Promotion promotionRequest,
-            @RequestPart(name = "file", required = false) MultipartFile file) throws IOException {
-        Promotion promotion = promotionService.update(id, promotionRequest, file);
-        ApiResponse<Promotion> response = new ApiResponse<>();
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Promoción actualizada exitosamente");
-        response.setData(promotion);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
- */
+    /*
+     * @PutMapping("/{id}")
+     * public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int
+     * id,@RequestPart("promotion") Promotion promotionRequest,
+     * 
+     * @RequestPart(name = "file", required = false) MultipartFile file) throws
+     * IOException {
+     * Promotion promotion = promotionService.update(id, promotionRequest, file);
+     * ApiResponse<Promotion> response = new ApiResponse<>();
+     * response.setStatus(HttpStatus.OK.value());
+     * response.setMessage("Promoción actualizada exitosamente");
+     * response.setData(promotion);
+     * return new ResponseEntity<>(response, HttpStatus.OK);
+     * }
+     */
 
-/* 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Promotion>> getById(@PathVariable int id) {
-        Promotion promocion = promotionService.getById(id);
-        ApiResponse<Promotion> response = new ApiResponse<>();
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Detalle de la promocion recuperado exitossamente");
-        response.setData(promocion);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-*/
+    /*
+     * @GetMapping("/{id}")
+     * public ResponseEntity<ApiResponse<Promotion>> getById(@PathVariable int id) {
+     * Promotion promocion = promotionService.getById(id);
+     * ApiResponse<Promotion> response = new ApiResponse<>();
+     * response.setStatus(HttpStatus.OK.value());
+     * response.setMessage("Detalle de la promocion recuperado exitossamente");
+     * response.setData(promocion);
+     * return new ResponseEntity<>(response, HttpStatus.OK);
+     * }
+     */
 
-/*
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Promotion>> delete(@PathVariable int id) {
-        promotionService.delete(id);
-        ApiResponse<Promotion> response = new ApiResponse<>();
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Promocion eliminada exitosamente");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /*
+     * @DeleteMapping("/{id}")
+     * public ResponseEntity<ApiResponse<Promotion>> delete(@PathVariable int id) {
+     * promotionService.delete(id);
+     * ApiResponse<Promotion> response = new ApiResponse<>();
+     * response.setStatus(HttpStatus.OK.value());
+     * response.setMessage("Promocion eliminada exitosamente");
+     * return new ResponseEntity<>(response, HttpStatus.OK);
+     * }
+     * 
+     */
 
     @Value("${image.upload.directory}")
     private String uploadDir;

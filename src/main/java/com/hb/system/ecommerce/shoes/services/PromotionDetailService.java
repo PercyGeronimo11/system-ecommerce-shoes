@@ -100,22 +100,11 @@ public class PromotionDetailService{
                 .promEnddate(optionalPromo.get().getPromEnddate())
                 .promDescription(optionalPromo.get().getPromDescription())
                 .promUrlImage(optionalPromo.get().getPromUrlImage())
+                .promStatus(optionalPromo.get().getPromStatus())
                 .promoDetail(promoDetailRespList)
                 .build();
         return promoCompleteResp;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
