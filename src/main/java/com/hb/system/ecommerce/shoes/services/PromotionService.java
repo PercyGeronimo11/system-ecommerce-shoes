@@ -31,6 +31,7 @@ import com.hb.system.ecommerce.shoes.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,23 +65,24 @@ public class PromotionService {
 
     public PromoCompleteResp getById(int idpromocion) {
         Optional<Promotion> optionalPromo = promotionRepository.findById(idpromocion);
+        if (optionalPromo.isEmpty()) {
+            throw new EntityNotFoundException("Promotion with id " + idpromocion + " not found");
+        }
         List<PromotionDetail> promoDetails = promotionDetailRepository.findAllByPromotionId(idpromocion);
-        List<PromoDetailResp> promoDetailRespList = new ArrayList<>();
-        promoDetails.forEach(promoDetail -> {
-            PromoDetailResp promoDetailResp = PromoDetailResp.builder()
-                    .id(promoDetail.getId())
-                    .proName(promoDetail.getProduct().getProName())
-                    .build();
-            promoDetailRespList.add(promoDetailResp);
-        });
-
+    List<PromoDetailResp> promoDetailRespList = promoDetails.stream()
+        .map(promoDetail -> PromoDetailResp.builder()
+            .id(promoDetail.getProduct().getId())
+            .proName(promoDetail.getProduct().getProName())
+            .build())
+        .collect(Collectors.toList());
+        Promotion promotion = optionalPromo.get();
         PromoCompleteResp promoCompleteResp = PromoCompleteResp.builder()
-                .id(optionalPromo.get().getId())
-                .promPercentage(optionalPromo.get().getPromPercentage())
-                .promStartdate(optionalPromo.get().getPromStartdate())
-                .promEnddate(optionalPromo.get().getPromEnddate())
-                .promDescription(optionalPromo.get().getPromDescription())
-                .promUrlImage(optionalPromo.get().getPromUrlImage())
+                .id(promotion.getId())
+                .promPercentage(promotion.getPromPercentage())
+                .promStartdate(promotion.getPromStartdate())
+                .promEnddate(promotion.getPromEnddate())
+                .promDescription(promotion.getPromDescription())
+                .promUrlImage(promotion.getPromUrlImage())
                 .promoDetail(promoDetailRespList)
                 .build();
         return promoCompleteResp;
