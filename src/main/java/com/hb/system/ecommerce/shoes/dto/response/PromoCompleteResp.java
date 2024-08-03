@@ -20,6 +20,6 @@ public class PromoCompleteResp {
 
     private String promUrlImage;
 
-    private Boolean promStatus;
     private List<PromoDetailResp> promoDetail;
+    private Boolean promStatus;
 }
