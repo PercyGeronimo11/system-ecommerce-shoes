@@ -13,11 +13,11 @@ import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.PromoRequest;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.dto.response.PromoCompleteResp;
+import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
 import com.hb.system.ecommerce.shoes.services.PromotionDetailService;
-import com.hb.system.ecommerce.shoes.services.PromotionService;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -28,8 +28,7 @@ import java.util.List;
 @CrossOrigin(origins = "*") // Permitir solicitudes desde cualquier origen
 @RequestMapping("/api/promotion")
 public class PromotionController {
-    @Autowired
-    private PromotionService promotionService;
+
     @Autowired
     private PromotionDetailService promoDetailService;
 
@@ -38,7 +37,7 @@ public class PromotionController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Promotion>>> list() {
-        List<Promotion> promotions = promotionService.listAll();
+        List<Promotion> promotions = promoDetailService.listAll();
         ApiResponse<List<Promotion>> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Lista de promociones exitosamente");
@@ -91,45 +90,15 @@ public class PromotionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*
-     * @PutMapping("/{id}")
-     * public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int
-     * id,@RequestPart("promotion") Promotion promotionRequest,
-     * 
-     * @RequestPart(name = "file", required = false) MultipartFile file) throws
-     * IOException {
-     * Promotion promotion = promotionService.update(id, promotionRequest, file);
-     * ApiResponse<Promotion> response = new ApiResponse<>();
-     * response.setStatus(HttpStatus.OK.value());
-     * response.setMessage("Promoción actualizada exitosamente");
-     * response.setData(promotion);
-     * return new ResponseEntity<>(response, HttpStatus.OK);
-     * }
-     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Promotion>> delete(@PathVariable int id){
+        promoDetailService.delete(id);
+        ApiResponse<Promotion> response=new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("promocion eliminada exitosamente");
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
-    /*
-     * @GetMapping("/{id}")
-     * public ResponseEntity<ApiResponse<Promotion>> getById(@PathVariable int id) {
-     * Promotion promocion = promotionService.getById(id);
-     * ApiResponse<Promotion> response = new ApiResponse<>();
-     * response.setStatus(HttpStatus.OK.value());
-     * response.setMessage("Detalle de la promocion recuperado exitossamente");
-     * response.setData(promocion);
-     * return new ResponseEntity<>(response, HttpStatus.OK);
-     * }
-     */
-
-    /*
-     * @DeleteMapping("/{id}")
-     * public ResponseEntity<ApiResponse<Promotion>> delete(@PathVariable int id) {
-     * promotionService.delete(id);
-     * ApiResponse<Promotion> response = new ApiResponse<>();
-     * response.setStatus(HttpStatus.OK.value());
-     * response.setMessage("Promocion eliminada exitosamente");
-     * return new ResponseEntity<>(response, HttpStatus.OK);
-     * }
-     * 
-     */
 
     @Value("${image.upload.directory}")
     private String uploadDir;

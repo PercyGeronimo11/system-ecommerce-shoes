@@ -38,9 +38,8 @@ public class PromotionDetailService {
     @Value("${url.local}")
     private String urlLocal;
 
-    // Lista de detalles Activos
-    public List<PromotionDetail> listAll() {
-        return promdetailRepository.findByDetStatus(true);
+    public List<Promotion> listAll() {
+        return promotionRepository.findByPromStatus(true);
     }
 
     public Promotion save(PromoRequest promocion, MultipartFile file) throws IOException {
@@ -84,7 +83,7 @@ public class PromotionDetailService {
     // Obtener una promocion y su detalle
     public PromoCompleteResp getById(int idpromocion) {
         Optional<Promotion> optionalPromo = promotionRepository.findById(idpromocion);
-        List<PromotionDetail> promoDetails = promotionDetailRepository.findAllByPromotionId(idpromocion);
+        List<PromotionDetail> promoDetails = promotionDetailRepository.findAllByPromotion(optionalPromo.get());
         List<PromoDetailResp> promoDetailRespList = new ArrayList<>();
         promoDetails.forEach(promoDetail -> {
             PromoDetailResp promoDetailResp = PromoDetailResp.builder()
@@ -126,7 +125,12 @@ public class PromotionDetailService {
             Promotion updatedPromo = promotionRepository.save(promo);
 
             // Vaciamos los detalles
-            promdetailRepository.deleteAllByPromotionId(promo.getId());
+            List<PromotionDetail> lista=promotionDetailRepository.findAllByPromotion(updatedPromo);
+            for (PromotionDetail detail : lista) {
+                promotionDetailRepository.deleteById(detail.getId());
+            }
+
+
             // Guardar nuevos detalles
             promocion.getPromDetail().forEach(PromoDetailRequest -> {
                 PromotionDetail detail = new PromotionDetail();
@@ -148,32 +152,20 @@ public class PromotionDetailService {
         }
     }
 
-    /*
-     * public Promotion update(int id, Promotion promotionRequest, MultipartFile
-     * file) throws IOException {
-     * if (promotionRepository.existsById(id)) {
-     * promotionRequest.setId(id);
-     * if (file != null && !file.isEmpty()) {
-     * promotionRequest.setPromUrlImage(saveFile(file));
-     * }
-     * return promotionRepository.save(promotionRequest);
-     * } else {
-     * throw new IllegalArgumentException("Promotion not found with id: " + id);
-     * }
-     * }
-     */
-    /*
-     * public void delete(int id) {
-     * Promotion promotion = promotionRepository.findById(id);
-     * if (promotion != null) {
-     * promotion.setPromStatus(false);
-     * promotionRepository.save(promotion);
-     * } else {
-     * throw new IllegalArgumentException("Promotion not found with id: " + id);
-     * }
-     * }
-     * 
-     */
+    public void delete(int id) {
+        Optional<Promotion> promo = promotionRepository.findById(id);
+        if (promo.isPresent()) {
+            List<PromotionDetail> lista = promotionDetailRepository.findAllByPromotion(promo.get());
+            for (PromotionDetail detail : lista) {
+                detail.setDetStatus(false);
+                promotionDetailRepository.save(detail);
+            }
+          promo.get().setPromStatus(false);
+          promotionRepository.save(promo.get());
+        } else {
+            throw new IllegalArgumentException("Promotion not found with id: " + id);
+        }
+    }
 
     @Value("${image.upload.directory}")
     private String uploadDirectory;
