@@ -1,7 +1,6 @@
 package com.hb.system.ecommerce.shoes.auth;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,21 +39,20 @@ public class AuthService {
             throw new IllegalArgumentException("No tiene permiso para iniciar sesión.");
         }
     }
-
     public AuthResponse loginCustomer(LoginRequest request) {
-        Optional<User> usuer = userRepository.findByUsername(request.getEmail());
-        if (usuer.isPresent() && usuer.get().getRole().getId()==3) {
-            authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            UserDetails userDetails = userRepository.findByUsername(request.getEmail()).orElseThrow();
-            User user = userRepository.findByUsername(request.getEmail()).orElseThrow();
+        User user = userRepository.findByUsername(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    
+        if (user.getRole().getName().equals("Cliente")) {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    
             return AuthResponse.builder()
-                    .token(jwtService.getToken(userDetails))
+                    .token(jwtService.getToken(user))
                     .username(user.getName())
                     .rol(user.getRole().getName())
                     .build();
         } else {
-            throw new RuntimeException("Customer not found");
+            throw new RuntimeException("No tiene permiso para iniciar sesión");
         }
     }
 

@@ -20,6 +20,35 @@ import lombok.RequiredArgsConstructor;
 public class UserInitializer {
     private final PasswordEncoder passwordEncoder;
     private final RolRepository rolRepository;
+
+    @Bean
+    @Transactional
+    public CommandLineRunner initRoles(RolRepository roleRepository) {
+        return args -> {
+            if (!roleRepository.findByName("Usuario").isPresent()) {
+                Role userRole = new Role();
+                userRole.setName("Usuario");
+                userRole.setStatus(true);
+                roleRepository.save(userRole);
+            }
+
+            if (!roleRepository.findByName("Administrador").isPresent()) {
+                Role adminRole = new Role();
+                adminRole.setName("Administrador");
+                adminRole.setStatus(true);
+                roleRepository.save(adminRole);
+            }
+
+            if (!roleRepository.findByName("Cliente").isPresent()) {
+                Role clienteRole = new Role();
+                clienteRole.setName("Cliente");
+                clienteRole.setStatus(true);
+                roleRepository.save(clienteRole);
+            }
+        };
+    }
+
+    
     @Bean
     @Transactional
     public CommandLineRunner initUser(UserRepository userRepository) {

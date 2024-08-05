@@ -10,7 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
+import com.hb.system.ecommerce.shoes.dto.request.PromoRequest;
+import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
+
+import com.hb.system.ecommerce.shoes.services.ProductService;
+import com.hb.system.ecommerce.shoes.services.PromotionDetailService;
 import com.hb.system.ecommerce.shoes.services.PromotionService;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,6 +29,12 @@ import java.util.List;
 public class PromotionController {
     @Autowired
     private PromotionService promotionService;
+    @Autowired
+    private PromotionDetailService promoDetailService;
+
+    @Autowired
+    private ProductService productService;
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<Promotion>>> list() {
         List<Promotion> promotions = promotionService.listAll();
@@ -34,16 +45,47 @@ public class PromotionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * @PostMapping
+     * public ResponseEntity<ApiResponse<Promotion>> create(
+     * 
+     * @RequestPart("promotion") Promotion promotionRequest,
+     * 
+     * @RequestParam(name = "file", required = false) MultipartFile file)
+     * 
+     * 
+     * throws IOException {
+     * Promotion promotion = promotionService.save(promotionRequest, file);
+     * ApiResponse<Promotion> response = new ApiResponse<>();
+     * response.setStatus(HttpStatus.OK.value());
+     * response.setMessage("Promoción registrada exitosamente");
+     * response.setData(promotion);
+     * return new ResponseEntity<>(response, HttpStatus.OK);
+     * }
+     */
+    @GetMapping(value = { "/list" }, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<ProductListResp>> index(String search) {
+        ProductListResp productListResp = productService.productListService(search);
+        ApiResponse<ProductListResp> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Lista de productos exitosamente");
+        response.setData(productListResp);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<ApiResponse<Promotion>> create(@RequestPart("promotion") Promotion promotionRequest,
-                @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
-        Promotion promotion = promotionService.save(promotionRequest, file);
+    public ResponseEntity<ApiResponse<Promotion>> create(
+            @RequestPart("promotion") PromoRequest promoRequest,
+            @RequestParam(name = "file", required = false) MultipartFile file)
+            throws IOException {
+        Promotion promotion = promoDetailService.save(promoRequest, file);
         ApiResponse<Promotion> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Promoción registrada exitosamente");
+        response.setMessage("Se guardo la promocion exitosamente");
         response.setData(promotion);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Promotion>> edit(@PathVariable int id,
             @RequestPart("promotion") Promotion promotionRequest,
@@ -77,6 +119,7 @@ public class PromotionController {
 
     @Value("${image.upload.directory}")
     private String uploadDir;
+
     @GetMapping("/images/{imageName:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         Path imagePath = Paths.get(uploadDir).resolve(imageName);

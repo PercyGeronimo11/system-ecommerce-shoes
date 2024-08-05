@@ -7,12 +7,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.hb.system.ecommerce.shoes.entity.Customer;
 import com.hb.system.ecommerce.shoes.entity.User;
+import com.hb.system.ecommerce.shoes.exceptions.CustomException;
 import com.hb.system.ecommerce.shoes.repositories.CustomerRepository;
 import com.hb.system.ecommerce.shoes.repositories.RolRepository;
 import com.hb.system.ecommerce.shoes.repositories.UserRepository;
-import com.hb.system.ecommerce.shoes.exceptions.CustomException;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -42,6 +44,11 @@ public class CustomerService {
         Optional<Customer> customerFind = customerRepository.findByCustDni(dni);
         return customerFind.get();
 
+    }
+
+
+    public List<Customer> getByName(String name) {
+        return customerRepository.findByName(name);
     }
 
 

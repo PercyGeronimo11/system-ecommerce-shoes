@@ -31,5 +31,5 @@ public class Promotion {
 
     private String promUrlImage;
 
-    private boolean promStatus;
+    private Boolean promStatus;
 }
