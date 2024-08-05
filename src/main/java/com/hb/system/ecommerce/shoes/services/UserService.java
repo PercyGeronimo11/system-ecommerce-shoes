@@ -1,7 +1,7 @@
 package com.hb.system.ecommerce.shoes.services;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,24 @@ public class UserService {
     private final RolRepository roleRepository;
 
     public List<User> listAll() {
-        return userRepository.findUsersByStatus(true);
+        // Obtener los roles "Administrador" y "Usuario"
+        Optional<Role> adminRoleOptional = roleRepository.findByName("Administrador");
+        Optional<Role> userRoleOptional = roleRepository.findByName("Usuario");
+
+        // Verificar si ambos roles están presentes
+        if (adminRoleOptional.isPresent() && userRoleOptional.isPresent()) {
+            Role adminRole = adminRoleOptional.get();
+            Role userRole = userRoleOptional.get();
+
+            // Crear una lista con ambos roles
+            List<Role> roles = List.of(adminRole, userRole);
+
+            // Buscar usuarios con el estado true y que tengan uno de los roles especificados
+            return userRepository.findUsersByStatusAndRoles(true, roles);
+        } else {
+            // Manejar el caso en el que uno o ambos roles no existen
+            throw new RuntimeException("Roles no encontrados");
+        }
     }
 
     public User getById(int id) {
