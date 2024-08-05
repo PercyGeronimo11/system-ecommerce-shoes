@@ -1,32 +1,50 @@
 package com.hb.system.ecommerce.shoes.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "order_detail")
-public class OrderDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@IdClass(OrderDetailId.class)
 
-    @ManyToOne()
-    @JoinColumn(name = "ord_id", referencedColumnName = "id")
+@Table(name = "order_detail")
+
+public class OrderDetail {
+
+    @Id
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "ord_id")
     private Order order;
 
-    @ManyToOne()
-    @JoinColumn(name = "pro_id", referencedColumnName = "id")
+    @Id
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "id")
     private Product product;
 
-    private Integer detQuantity;
-    private Double detPrice;
-    private String detDescription;
-    private boolean detStatus;
-}
+    @Column(nullable = false, name = "odt_amount")
+    private int odt_amount;
+
+    @Column(nullable = false, name = "odt_price")
+    private float odt_price;
+
+    @Column(nullable = false, name = "odt_status")
+    private int odt_status;
+
+    @Column(name = "odt_description")
+    private String odt_description;
+
+
+}  

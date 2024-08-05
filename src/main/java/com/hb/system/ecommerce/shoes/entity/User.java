@@ -28,7 +28,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name="user", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"username"}), 
+    @UniqueConstraint(columnNames = {"name"}) // Agrega la restricción de unicidad para el campo `name`
+})
 public class User implements UserDetails{
     @Id
     @Column(name = "use_id")

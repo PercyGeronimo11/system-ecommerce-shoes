@@ -1,17 +1,24 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.hb.system.ecommerce.shoes.dto.request.LoginReq;
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Customer;
 import com.hb.system.ecommerce.shoes.exceptions.CustomException;
 import com.hb.system.ecommerce.shoes.services.CustomerService;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -73,6 +80,16 @@ public class CustomerController {
         response.setMessage("Cliente Obtenido por Dni");
         response.setData(customer);
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/username/{name}")
+    public ResponseEntity<ApiResponse<List<Customer>>> findByUsername(@PathVariable String name){
+        List<Customer> customers = customerService.getByName(name);
+        ApiResponse<List<Customer>> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Clientes obtenidos por nombre de usuario");
+        response.setData(customers);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

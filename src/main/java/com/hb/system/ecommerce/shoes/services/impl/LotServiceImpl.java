@@ -1,24 +1,33 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
-import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
-import com.hb.system.ecommerce.shoes.dto.response.LotCompleteResp;
-import com.hb.system.ecommerce.shoes.dto.response.LotDetailResp;
-import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
-import com.hb.system.ecommerce.shoes.entity.*;
-import com.hb.system.ecommerce.shoes.repositories.*;
-import com.hb.system.ecommerce.shoes.services.LotService;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
+import com.hb.system.ecommerce.shoes.dto.response.LotCompleteResp;
+import com.hb.system.ecommerce.shoes.dto.response.LotDetailResp;
+import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
+import com.hb.system.ecommerce.shoes.entity.Lot;
+import com.hb.system.ecommerce.shoes.entity.LotDetail;
+import com.hb.system.ecommerce.shoes.entity.Material;
+import com.hb.system.ecommerce.shoes.entity.Product;
+import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
+import com.hb.system.ecommerce.shoes.repositories.LotDetailRepository;
+import com.hb.system.ecommerce.shoes.repositories.LotRepository;
+import com.hb.system.ecommerce.shoes.repositories.MaterialRepository;
+import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
+import com.hb.system.ecommerce.shoes.services.LotService;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
