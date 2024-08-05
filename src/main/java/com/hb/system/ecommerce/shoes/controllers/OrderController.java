@@ -1,5 +1,7 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,27 +16,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Order;
+import com.hb.system.ecommerce.shoes.entity.OrderDetail;
 import com.hb.system.ecommerce.shoes.services.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/order")
+@RequestMapping("/api/order")
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class OrderController {
      private final OrderService orderService;
 
     @PostMapping
-    public void createOrder(@RequestBody Order order){
-           orderService.createOrder(order);
+    public ResponseEntity<ApiResponse<Order>> createOrder(@RequestBody Order order){
+            Order orderResponse =  orderService.createOrder(order);
+            ApiResponse<Order> response= new ApiResponse<>();
+            response.setStatus(HttpStatus.OK.value());
+            response.setMessage("Listado de órdenes exitoso");
+            response.setData(orderResponse);
+            return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping 
-    public  java.util.List<Order> getAllOrders(){
-        return orderService.getAllOrders();
+    public  ResponseEntity<ApiResponse<List<Order>>> getAllOrders(){
+        List<Order> orders = orderService.getAllOrders();
+        ApiResponse<List<Order>> response= new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Listado de órdenes exitoso");
+        response.setData(orders);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
 

@@ -92,6 +92,16 @@ public class CustomerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<ApiResponse<Customer>> findByEmail(@PathVariable String email){
+        Customer customer = customerService.getByEmail(email);
+        ApiResponse<Customer> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Cliente econtrado por email");
+        response.setData(customer);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Customer>> delete(@PathVariable int id){
         customerService.delete(id);

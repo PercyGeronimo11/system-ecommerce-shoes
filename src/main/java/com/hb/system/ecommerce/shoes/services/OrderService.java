@@ -14,10 +14,10 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public String createOrder(Order order) {
+    public Order createOrder(Order order) {
         try {
-            orderRepository.save(order);
-            return "Orden creada exitosamente";
+            order.setOrd_status(1);
+            return orderRepository.save(order);
         } catch (Exception e) {
             throw new OrderServiceException("Error al crear orden: " + e.getMessage());
         }

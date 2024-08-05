@@ -5,9 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.hb.system.ecommerce.shoes.entity.Order;
 import com.hb.system.ecommerce.shoes.entity.OrderDetail;
 import com.hb.system.ecommerce.shoes.entity.OrderDetailId;
 import com.hb.system.ecommerce.shoes.repositories.OrderDetailRepository;
+import com.hb.system.ecommerce.shoes.repositories.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderDetilService {
 
     private final OrderDetailRepository orderDetailRepository;
+    private final OrderRepository orderRepository;
 
     public void createOrderDetails(List<OrderDetail> orderDetails) {
         try {
@@ -27,6 +30,11 @@ public class OrderDetilService {
 
     public List<OrderDetail> getAllOrderDetails() {
         return orderDetailRepository.findAll();
+    }
+
+    public List<OrderDetail> OrderDetailfindOrder(Integer idOrder) {
+        Order order = orderRepository.findById(idOrder).get();
+        return orderDetailRepository.findByOrder(order); 
     }
 
     public Optional<OrderDetail> getOrderDetailById(OrderDetailId id) {

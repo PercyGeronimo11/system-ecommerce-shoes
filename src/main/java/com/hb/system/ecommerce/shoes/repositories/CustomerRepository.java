@@ -11,7 +11,7 @@ import com.hb.system.ecommerce.shoes.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
     Optional<Customer> findByCustDni(String dni);
-    Optional<Customer> findByCustEmail(String email);
+    Optional<Customer> findByCustEmail(String custEmail);
     @Query("SELECT c FROM Customer c WHERE c.usuario.name = :name")
     List<Customer> findByName(@Param("name") String username);
     Optional<Customer> findByCustEmailAndCustPassword(String custEmail, String custPassword);

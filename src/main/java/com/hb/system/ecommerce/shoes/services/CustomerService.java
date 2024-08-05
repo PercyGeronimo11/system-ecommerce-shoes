@@ -51,6 +51,10 @@ public class CustomerService {
         return customerRepository.findByName(name);
     }
 
+    public Customer getByEmail(String name) {
+        return customerRepository.findByCustEmail(name).get();
+    }
+
 
 //borrar
 
