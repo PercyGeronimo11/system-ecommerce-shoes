@@ -20,13 +20,42 @@ import lombok.RequiredArgsConstructor;
 public class UserInitializer {
     private final PasswordEncoder passwordEncoder;
     private final RolRepository rolRepository;
+
+    @Bean
+    @Transactional
+    public CommandLineRunner initRoles(RolRepository roleRepository) {
+        return args -> {
+            if (!roleRepository.findByName("Usuario").isPresent()) {
+                Role userRole = new Role();
+                userRole.setName("Usuario");
+                userRole.setStatus(true);
+                roleRepository.save(userRole);
+            }
+
+            if (!roleRepository.findByName("Administrador").isPresent()) {
+                Role adminRole = new Role();
+                adminRole.setName("Administrador");
+                adminRole.setStatus(true);
+                roleRepository.save(adminRole);
+            }
+
+            if (!roleRepository.findByName("Cliente").isPresent()) {
+                Role clienteRole = new Role();
+                clienteRole.setName("Cliente");
+                clienteRole.setStatus(true);
+                roleRepository.save(clienteRole);
+            }
+        };
+    }
+
+    
     @Bean
     @Transactional
     public CommandLineRunner initUser(UserRepository userRepository) {
         return args -> {
             if (!userRepository.findByUsername("admin@service.com").isPresent()) {
                 User user = new User();
-                Role role = rolRepository.findById(1).orElseThrow(() -> new RuntimeException("Role not found"));
+                Role role = rolRepository.findById(2).orElseThrow(() -> new RuntimeException("Role not found"));
                 user.setName("Administrador");
                 user.setUsername("admin@service.com");
                 user.setPassword(passwordEncoder.encode("12345678"));

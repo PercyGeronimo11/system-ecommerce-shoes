@@ -23,51 +23,52 @@ import com.hb.system.ecommerce.shoes.services.UserService;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/user")
 public class UserController {
-     @Autowired
+    @Autowired
     private UserService userService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<User>>> list() {
         List<User> users = userService.listAll();
-        ApiResponse<List<User>> response= new ApiResponse<>();
+        ApiResponse<List<User>> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Lista de usuarios exitosamente");
         response.setData(users);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> delete(@PathVariable int id){
+    public ResponseEntity<ApiResponse<User>> delete(@PathVariable int id) {
         userService.delete(id);
-        ApiResponse<User> response=new ApiResponse<>();
+        ApiResponse<User> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Producto eliminado exitosamente");
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> edit(@PathVariable int id, @RequestBody UserEditReq userRequest){
-        User user= userService.update(id,userRequest);
+    public ResponseEntity<ApiResponse<User>> edit(@PathVariable int id, @RequestBody UserEditReq userRequest) {
+        User user = userService.update(id, userRequest);
         user.setStatus(true);
-        ApiResponse<User> response=new ApiResponse<>();
+        ApiResponse<User> response = new ApiResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("El usuario se actualizó exitosamente");
         response.setData(user);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     /*
-    @GetMapping("/delete/{id}")
-    public String showDeleteConfirm(@PathVariable("id") Integer id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "confirm-delete";
-    }
+     * @GetMapping("/delete/{id}")
+     * public String showDeleteConfirm(@PathVariable("id") Integer id, Model model)
+     * {
+     * User user = userService.getUserById(id);
+     * model.addAttribute("user", user);
+     * return "confirm-delete";
+     * }
+     * 
+     * @PostMapping("/delete/{id}")
+     * public String deleteUser(@PathVariable("id") Integer id) {
+     * userService.deleteUser(id);
+     * return "redirect:/user/list";
+     * }
+     */
 
-    @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Integer id) {
-        userService.deleteUser(id);
-        return "redirect:/user/list";
-    } */
-
-    
 }

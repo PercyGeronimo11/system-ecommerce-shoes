@@ -30,6 +30,7 @@ public class SecurityConfig {
               authRequest
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/product/images/**").permitAll()
+ 
                 .requestMatchers("/api/list").permitAll()
                 /* .requestMatchers("/api/**").permitAll() */
                 .anyRequest().permitAll()
@@ -43,5 +44,4 @@ public class SecurityConfig {
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
-
 }

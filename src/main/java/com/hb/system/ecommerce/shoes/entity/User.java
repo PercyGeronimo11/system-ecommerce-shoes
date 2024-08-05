@@ -28,24 +28,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name="user", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"username"}), 
+    @UniqueConstraint(columnNames = {"name"}) // Agrega la restricción de unicidad para el campo `name`
+})
 public class User implements UserDetails{
     @Id
-    @Column(name = "USE_id")
+    @Column(name = "use_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @Column(nullable = false, name = "USE_name")
+    @Column(nullable = false, name = "use_name")
     String name;
-    @Column(nullable = false, name = "USE_email")
+    @Column(nullable = false, name = "use_email")
     String username;
-    @Column(nullable = false, name = "USE_password")
+    @Column(nullable = false, name = "use_password")
     String password;
-    @Column(name = "USE_status")
+    @Column(name = "use_status")
     boolean status;
-    @Column(name = "USE_register_date")
+    @Column(name = "use_register_date")
     LocalDateTime registerDate;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ROL_id")
+    @JoinColumn(name = "rol_id")
     private Role role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

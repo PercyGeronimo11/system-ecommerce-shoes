@@ -1,39 +1,40 @@
 package com.hb.system.ecommerce.shoes.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 @Data
 @Entity
 public class Product {
     @Id
-    @Column(name = "pro_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne
-    @JoinColumn(name = "cat_id", referencedColumnName = "cat_id")
+    @JoinColumn(name = "cat_id", referencedColumnName = "id")
     private Category category;
-    @Column(name = "pro_name")
+
     private String proName;
-    @Column(name = "pro_description")
+
     private String proDescription;
-    @Column(name = "pro_unit_price")
-    private String proUnitPrice;
-    @Column(name = "pro_size")
+
+    private Double proUnitPrice;
+
+    private BigDecimal proUnitCost;
+
     private String proSize;
-    @Column(name = "pro_size_platform")
+
     private String proSizePlatform;
-    @Column(name = "pro_size_taco")
+
     private String proSizeTaco;
-    @Column(name = "pro_url_image")
+
     private String proUrlImage;
-    @Column(name = "pro_color")
+
     private String proColor;
-    @Column(name = "pro_stock")
-    private String proStock;
-    @Column(name = "pro_status")
-    private String proStatus;
+
+    private int proStock;
+
+    private Boolean proStatus;
 }

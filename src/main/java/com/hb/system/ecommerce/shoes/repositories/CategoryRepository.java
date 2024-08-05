@@ -11,7 +11,7 @@ import com.hb.system.ecommerce.shoes.entity.Category;
 public interface CategoryRepository extends JpaRepository<Category, Integer>{
 
     Optional<Category> findById(int id);
-    List<Category> findByCatStatus(Boolean status);
+    List<Category> findByCatStatus(boolean catStatus);
     @Query("SELECT c FROM Category c WHERE c.catStatus = true")
     List<Category> findAllActiveCategories();
 }

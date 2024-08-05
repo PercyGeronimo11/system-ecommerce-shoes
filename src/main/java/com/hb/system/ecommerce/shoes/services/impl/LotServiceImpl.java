@@ -1,20 +1,33 @@
 package com.hb.system.ecommerce.shoes.services.impl;
 
-import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
-import com.hb.system.ecommerce.shoes.dto.request.LotDetailRequest;
-import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
-import com.hb.system.ecommerce.shoes.entity.*;
-import com.hb.system.ecommerce.shoes.repositories.*;
-import com.hb.system.ecommerce.shoes.services.LotService;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import com.hb.system.ecommerce.shoes.dto.request.LotRequest;
+import com.hb.system.ecommerce.shoes.dto.response.LotCompleteResp;
+import com.hb.system.ecommerce.shoes.dto.response.LotDetailResp;
+import com.hb.system.ecommerce.shoes.dto.response.LotListResp;
+import com.hb.system.ecommerce.shoes.entity.Lot;
+import com.hb.system.ecommerce.shoes.entity.LotDetail;
+import com.hb.system.ecommerce.shoes.entity.Material;
+import com.hb.system.ecommerce.shoes.entity.Product;
+import com.hb.system.ecommerce.shoes.repositories.CategoryRepository;
+import com.hb.system.ecommerce.shoes.repositories.LotDetailRepository;
+import com.hb.system.ecommerce.shoes.repositories.LotRepository;
+import com.hb.system.ecommerce.shoes.repositories.MaterialRepository;
+import com.hb.system.ecommerce.shoes.repositories.ProductRepository;
+import com.hb.system.ecommerce.shoes.services.LotService;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -24,13 +37,9 @@ public class LotServiceImpl implements LotService {
     @Autowired
     private LotDetailRepository lotDetailRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private MaterialRepository materialRepository;
-    @Autowired
-    private LotDetailServiceImpl lotDetailServiceImpl;
 
     @Override
     public LotListResp lotListService(String search) {
@@ -67,46 +76,80 @@ public class LotServiceImpl implements LotService {
                 } else {
                     throw new RuntimeException("No se encontró el material");
                 }
-                detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
-                detail.setDetPriceUnit(detailRequest.getDetSubTotal());
+                detail.setDetQuantity(detailRequest.getDetQuantity());
+                detail.setDetPriceUnit(detailRequest.getDetPriceUnit());
                 detail.setDetSubTotal(detailRequest.getDetSubTotal());
-//                log.info("finalll");
-//                LotDetail existingDetail = lotDetailRepository.findById(detail.getId()).orElse(null);
-//                if (existingDetail != null) {
-//                    lotDetailRepository.delete(existingDetail);
-//                }
                 detail.setLot(savedLot);
                 lotDetailRepository.save(detail);
             });
+            productFind.get().setProStock(lot.getLotQuantityProducts()+productFind.get().getProStock());
+            BigDecimal lotTotalCost = new BigDecimal(lot.getLotTotalCost());
+            BigDecimal lotQuantityProducts = new BigDecimal(lot.getLotQuantityProducts());
+            BigDecimal result = lotTotalCost.divide(lotQuantityProducts, 2, RoundingMode.HALF_UP);
+            productFind.get().setProUnitCost(result);
             return savedLot;
         } catch (Exception e) {
-            throw new RuntimeException("Error: No se pudo guardar el lote", e);
+            throw new RuntimeException("Error: No se pudo guarder el lote", e);
         }
     }
 
+
     @Override
+    @Transactional
     public Lot lotEditService(int id,LotRequest lotRequest){
         Lot existingLot = lotRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Lot not found with id: " + id));
-
         lotDetailRepository.deleteByLot_Id(existingLot.getId());
+        existingLot.getProduct().setProStock(existingLot.getProduct().getProStock()-existingLot.getLotQuantityProducts());
+        existingLot.setLotTotalCost(lotRequest.getLotTotalCost());
+        existingLot.setLotQuantityProducts(lotRequest.getLotQuantityProducts());
+        Lot savedLot = lotRepository.save(existingLot);
 
-        for (LotDetailRequest detailRequest : lotRequest.getLotDetail()) {
+        lotRequest.getLotDetail().forEach(detailRequest->{
             LotDetail detail = new LotDetail();
-            detail.setLot(existingLot);
-            Optional<Material> materialFind=materialRepository.findByName(detailRequest.getName());
-            if(materialFind.isPresent()){
+            Optional<Material> materialFind = materialRepository.findByName(detailRequest.getName());
+            if (materialFind.isPresent()) {
                 detail.setMaterial(materialFind.get());
-            }else{
-                throw new RuntimeException("No se encontro el material");
+                log.info("material:"+ materialFind.get());
+            } else {
+                throw new RuntimeException("No se encontró el material");
             }
-            detail.setDetQuantityMaterials(detailRequest.getDetQuantity());
-            detail.setDetPriceUnit(detailRequest.getDetSubTotal());
+            detail.setDetQuantity(detailRequest.getDetQuantity());
+            detail.setDetPriceUnit(detailRequest.getDetPriceUnit());
             detail.setDetSubTotal(detailRequest.getDetSubTotal());
+            detail.setLot(savedLot);
             lotDetailRepository.save(detail);
-        }
-
+        });
+        existingLot.getProduct().setProStock(existingLot.getProduct().getProStock()+lotRequest.getLotQuantityProducts());
+        BigDecimal lotTotalCost = new BigDecimal(existingLot.getLotTotalCost());
+        BigDecimal lotQuantityProducts = new BigDecimal(existingLot.getLotQuantityProducts());
+        BigDecimal result = lotTotalCost.divide(lotQuantityProducts, 2, RoundingMode.HALF_UP);
+        existingLot.getProduct().setProUnitCost(result);
         return lotRepository.save(existingLot);
     }
 
+    @Override
+    public LotCompleteResp lotGetService(int id) {
+        Optional<Lot> lotFind=lotRepository.findById(id);
+        List<LotDetail> lotDetails= lotDetailRepository.findAllByLot_id(id);
+
+        List<LotDetailResp>  lotDetailRespList= new ArrayList<>();
+        lotDetails.forEach(lotDetail -> {
+            LotDetailResp lotDetailResp= LotDetailResp.builder()
+                    .name(lotDetail.getMaterial().getName())
+                    .detPriceUnit(lotDetail.getDetPriceUnit())
+                    .detQuantity(lotDetail.getDetQuantity())
+                    .detSubTotal(lotDetail.getDetSubTotal())
+                    .build();
+            lotDetailRespList.add(lotDetailResp);
+        });
+
+        LotCompleteResp lotCompleteResp= LotCompleteResp.builder()
+                .product(lotFind.get().getProduct())
+                .lotTotalCost(lotFind.get().getLotTotalCost())
+                .lotQuantityProducts(lotFind.get().getLotQuantityProducts())
+                .lotDetails(lotDetailRespList)
+                .build();
+        return lotCompleteResp;
+    }
 }
