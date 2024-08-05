@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PromoDetailRequest {
-    // datos del producto
+    // Datos del producto
     private int id;
     private String proName;
 }

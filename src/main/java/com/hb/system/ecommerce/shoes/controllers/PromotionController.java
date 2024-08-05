@@ -13,7 +13,6 @@ import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.PromoRequest;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.dto.response.PromoCompleteResp;
-import com.hb.system.ecommerce.shoes.entity.Category;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
 
 import com.hb.system.ecommerce.shoes.services.ProductService;
@@ -25,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*") // Permitir solicitudes desde cualquier origen
+@CrossOrigin(origins = "*") 
 @RequestMapping("/api/promotion")
 public class PromotionController {
 
