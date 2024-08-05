@@ -32,8 +32,8 @@ public class SecurityConfig {
                 .requestMatchers("/product/images/**").permitAll()
                 .requestMatchers("/api/list").permitAll()
                 /* .requestMatchers("/api/**").permitAll() */
-                /* .anyRequest().permitAll() */
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+                /* .anyRequest().authenticated() */
                 )
 
             .sessionManagement(sessionManager->

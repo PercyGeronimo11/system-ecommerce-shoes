@@ -20,11 +20,9 @@ public class Material {
     @Column(name = "mat_name")
     private String name;
 
-    @Column(name = "mat_price")
-    private String price;
+    private Double price;
 
-    @Column(name = "mat_quantity")
-    private String quantity;
+    private Integer quantity;
 
     @Column(name = "mat_unit")
     private String unit;
@@ -32,6 +30,5 @@ public class Material {
     @Column(name = "mat_description")
     private String description;
 
-    @Column(name = "mat_status")
-    private boolean status;
+    private Boolean status;
 }
