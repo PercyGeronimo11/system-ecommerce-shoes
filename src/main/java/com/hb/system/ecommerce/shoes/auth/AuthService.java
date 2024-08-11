@@ -34,6 +34,7 @@ public class AuthService {
             .token(jwtService.getToken(userDetails))
             .username(user.getName())
             .rol(user.getRole().getName())
+            .usuario(user)
             .build();
         }else{
             throw new IllegalArgumentException("No tiene permiso para iniciar sesión.");
