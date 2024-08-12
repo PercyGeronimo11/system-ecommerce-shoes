@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class UserInitializer {
 
     @Bean
     @Transactional
+    @Order(1)
     public CommandLineRunner initRoles(RolRepository roleRepository) {
         return args -> {
             if (!roleRepository.findByName("Usuario").isPresent()) {
@@ -51,11 +54,12 @@ public class UserInitializer {
     
     @Bean
     @Transactional
+    @Order(2)
     public CommandLineRunner initUser(UserRepository userRepository) {
         return args -> {
+            Role role = rolRepository.findById(2).orElseThrow(() -> new RuntimeException("Role not found"));
             if (!userRepository.findByUsername("admin@service.com").isPresent()) {
                 User user = new User();
-                Role role = rolRepository.findById(2).orElseThrow(() -> new RuntimeException("Role not found"));
                 user.setName("Administrador");
                 user.setUsername("admin@service.com");
                 user.setPassword(passwordEncoder.encode("12345678"));
