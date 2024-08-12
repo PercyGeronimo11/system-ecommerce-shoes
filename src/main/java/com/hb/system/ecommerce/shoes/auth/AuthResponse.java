@@ -1,5 +1,7 @@
 package com.hb.system.ecommerce.shoes.auth;
 
+import com.hb.system.ecommerce.shoes.entity.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,4 +15,5 @@ public class AuthResponse {
     String token;
     String username;
     String rol;
+    User usuario;
 }
