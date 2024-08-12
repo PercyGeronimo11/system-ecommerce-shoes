@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.entity.Order;
-import com.hb.system.ecommerce.shoes.entity.OrderDetail;
 import com.hb.system.ecommerce.shoes.services.OrderService;
 
 import lombok.RequiredArgsConstructor;
