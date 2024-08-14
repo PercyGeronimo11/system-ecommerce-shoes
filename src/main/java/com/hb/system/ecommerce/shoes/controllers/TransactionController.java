@@ -1,8 +1,8 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
 import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hb.system.ecommerce.shoes.entity.Order;
 import com.hb.system.ecommerce.shoes.entity.Transaction;
 import com.hb.system.ecommerce.shoes.repositories.TransactionRepository;
+import com.hb.system.ecommerce.shoes.services.OrderService;
 import com.hb.system.ecommerce.shoes.services.TransactionService;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final OrderService orderService;
     private final TransactionRepository transactionRepository;
 
 
@@ -42,6 +48,20 @@ public class TransactionController {
     public ResponseEntity<Transaction> getTransaction(@PathVariable Integer tra_id) {
         Optional<Transaction> transaction = transactionRepository.findById(tra_id);
         return transaction.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/image/{ord_id}")
+    public ResponseEntity<Resource> getImage(@PathVariable Integer ord_id) {
+        Order order= orderService.getOrderById(ord_id).get();
+        Transaction transaction = transactionRepository.findByOrder(order).get();
+        try {
+            Resource resource = new ClassPathResource("static/vouchers/" + transaction.getTra_image());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     public class ProductoNotFoundException extends RuntimeException {
