@@ -26,18 +26,11 @@ public class Shipment {
     @ManyToOne
     @JoinColumn(name = "ord_id")
     private Order order;
-
     private String shi_department;
-
     private String shi_province;
-
     private String shi_district;
-
     private String shi_adress;
-
     private Date   shi_date_start;
-
     private Date shi_date_end;
-
     private Integer shi_status;
 }
