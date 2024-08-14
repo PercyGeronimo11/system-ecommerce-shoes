@@ -39,7 +39,7 @@ public class PromotionDetailService {
     private String urlLocal;
 
     public List<Promotion> listAll() {
-        return promotionRepository.findByPromStatus(true);
+        return promotionRepository.findAll();
     }
 
     public Promotion save(PromoRequest promocion, MultipartFile file) throws IOException {
@@ -76,8 +76,9 @@ public class PromotionDetailService {
     }
 
     // Lista de detalles Activos de una promocion
-    public List<PromotionDetail> listAllDetPromotion(int promoid) {
-        return promdetailRepository.findByPromotionIdAndDetStatus(promoid, true);
+    public Promotion retornaPromotion(int productoid) {
+        PromotionDetail detalle=promotionDetailRepository.findByProductId(productoid);
+        return  detalle.getPromotion();
     }
 
     // Obtener una promocion y su detalle
