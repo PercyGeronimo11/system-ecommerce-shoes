@@ -1,6 +1,7 @@
 package com.hb.system.ecommerce.shoes.DataIniatilizer;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.hb.system.ecommerce.shoes.entity.Department;
@@ -15,6 +16,7 @@ public class DataDepartment implements CommandLineRunner {
     }
 
     @Override
+    @Order(4)
     public void run(String... args) throws Exception {
         if (departmentRepository.count() == 0) {
             departmentRepository.save(new Department("AMAZONAS"));
