@@ -1,5 +1,8 @@
 package com.hb.system.ecommerce.shoes.services;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.hb.system.ecommerce.shoes.entity.Order;
@@ -24,7 +27,8 @@ public class OrderService {
     }
 
     public java.util.List<Order> getAllOrders() {
-        return orderRepository.findAll();
+        List<Integer> activeStatusList = Arrays.asList(1, 2, 3);
+        return orderRepository.findAllByStatusList(activeStatusList);
     } 
     
     public java.util.Optional<Order> getOrderById(int ord_id) {
@@ -34,7 +38,7 @@ public class OrderService {
     public String updateOrder(int ord_id,Order order) {
         if (orderRepository.existsById(ord_id)) {
             try {
-                order.setOrd_id(ord_id);;;
+                order.setOrd_id(ord_id);
                 orderRepository.save(order);
                 return "Orden  actualizada exitosamente";
             } catch (Exception e) {
@@ -52,6 +56,21 @@ public class OrderService {
                 return "Orden eliminada exitosamente";
             } catch (Exception e) {
                 throw new OrderServiceException("Error al eliminar la orden: " + e.getMessage());
+            }
+        } else {
+            throw new OrderNotFoundException("Order no encontrado con el id: " + ord_id);
+        }
+    }
+
+    public String ChangeStatusOrder(int ord_id, int status) {
+        Order order = orderRepository.findById(ord_id).get();
+        if (order!=null) {
+            try {
+                order.setOrd_status(status);
+                orderRepository.save(order);
+                return "Estado de orden actualizado exitosamente";
+            } catch (Exception e) {
+                throw new OrderServiceException("Error al actualizar el estado la orden: " + e.getMessage());
             }
         } else {
             throw new OrderNotFoundException("Order no encontrado con el id: " + ord_id);

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.hb.system.ecommerce.shoes.dto.ApiResponse;
+import com.hb.system.ecommerce.shoes.dto.request.StatusRequest;
 import com.hb.system.ecommerce.shoes.entity.Order;
 import com.hb.system.ecommerce.shoes.services.OrderService;
 
@@ -66,6 +67,12 @@ public class OrderController {
         orderService.deleteOrder(ord_id);;
     }
 
+    @PostMapping("/status/{ord_id}")
+    public void changeStatusOrder(@PathVariable Integer ord_id, @RequestBody StatusRequest statusRequest) {
+        int status = statusRequest.getStatus();
+        orderService.ChangeStatusOrder(ord_id, status);
+    }
+
     @ExceptionHandler(OrderService.OrderNotFoundException.class)
     public ResponseEntity<String> handleOrderNotFoundException(OrderService.OrderNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
@@ -80,4 +87,6 @@ public class OrderController {
     public ResponseEntity<String> handleGeneralException(Exception ex) {
         return new ResponseEntity<>("Error inesperado: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    
 }
