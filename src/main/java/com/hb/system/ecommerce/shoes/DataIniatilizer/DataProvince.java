@@ -3,6 +3,7 @@ package com.hb.system.ecommerce.shoes.DataIniatilizer;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.hb.system.ecommerce.shoes.entity.Department;
@@ -22,6 +23,7 @@ public class DataProvince implements CommandLineRunner {
     }
 
     @Override
+    @Order(5)
     public void run(String... args) throws Exception {
         if (provinceRepository.count() == 0) {
             // Aquí defines todas las provincias y departamentos necesarios.

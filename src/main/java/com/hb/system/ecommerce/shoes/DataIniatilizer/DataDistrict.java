@@ -3,6 +3,7 @@ package com.hb.system.ecommerce.shoes.DataIniatilizer;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.hb.system.ecommerce.shoes.entity.District;
@@ -21,6 +22,7 @@ public class DataDistrict   implements CommandLineRunner{
         this.districtRepository = districtRepository;
     }
   @Override
+    @Order(6)
     public void run(String... args) throws Exception {
         if (districtRepository.count() == 0) {
             List<District> districts = List.of(
