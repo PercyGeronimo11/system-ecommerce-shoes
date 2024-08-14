@@ -27,7 +27,7 @@ public class OrderService {
     }
 
     public java.util.List<Order> getAllOrders() {
-        List<Integer> activeStatusList = Arrays.asList(1, 2, 3);
+        List<Integer> activeStatusList = Arrays.asList(1, 2, 3, 4);
         return orderRepository.findAllByStatusList(activeStatusList);
     } 
     
