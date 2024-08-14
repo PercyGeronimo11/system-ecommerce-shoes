@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,10 @@ import com.hb.system.ecommerce.shoes.dto.ApiResponse;
 import com.hb.system.ecommerce.shoes.dto.request.ProductReq;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.entity.Product;
+import com.hb.system.ecommerce.shoes.entity.Promotion;
+import com.hb.system.ecommerce.shoes.entity.PromotionDetail;
 import com.hb.system.ecommerce.shoes.services.ProductService;
+import com.hb.system.ecommerce.shoes.services.PromotionDetailService;
 
 
 @CrossOrigin(origins = "*")
@@ -36,6 +40,8 @@ import com.hb.system.ecommerce.shoes.services.ProductService;
 public class ProductController {
     @Autowired
     private ProductService productService;
+        @Autowired
+    private PromotionDetailService promoDetailService;
 
     @GetMapping(value = { "/list" }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<ProductListResp>> index(String search) {
@@ -44,6 +50,17 @@ public class ProductController {
         response.setStatus(HttpStatus.OK.value());
         response.setMessage("Lista de productos exitosamente");
         response.setData(productListResp);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getpromo/{idproducto}")
+    public ResponseEntity<ApiResponse<Promotion>> retornaPromotion(@PathVariable int idproducto) {
+        Promotion promot = promoDetailService.retornaPromotion(idproducto);
+        ApiResponse<Promotion> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("return promocion x idproducto");
+        response.setData(promot);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
