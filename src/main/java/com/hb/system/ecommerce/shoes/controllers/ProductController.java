@@ -65,14 +65,14 @@ public class ProductController {
     @GetMapping(
             value = { "/listaxcate/{idcate}" },
             produces = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseEntity<ApiResponse<ProductListResp>> productsByCategory(@PathVariable("idcate") int idcate) {
-            ProductListResp productListResp = productService.productsByCategory(idcate);
-            ApiResponse<ProductListResp> response = new ApiResponse<>();
-            response.setStatus(HttpStatus.OK.value());
-            response.setMessage("Lista de productos de una categoría exitosamente");
-            response.setData(productListResp);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+    public ResponseEntity<ApiResponse<ProductListResp>> productsByCategory(@PathVariable("idcate") int idcate) {
+        ProductListResp productListResp = productService.productsByCategory(idcate);
+        ApiResponse<ProductListResp> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Lista de productos de una categoría exitosamente");
+        response.setData(productListResp);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @PutMapping(
             value = "/update/{id}",

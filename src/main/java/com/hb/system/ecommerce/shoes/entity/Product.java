@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
@@ -35,6 +35,8 @@ public class Product {
     private String proColor;
 
     private int proStock;
+
+    private Integer proAverageRating;
 
     private Boolean proStatus;
 }
