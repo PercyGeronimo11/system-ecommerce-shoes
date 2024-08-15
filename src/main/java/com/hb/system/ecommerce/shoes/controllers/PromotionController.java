@@ -14,7 +14,7 @@ import com.hb.system.ecommerce.shoes.dto.request.PromoRequest;
 import com.hb.system.ecommerce.shoes.dto.response.ProductListResp;
 import com.hb.system.ecommerce.shoes.dto.response.PromoCompleteResp;
 import com.hb.system.ecommerce.shoes.entity.Promotion;
-
+import com.hb.system.ecommerce.shoes.entity.PromotionDetail;
 import com.hb.system.ecommerce.shoes.services.ProductService;
 import com.hb.system.ecommerce.shoes.services.PromotionDetailService;
 import java.io.IOException;
@@ -43,6 +43,19 @@ public class PromotionController {
         response.setData(promotions);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/detail")
+    public ResponseEntity<ApiResponse<List<PromotionDetail>>> listDetail() {
+        List<PromotionDetail> promotions = promoDetailService.listAllDetail();
+        ApiResponse<List<PromotionDetail>> response = new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Lista de detalles exitosamente");
+        response.setData(promotions);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
 
     @GetMapping(value = { "/list" }, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<ProductListResp>> index(String search) {

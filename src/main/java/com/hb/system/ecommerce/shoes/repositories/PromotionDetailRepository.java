@@ -17,8 +17,9 @@ public interface PromotionDetailRepository extends JpaRepository<PromotionDetail
 
 
     List<PromotionDetail> findByPromotionIdAndDetStatus(int promotionId, boolean detStatus);
-
-
+    
+    List<PromotionDetail> findByProductIdAndDetStatus(int producId, boolean detStatus);
+    
     void deleteById(int idDetalle);
     List<PromotionDetail> findByPromotion(Promotion promotion);
     List<PromotionDetail> deleteAllByPromotion(Promotion promotion);

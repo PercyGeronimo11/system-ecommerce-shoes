@@ -42,6 +42,20 @@ public class PromotionDetailService {
         return promotionRepository.findAll();
     }
 
+    public List<PromotionDetail> listAllDetail() {
+        return promotionDetailRepository.findByDetStatus(true);
+    }
+
+    // Lista de detalles Activos de una promocion
+    public Promotion retornaPromotion(int productoid) {
+        PromotionDetail detalle=promotionDetailRepository.findByProductId(productoid);
+        if(detalle.getPromotion().getPromStatus()){
+            return  detalle.getPromotion();
+        }else{
+            return null;
+        }
+    }
+
     public Promotion save(PromoRequest promocion, MultipartFile file) throws IOException {
         try {
             Promotion promo = new Promotion();
@@ -75,11 +89,8 @@ public class PromotionDetailService {
         }
     }
 
-    // Lista de detalles Activos de una promocion
-    public Promotion retornaPromotion(int productoid) {
-        PromotionDetail detalle=promotionDetailRepository.findByProductId(productoid);
-        return  detalle.getPromotion();
-    }
+
+
 
     // Obtener una promocion y su detalle
     public PromoCompleteResp getById(int idpromocion) {
