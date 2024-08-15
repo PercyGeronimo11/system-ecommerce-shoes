@@ -12,9 +12,14 @@ public interface PromotionDetailRepository extends JpaRepository<PromotionDetail
     Optional<PromotionDetail> findById(int id);
     List<PromotionDetail> findByDetStatus(boolean detStatus);
     List<PromotionDetail> findByPromotionId(int promotionId);
+
+    PromotionDetail findByProductId(int productId);
+
+
     List<PromotionDetail> findByPromotionIdAndDetStatus(int promotionId, boolean detStatus);
-
-
+    
+    List<PromotionDetail> findByProductIdAndDetStatus(int producId, boolean detStatus);
+    
     void deleteById(int idDetalle);
     List<PromotionDetail> findByPromotion(Promotion promotion);
     List<PromotionDetail> deleteAllByPromotion(Promotion promotion);

@@ -41,7 +41,7 @@ public class TransactionService {
     private String saveFile(MultipartFile archivo) {
  
         try {
-            String uploadDir = "vouchers"; 
+            String uploadDir = "static/vouchers"; 
             Path uploadPath = Paths.get(uploadDir);
 
             if (!uploadPath.toFile().exists()) {

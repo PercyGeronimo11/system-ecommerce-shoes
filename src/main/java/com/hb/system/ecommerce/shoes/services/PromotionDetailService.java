@@ -39,7 +39,22 @@ public class PromotionDetailService {
     private String urlLocal;
 
     public List<Promotion> listAll() {
-        return promotionRepository.findByPromStatus(true);
+        return promotionRepository.findAll();
+    }
+
+    public List<PromotionDetail> listAllDetail() {
+        return promotionDetailRepository.findByDetStatus(true);
+        
+    }
+
+    // Lista de detalles Activos de una promocion
+    public Promotion retornaPromotion(int productoid) {
+        PromotionDetail detalle=promotionDetailRepository.findByProductId(productoid);
+        if(detalle.getPromotion().getPromStatus()){
+            return  detalle.getPromotion();
+        }else{
+            return null;
+        }
     }
 
     public Promotion save(PromoRequest promocion, MultipartFile file) throws IOException {
@@ -75,10 +90,8 @@ public class PromotionDetailService {
         }
     }
 
-    // Lista de detalles Activos de una promocion
-    public List<PromotionDetail> listAllDetPromotion(int promoid) {
-        return promdetailRepository.findByPromotionIdAndDetStatus(promoid, true);
-    }
+
+
 
     // Obtener una promocion y su detalle
     public PromoCompleteResp getById(int idpromocion) {
