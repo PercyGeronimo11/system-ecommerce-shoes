@@ -44,6 +44,7 @@ public class PromotionDetailService {
 
     public List<PromotionDetail> listAllDetail() {
         return promotionDetailRepository.findByDetStatus(true);
+        
     }
 
     // Lista de detalles Activos de una promocion
