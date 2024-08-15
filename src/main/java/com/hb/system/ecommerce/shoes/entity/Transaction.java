@@ -26,15 +26,10 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "ord_id")
     private Order order;
-
     private String tra_tipe;
-
     private Date tra_date;
-
     private float tra_amount;
-
     private String tra_image;
-
     private Integer tra_status;
 
 }
