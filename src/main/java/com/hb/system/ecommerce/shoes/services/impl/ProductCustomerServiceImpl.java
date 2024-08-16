@@ -102,7 +102,7 @@ public class ProductCustomerServiceImpl implements ProductCustomerService {
                         .collect(Collectors.toList());
                 return dtos;
             }else{
-                throw new NotFoundException("No se al cliente con ID " + customerId);
+                throw new NotFoundException("No se encontro al cliente con ID " + customerId);
             }
 
         } catch (Exception e) {

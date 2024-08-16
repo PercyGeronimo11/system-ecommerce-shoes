@@ -1,7 +1,10 @@
 package com.hb.system.ecommerce.shoes.auth;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import com.hb.system.ecommerce.shoes.entity.Customer;
+import com.hb.system.ecommerce.shoes.repositories.CustomerRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +27,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final RolRepository roleRepository;
+    private final CustomerRepository customerRepository;
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
@@ -40,17 +44,23 @@ public class AuthService {
             throw new IllegalArgumentException("No tiene permiso para iniciar sesión.");
         }
     }
-    public AuthResponse loginCustomer(LoginRequest request) {
+    public AuthCustomerResponse loginCustomer(LoginRequest request) {
         User user = userRepository.findByUsername(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     
         if (user.getRole().getName().equals("Cliente")) {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-    
-            return AuthResponse.builder()
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    request.getEmail(), request.getPassword()));
+
+            Optional<Customer> customerFind=customerRepository.findByUsuario(user);
+            if(!customerFind.isPresent()){
+                throw new RuntimeException("Cliente no encontrado con este usuario");
+            }
+            return AuthCustomerResponse.builder()
                     .token(jwtService.getToken(user))
                     .username(user.getName())
                     .rol(user.getRole().getName())
+                    .customer_id(customerFind.get().getId())
                     .usuario(user)
                     .build();
         } else {

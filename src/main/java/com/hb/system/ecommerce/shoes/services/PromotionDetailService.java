@@ -47,12 +47,12 @@ public class PromotionDetailService {
         
     }
 
-    // Lista de detalles Activos de una promocion
     public Promotion retornaPromotion(int productoid) {
-        PromotionDetail detalle=promotionDetailRepository.findByProductId(productoid);
-        if(detalle.getPromotion().getPromStatus()){
-            return  detalle.getPromotion();
-        }else{
+        PromotionDetail detalle = promotionDetailRepository.findByProductId(productoid);
+
+        if (detalle != null && detalle.getPromotion() != null && detalle.getPromotion().getPromStatus()) {
+            return detalle.getPromotion();
+        } else {
             return null;
         }
     }
