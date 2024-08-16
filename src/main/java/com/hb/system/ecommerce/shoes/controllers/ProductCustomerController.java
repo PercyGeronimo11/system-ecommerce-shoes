@@ -35,6 +35,18 @@ public class ProductCustomerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/update/clicks",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ApiResponse<ProductCustomer>> updateClicks(@RequestBody ProductCustomerReq productCustomer) {
+        productCustomerService.increaseClicksProductService(productCustomer);
+        ApiResponse<ProductCustomer> response= new ApiResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Se a guardado el producto exitosamente");
+        response.setData(null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping( value = "/get/ratings/{customerId}")
     public ResponseEntity<ApiResponse<List<ProductCustomerResp>>> getProductRatingsByCustomer(@PathVariable Integer customerId) {
         List<ProductCustomerResp> productCustomers = productCustomerService.findByCustomerIdService(customerId);
@@ -45,33 +57,5 @@ public class ProductCustomerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//
-//    @GetMapping(value = { "/list" },
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<ApiResponse<ProductCustomerListResp>> index(String search) {
-//        ProductCustomerListResp productListResp = productService.productListService(search);
-//        ApiResponse<ProductCustomerListResp> response = new ApiResponse<>();
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setMessage("Lista de productos exitosamente");
-//        response.setData(productListResp);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-//
-//
-//    @PutMapping(
-//            value = "/update/{id}",
-//            produces = MediaType.APPLICATION_JSON_VALUE,
-//            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<ApiResponse<ProductCustomer>> editProductCustomer(
-//            @PathVariable int id,
-//            ProductCustomerReq productEditReq,
-//            @RequestParam(name="file", required = false) MultipartFile file) {
-//        ProductCustomer product = productService.productEditService(id, productEditReq, file);
-//        ApiResponse<ProductCustomer> response = new ApiResponse<>();
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setMessage("El producto ha sido editado exitosamente");
-//        response.setData(product);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 
 }

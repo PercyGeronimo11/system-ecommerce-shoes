@@ -13,5 +13,6 @@ import java.util.List;
 
 public interface ProductCustomerService {
     void saveProductCustomerService(ProductCustomerReq productCustomer);
+    void increaseClicksProductService(ProductCustomerReq productCustomer);
     List<ProductCustomerResp> findByCustomerIdService(Integer customerId);
 }

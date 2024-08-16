@@ -29,7 +29,7 @@ public class ProductCustomerServiceImpl implements ProductCustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    public void saveProductCustomerService(ProductCustomerReq productCustomer) {
+    public void increaseClicksProductService(ProductCustomerReq productCustomer) {
         try {
             if (productCustomer.getCustomer_id() == null) {
                 throw new ServiceException("El campo customer_id no puede ser nulo.");
@@ -38,7 +38,52 @@ public class ProductCustomerServiceImpl implements ProductCustomerService {
                 throw new ServiceException("El campo product_id no puede ser nulo.");
             }
             if (productCustomer.getClicks() == null) {
-                throw new ServiceException("El campo clicks no puede ser nulo.");
+                throw new ServiceException("El campo rating no puede ser nulo.");
+            }
+
+            Integer customer_id = productCustomer.getCustomer_id();
+            Integer product_id = productCustomer.getProduct_id();
+
+            Optional<ProductCustomer> productCustomerFind = productCustomerRepository.findByCustomer_IdAndProduct_Id(customer_id, product_id);
+            Optional<Product> productFind = productRepository.findById(product_id);
+            Optional<Customer> customerFind = customerRepository.findById(customer_id);
+
+            if (!productFind.isPresent()) {
+                throw new ServiceException("Producto no encontrado con ID: " + product_id);
+            }
+            if (!customerFind.isPresent()) {
+                throw new ServiceException("Cliente no encontrado con ID: " + customer_id);
+            }
+
+            if (productCustomerFind.isPresent()) {
+                ProductCustomer existingProductCustomer = productCustomerFind.get();
+                existingProductCustomer.setClicks(existingProductCustomer.getClicks()+1);
+                productCustomerRepository.save(existingProductCustomer);
+            } else {
+                ProductCustomer newProductCustomer = ProductCustomer.builder()
+                        .customer(customerFind.get())
+                        .product(productFind.get())
+                        .clicks(1)
+                        .build();
+                productCustomerRepository.save(newProductCustomer);
+            }
+
+        } catch (ServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ServiceException("Aumento la interacción exitosamente", e);
+        }
+    }
+
+
+    @Override
+    public void saveProductCustomerService(ProductCustomerReq productCustomer) {
+        try {
+            if (productCustomer.getCustomer_id() == null) {
+                throw new ServiceException("El campo customer_id no puede ser nulo.");
+            }
+            if (productCustomer.getProduct_id() == null) {
+                throw new ServiceException("El campo product_id no puede ser nulo.");
             }
             if (productCustomer.getRating() == null) {
                 throw new ServiceException("El campo rating no puede ser nulo.");
@@ -46,7 +91,6 @@ public class ProductCustomerServiceImpl implements ProductCustomerService {
 
             Integer customer_id = productCustomer.getCustomer_id();
             Integer product_id = productCustomer.getProduct_id();
-            Integer clicks = productCustomer.getClicks();
             Integer rating = productCustomer.getRating();
 
             Optional<ProductCustomer> productCustomerFind = productCustomerRepository.findByCustomer_IdAndProduct_Id(customer_id, product_id);
@@ -62,14 +106,12 @@ public class ProductCustomerServiceImpl implements ProductCustomerService {
 
             if (productCustomerFind.isPresent()) {
                 ProductCustomer existingProductCustomer = productCustomerFind.get();
-                existingProductCustomer.setClicks(clicks);
                 existingProductCustomer.setRating(rating);
                 productCustomerRepository.save(existingProductCustomer);
             } else {
                 ProductCustomer newProductCustomer = ProductCustomer.builder()
                         .customer(customerFind.get())
                         .product(productFind.get())
-                        .clicks(clicks)
                         .rating(rating)
                         .build();
                 productCustomerRepository.save(newProductCustomer);
