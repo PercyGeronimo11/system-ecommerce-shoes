@@ -13,4 +13,5 @@ public interface ProductService {
     ProductListResp productsByCategory(int id);
     Product productGetService(int id);
     Product productEditService(int id,ProductReq productEditReq, MultipartFile urlImage);
+    void deleteProductService(int id);
 }

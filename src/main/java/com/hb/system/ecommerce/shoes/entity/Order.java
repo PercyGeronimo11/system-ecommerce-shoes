@@ -44,7 +44,7 @@ public class Order {
     private Date ord_date; 
 
     @Column(nullable = false, name = "ord_status")
-    private int ord_status;    
+    private int ordStatus;
     
     @Column(nullable = false, name = "ord_total")
     private float ord_total;

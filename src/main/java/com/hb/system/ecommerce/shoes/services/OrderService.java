@@ -19,7 +19,7 @@ public class OrderService {
 
     public Order createOrder(Order order) {
         try {
-            order.setOrd_status(1);
+            order.setOrdStatus(1);
             return orderRepository.save(order);
         } catch (Exception e) {
             throw new OrderServiceException("Error al crear orden: " + e.getMessage());
@@ -66,7 +66,7 @@ public class OrderService {
         Order order = orderRepository.findById(ord_id).get();
         if (order!=null) {
             try {
-                order.setOrd_status(status);
+                order.setOrdStatus(status);
                 orderRepository.save(order);
                 return "Estado de orden actualizado exitosamente";
             } catch (Exception e) {

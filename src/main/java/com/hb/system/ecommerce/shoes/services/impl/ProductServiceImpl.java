@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.hb.system.ecommerce.shoes.entity.Material;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -141,6 +142,17 @@ public ProductListResp productsByCategory(int idcategory) {
             return fileUrl;
         } catch (IOException ex) {
             throw new RuntimeException("Error al guardar el archivo: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteProductService(int id) {
+        Optional<Product> product=productRepository.findById(id);
+        if(product.isPresent()){
+            product.get().setProStatus(false);
+            productRepository.save(product.get());
+        }else{
+            throw new RuntimeException("No se encontro material");
         }
     }
 }

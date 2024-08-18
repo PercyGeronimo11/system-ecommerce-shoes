@@ -10,6 +10,7 @@ import com.hb.system.ecommerce.shoes.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     //Optional<Order> findByid(int id);
-    @Query("SELECT o FROM Order o WHERE o.ord_status IN :statusList")
+    @Query("SELECT o FROM Order o WHERE o.ordStatus IN :statusList")
     List<Order> findAllByStatusList(@Param("statusList") List<Integer> statusList);
+    List<Order> findByOrdStatus(int status);
 }

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,12 +38,13 @@ public class TransactionService {
 
 
 
+    @Value("${image.upload.directory}")
+    private String imageUploadDirect;
 
     private String saveFile(MultipartFile archivo) {
  
         try {
-            String uploadDir = "static/vouchers"; 
-            Path uploadPath = Paths.get(uploadDir);
+            Path uploadPath = Paths.get(imageUploadDirect);
 
             if (!uploadPath.toFile().exists()) {
                 uploadPath.toFile().mkdirs();

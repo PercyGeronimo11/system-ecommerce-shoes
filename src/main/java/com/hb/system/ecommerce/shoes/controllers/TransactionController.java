@@ -1,6 +1,8 @@
 package com.hb.system.ecommerce.shoes.controllers;
 
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,12 +52,15 @@ public class TransactionController {
         return transaction.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Value("${image.upload.directory}")
+    private String imageUploadDirect;
+
     @GetMapping("/image/{ord_id}")
     public ResponseEntity<Resource> getImage(@PathVariable Integer ord_id) {
         Order order= orderService.getOrderById(ord_id).get();
         Transaction transaction = transactionRepository.findByOrder(order).get();
         try {
-            Resource resource = new ClassPathResource("static/vouchers/" + transaction.getTra_image());
+            Resource resource = new ClassPathResource(imageUploadDirect + transaction.getTra_image());
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(resource);
@@ -64,10 +69,4 @@ public class TransactionController {
         }
     }
 
-    public class ProductoNotFoundException extends RuntimeException {
-
-        public ProductoNotFoundException(String message) {
-            super(message);
-        }
-    }
 }
