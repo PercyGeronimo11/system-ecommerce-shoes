@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*")
@@ -32,6 +33,9 @@ public class DashboardController {
         counts.put("numSales", dashboardService.getNumberSales());
         counts.put("incomeTotal", dashboardService.getIncomeTotalService());
         counts.put("costTotal", dashboardService.getCostTotalService());
+        counts.put("numCustomerNew", dashboardService.getCustomerCountLast7Days());
+        counts.put("weekly-income", dashboardService.getWeeklyIncome());
         return counts;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.hb.system.ecommerce.shoes.repositories;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
     Optional<Customer> findByCustEmailAndCustPassword(String custEmail, String custPassword);
     Optional<Customer> findById(int id);
     List<Customer> findByCustStatus(boolean custStatus);
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.createdAt BETWEEN :startDate AND :endDate")
+    long countCustomersRegisteredBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
 }
