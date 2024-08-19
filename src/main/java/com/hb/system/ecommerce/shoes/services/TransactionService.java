@@ -36,15 +36,11 @@ public class TransactionService {
         return transactionRepository.findById(tra_id);
     }
 
-
-
-    @Value("${image.upload.directory}")
-    private String imageUploadDirect;
-
     private String saveFile(MultipartFile archivo) {
  
         try {
-            Path uploadPath = Paths.get(imageUploadDirect);
+            String uploadDir = "src/main/resources/static/vouchers"; 
+            Path uploadPath = Paths.get(uploadDir);
 
             if (!uploadPath.toFile().exists()) {
                 uploadPath.toFile().mkdirs();
