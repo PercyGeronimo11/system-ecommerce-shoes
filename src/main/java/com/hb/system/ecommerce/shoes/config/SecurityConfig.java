@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .requestMatchers("/product/images/**").permitAll()
  
                 .requestMatchers("/api/list").permitAll()
-                /* .requestMatchers("/api/**").permitAll() */
+                .requestMatchers("/product/**").permitAll()
                 /* .anyRequest().permitAll() */
                 .anyRequest().authenticated()
                 )
