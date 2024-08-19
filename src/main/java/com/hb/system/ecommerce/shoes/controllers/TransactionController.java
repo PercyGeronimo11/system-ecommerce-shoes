@@ -52,15 +52,12 @@ public class TransactionController {
         return transaction.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Value("${image.voucher.directory}")
-    private String imageUploadDirect;
-
     @GetMapping("/image/{ord_id}")
     public ResponseEntity<Resource> getImage(@PathVariable Integer ord_id) {
         Order order= orderService.getOrderById(ord_id).get();
         Transaction transaction = transactionRepository.findByOrder(order).get();
         try {
-            Resource resource = new ClassPathResource(imageUploadDirect + transaction.getTra_image());
+            Resource resource = new ClassPathResource("static/vouchers/" + transaction.getTra_image());
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(resource);
